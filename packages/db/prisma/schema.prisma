@@ -1,0 +1,420 @@
+// TechMarket VZ — Prisma Schema v2.1
+// Sync con blueprint actualizado
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Para migraciones (sin PgBouncer)
+}
+
+// ─────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────
+
+enum UserRole {
+  user
+  moderator
+  admin
+}
+
+enum ListingCondition {
+  mint
+  good
+  fair
+  poor
+}
+
+enum VerificationStatus {
+  pending
+  verified
+  rejected
+  expired
+}
+
+enum ListingStatus {
+  draft
+  active
+  paused
+  sold
+  expired
+  removed
+}
+
+enum OfferStatus {
+  pending
+  accepted
+  rejected
+  countered
+  expired
+}
+
+enum FraudReportStatus {
+  open
+  reviewing
+  resolved
+  dismissed
+}
+
+enum PaymentEventType {
+  bump
+  verified_seller_sub
+  ad
+}
+
+enum PaymentStatus {
+  pending
+  confirmed
+  failed
+}
+
+enum SafeZoneType {
+  mall
+  bank
+  police
+  other
+}
+
+enum NotificationType {
+  new_offer
+  price_drop
+  search_match
+  verification_approved
+  verification_rejected
+  review_received
+  listing_expired
+}
+
+enum TransactionType {
+  buy
+  sell
+}
+
+// ─────────────────────────────────────────
+// MODELOS
+// ─────────────────────────────────────────
+
+model User {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String    @unique
+  phone                String?   @unique
+  username             String    @unique
+  fullName             String    @map("full_name")
+  avatarUrl            String?   @map("avatar_url")
+  idVerified           Boolean   @default(false) @map("id_verified")
+  idDocument           String?   @map("id_document")         // Hash del doc, nunca el doc
+  reputationScore      Int       @default(0) @map("reputation_score")
+  totalSales           Int       @default(0) @map("total_sales")
+  totalPurchases       Int       @default(0) @map("total_purchases")
+  isVerifiedSeller     Boolean   @default(false) @map("is_verified_seller")
+  verifiedSellerUntil  DateTime? @map("verified_seller_until")
+  isBanned             Boolean   @default(false) @map("is_banned")
+  banReason            String?   @map("ban_reason")
+  locationCity         String?   @map("location_city")
+  locationState        String?   @map("location_state")
+  whatsappNumber       String?   @map("whatsapp_number")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  // Relaciones
+  roles                UserRole_Assignment[]
+  listings             Listing[]
+  buyerOffers          Offer[]              @relation("BuyerOffers")
+  sellerOffers         Offer[]              @relation("SellerOffers")
+  reviewsGiven         Review[]             @relation("ReviewsGiven")
+  reviewsReceived      Review[]             @relation("ReviewsReceived")
+  savedListings        SavedListing[]
+  searchAlerts         SearchAlert[]
+  notifications        Notification[]
+  fraudReportsGiven    FraudReport[]        @relation("ReporterFraud")
+  fraudReportsReceived FraudReport[]        @relation("ReportedFraud")
+  paymentEvents        PaymentEvent[]
+  grantedRoles         UserRole_Assignment[] @relation("RoleGrantedBy")
+
+  @@map("users")
+}
+
+model UserRole_Assignment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      UserRole
+  grantedBy String?  @map("granted_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  granter   User? @relation("RoleGrantedBy", fields: [grantedBy], references: [id])
+
+  @@unique([userId, role])
+  @@map("user_roles")
+}
+
+model DeviceModel {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  brand                  String
+  modelName              String   @map("model_name")
+  modelNumber            String   @map("model_number")
+  releaseYear            Int?     @map("release_year")
+  originalStorageOptions Int[]    @map("original_storage_options")
+  originalColors         String[] @map("original_colors")
+  imageUrl               String?  @map("image_url")
+  isActive               Boolean  @default(true) @map("is_active")
+  createdAt              DateTime @default(now()) @map("created_at")
+
+  listings    Listing[]
+  imeiReports ImeiReport[]
+
+  @@map("device_models")
+}
+
+model Listing {
+  id              String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sellerId        String             @map("seller_id") @db.Uuid
+  deviceModelId   String             @map("device_model_id") @db.Uuid
+
+  // Specs
+  priceUsd        Decimal            @map("price_usd") @db.Decimal(10, 2)
+  storageGb       Int                @map("storage_gb")
+  color           String
+  batteryHealth   Int                @map("battery_health")               // 0-100
+  condition       ListingCondition
+  imeiLast4       String             @map("imei_last4")
+
+  // Estado del equipo
+  hasIcloudLock   Boolean            @default(false) @map("has_icloud_lock")
+  hasGoogleLock   Boolean            @default(false) @map("has_google_lock")
+  hasRepairs      Boolean            @default(false) @map("has_repairs")
+  repairDetails   String?            @map("repair_details")
+  includesBox     Boolean            @default(false) @map("includes_box")
+  includesCharger Boolean            @default(false) @map("includes_charger")
+  includesEarphones Boolean          @default(false) @map("includes_earphones")
+
+  description     String?
+
+  // Verificación
+  verificationStatus  VerificationStatus @default(pending) @map("verification_status")
+  verificationCode    String?            @map("verification_code")
+  verificationExpiresAt DateTime?        @map("verification_expires_at")
+  verifiedAt          DateTime?          @map("verified_at")
+
+  // Gestión
+  status          ListingStatus      @default(draft)
+  isBumped        Boolean            @default(false) @map("is_bumped")
+  bumpExpiresAt   DateTime?          @map("bump_expires_at")
+  viewsCount      Int                @default(0) @map("views_count")
+  savesCount      Int                @default(0) @map("saves_count")
+
+  // Precio negociable
+  acceptsOffers   Boolean            @default(false) @map("accepts_offers")
+  minOfferUsd     Decimal?           @map("min_offer_usd") @db.Decimal(10, 2)
+
+  // Ubicación
+  city            String?
+  state           String?
+  meetAtMall      Boolean            @default(true) @map("meet_at_mall")
+
+  expiresAt       DateTime           @default(dbgenerated("NOW() + INTERVAL '60 days'")) @map("expires_at")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  // Relaciones
+  seller          User               @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  deviceModel     DeviceModel        @relation(fields: [deviceModelId], references: [id])
+  photos          ListingPhoto[]
+  offers          Offer[]
+  reviews         Review[]
+  savedBy         SavedListing[]
+  fraudReports    FraudReport[]
+  paymentEvents   PaymentEvent[]
+  imeiReports     ImeiReport[]
+
+  @@index([status])
+  @@index([deviceModelId])
+  @@index([sellerId])
+  @@index([priceUsd])
+  @@index([batteryHealth])
+  @@index([city])
+  @@index([createdAt(sort: Desc)])
+  @@index([isBumped, bumpExpiresAt])
+  // Índices compuestos para queries frecuentes
+  @@index([status, city, priceUsd])
+  @@index([deviceModelId, status])
+  @@index([status, batteryHealth])
+  @@map("listings")
+}
+
+model ListingPhoto {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId            String   @map("listing_id") @db.Uuid
+  cloudinaryUrl        String   @map("cloudinary_url")
+  cloudinaryId         String   @map("cloudinary_id")
+  width                Int?                                  // Para layout sin CLS
+  height               Int?                                  // Para layout sin CLS
+  isVerificationPhoto  Boolean  @default(false) @map("is_verification_photo")
+  isCover              Boolean  @default(false) @map("is_cover")
+  sortOrder            Int      @default(0) @map("sort_order")
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@map("listing_photos")
+}
+
+model Offer {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId     String      @map("listing_id") @db.Uuid
+  buyerId       String      @map("buyer_id") @db.Uuid
+  sellerId      String      @map("seller_id") @db.Uuid
+  amountUsd     Decimal     @map("amount_usd") @db.Decimal(10, 2)
+  message       String?
+  status        OfferStatus @default(pending)
+  counterAmount Decimal?    @map("counter_amount") @db.Decimal(10, 2)
+  expiresAt     DateTime    @default(dbgenerated("NOW() + INTERVAL '24 hours'")) @map("expires_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyer   User    @relation("BuyerOffers", fields: [buyerId], references: [id])
+  seller  User    @relation("SellerOffers", fields: [sellerId], references: [id])
+
+  @@map("offers")
+}
+
+model Review {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId       String          @map("listing_id") @db.Uuid
+  reviewerId      String          @map("reviewer_id") @db.Uuid
+  reviewedId      String          @map("reviewed_id") @db.Uuid
+  rating          Int
+  comment         String?
+  transactionType TransactionType @map("transaction_type")
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  listing  Listing @relation(fields: [listingId], references: [id])
+  reviewer User    @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewed User    @relation("ReviewsReceived", fields: [reviewedId], references: [id])
+
+  @@unique([listingId, reviewerId])
+  @@map("reviews")
+}
+
+model SafeZone {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  type          SafeZoneType
+  address       String?
+  city          String
+  state         String
+  latitude      Decimal?     @db.Decimal(10, 8)
+  longitude     Decimal?     @db.Decimal(11, 8)
+  googleMapsUrl String?      @map("google_maps_url")
+  openingHours  Json?        @map("opening_hours")   // {"mon-fri": "9:00-21:00"}
+  isActive      Boolean      @default(true) @map("is_active")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  @@map("safe_zones")
+}
+
+model FraudReport {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reporterId     String            @map("reporter_id") @db.Uuid
+  reportedUserId String            @map("reported_user_id") @db.Uuid
+  listingId      String?           @map("listing_id") @db.Uuid
+  reason         String
+  evidenceUrls   String[]          @map("evidence_urls")
+  status         FraudReportStatus @default(open)
+  adminNotes     String?           @map("admin_notes")
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  reporter     User     @relation("ReporterFraud", fields: [reporterId], references: [id])
+  reportedUser User     @relation("ReportedFraud", fields: [reportedUserId], references: [id])
+  listing      Listing? @relation(fields: [listingId], references: [id])
+
+  @@map("fraud_reports")
+}
+
+model PaymentEvent {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  listingId     String?          @map("listing_id") @db.Uuid
+  eventType     PaymentEventType @map("event_type")
+  amountUsd     Decimal?         @map("amount_usd") @db.Decimal(10, 2)
+  paymentMethod String?          @map("payment_method")
+  reference     String?
+  status        PaymentStatus    @default(pending)
+  confirmedAt   DateTime?        @map("confirmed_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  user    User     @relation(fields: [userId], references: [id])
+  listing Listing? @relation(fields: [listingId], references: [id])
+
+  @@map("payment_events")
+}
+
+model SavedListing {
+  userId    String   @map("user_id") @db.Uuid
+  listingId String   @map("listing_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@id([userId, listingId])
+  @@map("saved_listings")
+}
+
+model SearchAlert {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  brand          String?
+  modelName      String?  @map("model_name")
+  maxPriceUsd    Decimal? @map("max_price_usd") @db.Decimal(10, 2)
+  minBattery     Int?     @map("min_battery")
+  condition      String[] // Array de ListingCondition
+  city           String?
+  isActive       Boolean  @default(true) @map("is_active")
+  lastNotifiedAt DateTime? @map("last_notified_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("search_alerts")
+}
+
+model Notification {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String           @map("user_id") @db.Uuid
+  type       NotificationType
+  title      String
+  body       String
+  data       Json?                              // Payload extra (listing_id, offer_id, etc.)
+  isRead     Boolean          @default(false) @map("is_read")
+  pushSentAt DateTime?        @map("push_sent_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt(sort: Desc)])
+  @@map("notifications")
+}
+
+model ImeiReport {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  imeiLast4       String    @map("imei_last4")
+  deviceModelId   String?   @map("device_model_id") @db.Uuid
+  listingId       String?   @map("listing_id") @db.Uuid
+  userId          String?   @map("user_id") @db.Uuid
+  occurrenceCount Int       @default(1) @map("occurrence_count")
+  flagged         Boolean   @default(false)
+  flaggedAt       DateTime? @map("flagged_at")
+  adminNotes      String?   @map("admin_notes")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  deviceModel DeviceModel? @relation(fields: [deviceModelId], references: [id])
+  listing     Listing?     @relation(fields: [listingId], references: [id])
+
+  @@unique([imeiLast4, listingId])
+  @@index([imeiLast4])
+  @@map("imei_reports")
+}
