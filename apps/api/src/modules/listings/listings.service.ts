@@ -42,8 +42,10 @@ export class ListingsService {
         take: limit + 1, // +1 para saber si hay siguiente página
         orderBy: [
           { isBumped: 'desc' },
-          { verificationStatus: 'asc' }, // verified < pending < rejected (alphabético → pending primero... )
+          // verified='desc' → verified aparece primero (z > p > e), resto después
+          { verificationStatus: 'desc' },
           { createdAt: 'desc' },
+          { id: 'desc' }, // tie-breaker único para cursor pagination estable
         ],
         select: {
           id: true,
@@ -79,15 +81,8 @@ export class ListingsService {
     const data = hasMore ? items.slice(0, limit) : items
     const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
 
-    // Expirar bumps vencidos en memoria (no bloquear la respuesta)
-    const now = new Date()
-    data.forEach((item) => {
-      if (item.isBumped && item.bumpExpiresAt && item.bumpExpiresAt < now) {
-        void this.prisma.listing
-          .update({ where: { id: item.id }, data: { isBumped: false, bumpExpiresAt: null } })
-          .catch(() => null)
-      }
-    })
+    // Bump expiry se maneja via CRON job en el módulo de listings
+    // No actualizar DB en una operación de lectura (anti-pattern)
 
     return { data, nextCursor, total }
   }
