@@ -24,7 +24,9 @@ export class TypesenseService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await this.initCollection()
+    await this.initCollection().catch((err) => {
+      this.logger.warn(`Typesense no disponible — search desactivado: ${err?.message}`)
+    })
   }
 
   async initCollection() {
@@ -101,7 +103,7 @@ export class TypesenseService implements OnModuleInit {
       price_sort: listing.priceUsd,
     }
 
-    await this.client.collections(COLLECTION_NAME).documents().upsert(doc)
+    await this.client.collections(COLLECTION_NAME).documents().upsert(doc).catch(() => null)
   }
 
   async deleteListing(id: string) {
