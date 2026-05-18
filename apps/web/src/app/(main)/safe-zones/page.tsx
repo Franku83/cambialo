@@ -54,7 +54,7 @@ export default async function SafeZonesPage({
     .eq('is_active', true)
     .order('city')
 
-  const uniqueCities = [...new Set((cities ?? []).map((c) => c.city))]
+  const uniqueCities = [...new Set(((cities ?? []) as { city: string; state: string }[]).map((c) => c.city))]
 
   return (
     <div className="min-h-screen bg-zinc-950 px-4 py-8">
