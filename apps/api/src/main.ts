@@ -9,12 +9,18 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug'],
   })
 
-  // CORS — solo dominios permitidos
+  // CORS — dominios permitidos
+  const allowedOrigins = [
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.CORS_ORIGIN,
+    'https://cambialo.vercel.app',
+    'https://cambialo-franku83s-projects.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:3030',
+  ].filter(Boolean) as string[]
+
   app.enableCors({
-    origin: [
-      process.env.NEXT_PUBLIC_APP_URL ?? 'https://cambialo.com',
-      'http://localhost:3000', // dev
-    ],
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   })
