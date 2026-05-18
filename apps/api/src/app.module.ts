@@ -17,6 +17,7 @@ import { ImeiModule } from './modules/imei/imei.module'
 import { AdminModule } from './modules/admin/admin.module'
 import { FraudReportsModule } from './modules/fraud-reports/fraud-reports.module'
 import { SearchAlertsModule } from './modules/search-alerts/search-alerts.module'
+import { DeviceModelsModule } from './modules/device-models/device-models.module'
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { SearchAlertsModule } from './modules/search-alerts/search-alerts.module
     AdminModule,
     FraudReportsModule,
     SearchAlertsModule,
+    DeviceModelsModule,
   ],
 })
 export class AppModule {}
