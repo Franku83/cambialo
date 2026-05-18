@@ -122,29 +122,29 @@ function Step1({ onNext }: { onNext: () => void }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-300">
+        <label className="mb-2 block text-sm font-medium text-slate-600">
           Modelo del equipo <span className="text-red-400">*</span>
         </label>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar: iPhone 14 Pro, Samsung S23..."
-            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-9 pr-4 text-sm text-zinc-100 placeholder:text-zinc-600 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-9 pr-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-green-500"
           />
           {loading && (
-            <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-zinc-500" />
+            <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-slate-400" />
           )}
         </div>
         {models.length > 0 && (
-          <div className="mt-1 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl">
+          <div className="mt-1 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-xl">
             {models.map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => selectModel(m)}
-                className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-200 transition-colors hover:bg-zinc-800"
+                className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-slate-700 transition-colors hover:bg-slate-100"
               >
                 <span>{m.brand} {m.modelName}</span>
               </button>
@@ -158,7 +158,7 @@ function Step1({ onNext }: { onNext: () => void }) {
 
       {/* Almacenamiento */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-300">
+        <label className="mb-2 block text-sm font-medium text-slate-600">
           Almacenamiento <span className="text-red-400">*</span>
         </label>
         <div className="flex flex-wrap gap-2">
@@ -170,8 +170,8 @@ function Step1({ onNext }: { onNext: () => void }) {
               className={cn(
                 'rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
                 storageGb === gb
-                  ? 'border-blue-500 bg-blue-600/20 text-blue-400'
-                  : 'border-zinc-700 bg-zinc-800 text-zinc-400 hover:border-zinc-600',
+                  ? 'border-green-500 bg-green-50 text-green-600'
+                  : 'border-slate-200 bg-slate-100 text-slate-500 hover:border-slate-300',
               )}
             >
               {gb >= 1024 ? `${gb / 1024} TB` : `${gb} GB`}
@@ -185,29 +185,29 @@ function Step1({ onNext }: { onNext: () => void }) {
 
       {/* IMEI */}
       <div>
-        <label className="mb-1 block text-sm font-medium text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-slate-600">
           Últimos 4 dígitos del IMEI <span className="text-red-400">*</span>
         </label>
-        <p className="mb-2 text-xs text-zinc-500">
+        <p className="mb-2 text-xs text-slate-400">
           En tu teléfono: Ajustes → General → Información (o *#06#)
         </p>
         <input
           {...register('imeiLast4')}
           placeholder="Ej: 4589"
           maxLength={4}
-          className="w-40 rounded-xl border border-zinc-800 bg-zinc-900 py-2.5 px-4 text-center text-lg font-mono text-zinc-100 outline-none focus:border-blue-500 tracking-widest"
+          className="w-40 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-center text-lg font-mono text-slate-900 outline-none focus:border-green-500 tracking-widest"
         />
         {errors.imeiLast4 && (
           <p className="mt-1 text-xs text-red-400">{errors.imeiLast4.message}</p>
         )}
-        <p className="mt-1 text-xs text-zinc-600">
+        <p className="mt-1 text-xs text-slate-400">
           Solo los últimos 4 dígitos para privacidad
         </p>
       </div>
 
       <button
         type="submit"
-        className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+        className="w-full rounded-xl bg-green-600 py-3 font-semibold text-white transition-colors hover:bg-green-700"
       >
         Continuar
       </button>
@@ -250,7 +250,7 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="mb-3 text-sm font-medium text-zinc-300">
+        <p className="mb-3 text-sm font-medium text-slate-600">
           Condición del equipo <span className="text-red-400">*</span>
         </p>
         <ConditionGuide value={condition} onChange={setCondition} />
@@ -261,8 +261,8 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Batería */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-300">
-          Salud de la batería: <span className="text-white font-bold">{battery}%</span>
+        <label className="mb-2 block text-sm font-medium text-slate-600">
+          Salud de la batería: <span className="text-slate-900 font-bold">{battery}%</span>
         </label>
         <input
           type="range"
@@ -270,29 +270,29 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           max={100}
           value={battery}
           onChange={(e) => setBattery(Number(e.target.value))}
-          className="w-full accent-blue-600"
+          className="w-full accent-green-600"
         />
-        <div className="mt-1 flex justify-between text-xs text-zinc-600">
+        <div className="mt-1 flex justify-between text-xs text-slate-400">
           <span>0%</span><span>50%</span><span>100%</span>
         </div>
-        <p className="mt-1 text-xs text-zinc-500">
+        <p className="mt-1 text-xs text-slate-400">
           Encuéntralo en Ajustes → Batería → Estado de la batería
         </p>
       </div>
 
       {/* Reparaciones */}
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-zinc-200">¿Ha sido reparado?</p>
-            <p className="text-xs text-zinc-500">Pantalla, batería, cámara, etc.</p>
+            <p className="text-sm font-medium text-slate-700">¿Ha sido reparado?</p>
+            <p className="text-xs text-slate-400">Pantalla, batería, cámara, etc.</p>
           </div>
           <button
             type="button"
             onClick={() => setHasRepairs(!hasRepairs)}
             className={cn(
               'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-              hasRepairs ? 'bg-blue-600' : 'bg-zinc-700',
+              hasRepairs ? 'bg-blue-600' : 'bg-slate-200',
             )}
           >
             <span
@@ -309,29 +309,29 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
             onChange={(e) => setRepairDetails(e.target.value)}
             placeholder="Describe qué fue reparado, dónde y cuándo..."
             rows={3}
-            className="mt-3 w-full resize-none rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-600 outline-none focus:border-blue-500"
+            className="mt-3 w-full resize-none rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:border-green-500"
           />
         )}
       </div>
 
       {/* Locks */}
       <div className="space-y-3">
-        <p className="text-sm font-medium text-zinc-300">Estado de bloqueos</p>
+        <p className="text-sm font-medium text-slate-600">Estado de bloqueos</p>
         {[
           { label: 'iCloud Lock activo', hint: 'El equipo solicita Apple ID al encender', val: hasIcloud, set: setHasIcloud },
           { label: 'Google/FRP Lock activo', hint: 'El equipo solicita cuenta Google al restablecer', val: hasGoogle, set: setHasGoogle },
         ].map(({ label, hint, val, set }) => (
-          <div key={label} className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900 p-3">
+          <div key={label} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div>
-              <p className="text-sm text-zinc-200">{label}</p>
-              <p className="text-xs text-zinc-500">{hint}</p>
+              <p className="text-sm text-slate-700">{label}</p>
+              <p className="text-xs text-slate-400">{hint}</p>
             </div>
             <button
               type="button"
               onClick={() => set(!val)}
               className={cn(
                 'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-                val ? 'bg-red-500' : 'bg-zinc-700',
+                val ? 'bg-red-500' : 'bg-slate-200',
               )}
             >
               <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', val ? 'translate-x-4' : 'translate-x-0')} />
@@ -342,7 +342,7 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Accesorios */}
       <div>
-        <p className="mb-3 text-sm font-medium text-zinc-300">Accesorios incluidos</p>
+        <p className="mb-3 text-sm font-medium text-slate-600">Accesorios incluidos</p>
         <AccessoriesChecklist
           includesBox={step2.includesBox ?? false}
           onBoxChange={(v) => updateStep2({ includesBox: v })}
@@ -357,14 +357,14 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         <button
           type="button"
           onClick={onBack}
-          className="flex-1 rounded-xl border border-zinc-700 py-3 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+          className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 transition-colors hover:text-white"
         >
           Atrás
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="flex-1 rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+          className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white transition-colors hover:bg-green-700"
         >
           Continuar
         </button>
@@ -405,23 +405,23 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Precio */}
       <div>
-        <label className="mb-1 block text-sm font-medium text-zinc-300">
+        <label className="mb-1 block text-sm font-medium text-slate-600">
           Precio en USD <span className="text-red-400">*</span>
         </label>
-        <p className="mb-2 text-xs text-zinc-500">Precio fijo visible — sin "precio al privado"</p>
+        <p className="mb-2 text-xs text-slate-400">Precio fijo visible — sin "precio al privado"</p>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
           <input
             {...register('priceUsd', { valueAsNumber: true })}
             type="number"
             step="0.01"
             min={1}
             placeholder="650"
-            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-7 pr-4 text-lg font-bold text-zinc-100 outline-none focus:border-blue-500"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-7 pr-4 text-lg font-bold text-slate-900 outline-none focus:border-green-500"
           />
         </div>
         {priceUsd > 0 && (
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-slate-400">
             Mostrará: <span className="font-medium text-white">{formatPrice(priceUsd)}</span>
           </p>
         )}
@@ -431,15 +431,15 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       {/* Acepta ofertas */}
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-zinc-200">Acepta ofertas</p>
+          <p className="text-sm font-medium text-slate-700">Acepta ofertas</p>
           <button
             type="button"
             onClick={() => updateStep3({ acceptsOffers: !acceptsOffers })}
             className={cn(
               'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-              acceptsOffers ? 'bg-blue-600' : 'bg-zinc-700',
+              acceptsOffers ? 'bg-blue-600' : 'bg-slate-200',
             )}
           >
             <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', acceptsOffers ? 'translate-x-4' : 'translate-x-0')} />
@@ -447,13 +447,13 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         </div>
         {acceptsOffers && (
           <div className="mt-3">
-            <label className="text-xs text-zinc-500">Oferta mínima ($)</label>
+            <label className="text-xs text-slate-400">Oferta mínima ($)</label>
             <input
               type="number"
               value={step3.minOfferUsd ?? ''}
               onChange={(e) => updateStep3({ minOfferUsd: Number(e.target.value) })}
               placeholder="500"
-              className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-blue-500"
+              className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-700 outline-none focus:border-green-500"
             />
           </div>
         )}
@@ -461,13 +461,13 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
       {/* Ciudad */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-300">
+        <label className="mb-2 block text-sm font-medium text-slate-600">
           Ciudad <span className="text-red-400">*</span>
         </label>
         <input
           {...register('city')}
           placeholder="Ej: Caracas"
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-2.5 px-4 text-sm text-zinc-100 outline-none focus:border-blue-500"
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm text-slate-900 outline-none focus:border-green-500"
         />
         {errors.city && (
           <p className="mt-1 text-xs text-red-400">{errors.city.message}</p>
@@ -475,17 +475,17 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       {/* Encuentro en CC */}
-      <div className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
         <div>
-          <p className="text-sm font-medium text-zinc-200">Disponible para encuentro en CC</p>
-          <p className="text-xs text-zinc-500">Centro comercial o banco como punto seguro</p>
+          <p className="text-sm font-medium text-slate-700">Disponible para encuentro en CC</p>
+          <p className="text-xs text-slate-400">Centro comercial o banco como punto seguro</p>
         </div>
         <button
           type="button"
           onClick={() => updateStep3({ meetAtMall: !meetAtMall })}
           className={cn(
             'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-            meetAtMall ? 'bg-blue-600' : 'bg-zinc-700',
+            meetAtMall ? 'bg-blue-600' : 'bg-slate-200',
           )}
         >
           <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', meetAtMall ? 'translate-x-4' : 'translate-x-0')} />
@@ -493,10 +493,10 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       <div className="flex gap-3">
-        <button type="button" onClick={onBack} className="flex-1 rounded-xl border border-zinc-700 py-3 text-sm font-medium text-zinc-400 hover:text-white">
+        <button type="button" onClick={onBack} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:text-white">
           Atrás
         </button>
-        <button type="submit" className="flex-1 rounded-xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700">
+        <button type="submit" className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700">
           Continuar
         </button>
       </div>
@@ -563,7 +563,7 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
     <div className="space-y-6">
       {/* Fotos estándar */}
       <div>
-        <p className="mb-3 text-sm font-medium text-zinc-300">
+        <p className="mb-3 text-sm font-medium text-slate-600">
           Fotos requeridas (mínimo 3 + verificación)
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -585,21 +585,21 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       {/* Código de verificación */}
-      <div className="rounded-2xl border border-blue-500/20 bg-blue-600/5 p-5">
+      <div className="rounded-2xl border border-green-200 bg-green-50/50 p-5">
         <h3 className="mb-1 font-semibold text-white">Foto de verificación</h3>
-        <p className="mb-4 text-sm text-zinc-400">
+        <p className="mb-4 text-sm text-slate-500">
           Escribe el código en un papel y fotografía el equipo junto al papel.
           Esto demuestra que el equipo está en tus manos.
         </p>
 
         {step4.verificationCode ? (
           <div className="mb-4">
-            <div className="flex items-center justify-between rounded-xl bg-zinc-900 px-4 py-3">
-              <span className="font-mono text-xl font-bold tracking-widest text-blue-400">
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3">
+              <span className="font-mono text-xl font-bold tracking-widest text-green-600">
                 {step4.verificationCode}
               </span>
               {timeLeft !== null && (
-                <span className={cn('text-sm font-mono', timeLeft < 300 ? 'text-red-400' : 'text-zinc-400')}>
+                <span className={cn('text-sm font-mono', timeLeft < 300 ? 'text-red-400' : 'text-slate-500')}>
                   {formatTime(timeLeft)}
                 </span>
               )}
@@ -613,7 +613,7 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
             type="button"
             onClick={() => void generateCode()}
             disabled={generatingCode || !listingId}
-            className="mb-4 flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+            className="mb-4 flex items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
           >
             {generatingCode && <Loader2 className="h-4 w-4 animate-spin" />}
             Generar código de verificación
@@ -638,14 +638,14 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       <div className="flex gap-3">
-        <button type="button" onClick={onBack} className="flex-1 rounded-xl border border-zinc-700 py-3 text-sm font-medium text-zinc-400 hover:text-white">
+        <button type="button" onClick={onBack} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:text-white">
           Atrás
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canContinue}
-          className="flex-1 rounded-xl bg-blue-600 py-3 font-semibold text-white disabled:opacity-40 hover:bg-blue-700"
+          className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white disabled:opacity-40 hover:bg-green-700"
         >
           Continuar {!canContinue && `(${uploadedCount}/3 fotos)`}
         </button>
@@ -691,35 +691,35 @@ function Step5({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 space-y-4">
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-4">
         <h3 className="font-semibold text-white">Resumen del listing</h3>
 
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-zinc-500">Equipo</span>
-            <span className="text-zinc-200">{step1.brand} {step1.modelName} {step1.storageGb}GB</span>
+            <span className="text-slate-400">Equipo</span>
+            <span className="text-slate-700">{step1.brand} {step1.modelName} {step1.storageGb}GB</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-zinc-500">Condición</span>
-            <span className="text-zinc-200">{conditionLabels[step2.condition ?? ''] ?? '–'}</span>
+            <span className="text-slate-400">Condición</span>
+            <span className="text-slate-700">{conditionLabels[step2.condition ?? ''] ?? '–'}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-zinc-500">Batería</span>
-            <span className="text-zinc-200">{step2.batteryHealth}%</span>
+            <span className="text-slate-400">Batería</span>
+            <span className="text-slate-700">{step2.batteryHealth}%</span>
           </div>
-          <div className="flex justify-between border-t border-zinc-800 pt-2">
-            <span className="text-zinc-500">Precio</span>
+          <div className="flex justify-between border-t border-slate-200 pt-2">
+            <span className="text-slate-400">Precio</span>
             <span className="text-xl font-bold text-white">{formatPrice(step3.priceUsd ?? 0)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-zinc-500">Ciudad</span>
-            <span className="text-zinc-200">{step3.city ?? '–'}</span>
+            <span className="text-slate-400">Ciudad</span>
+            <span className="text-slate-700">{step3.city ?? '–'}</span>
           </div>
         </div>
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 text-xs text-zinc-500">
-        Tu listing quedará en estado <strong className="text-white">Pendiente de verificación</strong>.
+      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-xs text-slate-400">
+        Tu listing quedará en estado <strong className="text-slate-900">Pendiente de verificación</strong>.
         Un moderador revisará tus fotos en máx. 2 horas y recibirás una notificación.
       </div>
 
@@ -730,14 +730,14 @@ function Step5({ onBack }: { onBack: () => void }) {
       )}
 
       <div className="flex gap-3">
-        <button type="button" onClick={onBack} disabled={submitting} className="flex-1 rounded-xl border border-zinc-700 py-3 text-sm font-medium text-zinc-400 disabled:opacity-40 hover:text-white">
+        <button type="button" onClick={onBack} disabled={submitting} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 disabled:opacity-40 hover:text-white">
           Atrás
         </button>
         <button
           type="button"
           onClick={() => void handlePublish()}
           disabled={submitting}
-          className="flex-1 rounded-xl bg-blue-600 py-3 font-semibold text-white disabled:opacity-60 hover:bg-blue-700 flex items-center justify-center gap-2"
+          className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white disabled:opacity-60 hover:bg-green-700 flex items-center justify-center gap-2"
         >
           {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Enviar a verificación
@@ -818,9 +818,9 @@ export default function SellPage() {
 
       {creatingDraft && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-3 rounded-2xl bg-zinc-900 p-8">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-            <p className="text-sm text-zinc-400">Creando borrador...</p>
+          <div className="flex flex-col items-center gap-3 rounded-2xl bg-slate-50 p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+            <p className="text-sm text-slate-500">Creando borrador...</p>
           </div>
         </div>
       )}

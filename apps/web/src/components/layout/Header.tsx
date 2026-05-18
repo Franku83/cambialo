@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Search, Plus, X, User, LogOut, LayoutDashboard } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -35,18 +35,85 @@ function useDebounce<T>(value: T, delay: number): T {
   return debounced
 }
 
+function SearchBar({
+  query,
+  setQuery,
+  results,
+  showResults,
+  setShowResults,
+  onSubmit,
+  searchRef,
+}: {
+  query: string
+  setQuery: (v: string) => void
+  results: QuickResult[]
+  showResults: boolean
+  setShowResults: (v: boolean) => void
+  onSubmit: (e: React.FormEvent) => void
+  searchRef: React.RefObject<HTMLDivElement | null>
+}) {
+  return (
+    <div ref={searchRef} className="relative w-full">
+      <form onSubmit={onSubmit}>
+        <div className="relative">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => results.length > 0 && setShowResults(true)}
+            placeholder="Busca iPhone 14, Samsung S23..."
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-10 text-sm text-slate-900 placeholder-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:shadow-[0_0_0_3px_rgba(22,163,74,0.15)]"
+          />
+          <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+            <Search className="h-4 w-4" />
+          </button>
+        </div>
+      </form>
+
+      {showResults && results.length > 0 && (
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+          {results.map((r) => (
+            <Link
+              key={r.id}
+              href={`/listings/${r.id}`}
+              onClick={() => setShowResults(false)}
+              className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-slate-50"
+            >
+              {r.coverPhotoUrl ? (
+                <img src={r.coverPhotoUrl} alt="" className="h-10 w-10 rounded-md object-cover bg-slate-100" />
+              ) : (
+                <div className="h-10 w-10 rounded-md bg-slate-100" />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="truncate text-sm font-medium text-slate-900">{r.brand} {r.modelName}</p>
+              </div>
+              <span className="text-sm font-semibold text-green-600">
+                ${Number(r.priceUsd).toLocaleString('es-VE')}
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function Header() {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<QuickResult[]>([])
   const [showResults, setShowResults] = useState(false)
   const [mobileSearch, setMobileSearch] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [activeBrand, setActiveBrand] = useState('')
   const searchRef = useRef<HTMLDivElement>(null)
   const debouncedQuery = useDebounce(query, 300)
+
+  const activeBrand = searchParams.get('brand') ?? ''
 
   useEffect(() => {
     const supabase = createClient()
@@ -55,16 +122,19 @@ export function Header() {
       if (data.user) {
         void supabase
           .from('users')
-          .select('avatar_url')
+          .select('avatar_url, username')
           .eq('id', data.user.id)
           .single()
           .then(({ data: profile }) => {
-            setAvatarUrl((profile as { avatar_url?: string } | null)?.avatar_url ?? null)
+            const p = profile as { avatar_url?: string; username?: string } | null
+            setAvatarUrl(p?.avatar_url ?? null)
+            setUsername(p?.username ?? null)
           })
       }
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null)
+      if (!session?.user) { setAvatarUrl(null); setUsername(null) }
     })
     return () => subscription.unsubscribe()
   }, [])
@@ -113,53 +183,11 @@ export function Header() {
     router.refresh()
   }
 
-  const searchBar = (
-    <div ref={searchRef} className="relative w-full max-w-[500px]">
-      <form onSubmit={handleSearch}>
-        <div className="relative">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => results.length > 0 && setShowResults(true)}
-            placeholder="Busca iPhone 14, Samsung S23..."
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-10 text-sm text-slate-900 placeholder-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:shadow-[0_0_0_3px_rgba(22,163,74,0.15)]"
-          />
-          <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-            <Search className="h-4 w-4" />
-          </button>
-        </div>
-      </form>
-
-      {showResults && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-          {results.map((r) => (
-            <Link
-              key={r.id}
-              href={`/listings/${r.id}`}
-              onClick={() => setShowResults(false)}
-              className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-slate-50"
-            >
-              {r.coverPhotoUrl ? (
-                <img src={r.coverPhotoUrl} alt="" className="h-10 w-10 rounded-md object-cover bg-slate-100" />
-              ) : (
-                <div className="h-10 w-10 rounded-md bg-slate-100" />
-              )}
-              <div className="flex-1 min-w-0">
-                <p className="truncate text-sm font-medium text-slate-900">{r.brand} {r.modelName}</p>
-              </div>
-              <span className="text-sm font-semibold text-green-600">
-                ${Number(r.priceUsd).toLocaleString('es-VE')}
-              </span>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+  const isHome = pathname === '/'
 
   return (
     <>
+      {/* Main header bar — sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
           {/* Logo */}
@@ -168,8 +196,16 @@ export function Header() {
           </Link>
 
           {/* Search — desktop */}
-          <div className="hidden flex-1 justify-center px-4 md:flex">
-            {searchBar}
+          <div className="hidden flex-1 justify-center px-4 md:flex max-w-[500px] mx-auto">
+            <SearchBar
+              query={query}
+              setQuery={setQuery}
+              results={results}
+              showResults={showResults}
+              setShowResults={setShowResults}
+              onSubmit={handleSearch}
+              searchRef={searchRef}
+            />
           </div>
 
           <div className="ml-auto flex items-center gap-2">
@@ -205,18 +241,23 @@ export function Header() {
                   )}
                 </button>
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-1.5 w-44 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-                    <Link href="/dashboard" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
-                      <LayoutDashboard className="h-4 w-4" /> Dashboard
-                    </Link>
-                    <Link href={`/profile/${user.email?.split('@')[0]}`} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
-                      <User className="h-4 w-4" /> Mi perfil
-                    </Link>
-                    <hr className="border-slate-100" />
-                    <button onClick={handleSignOut} className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                      <LogOut className="h-4 w-4" /> Cerrar sesión
-                    </button>
-                  </div>
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                    <div className="absolute right-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+                      <Link href="/dashboard" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <LayoutDashboard className="h-4 w-4" /> Dashboard
+                      </Link>
+                      {username && (
+                        <Link href={`/profile/${username}`} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                          <User className="h-4 w-4" /> Mi perfil
+                        </Link>
+                      )}
+                      <hr className="border-slate-100" />
+                      <button onClick={handleSignOut} className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <LogOut className="h-4 w-4" /> Cerrar sesión
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
             ) : (
@@ -230,37 +271,48 @@ export function Header() {
           </div>
         </div>
 
-        {/* Category nav */}
-        <div className="border-t border-slate-100">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex gap-0 overflow-x-auto scrollbar-hide">
-              {BRANDS.map((b) => (
-                <Link
-                  key={b.value}
-                  href={b.value ? `/?brand=${b.value}` : '/'}
-                  onClick={() => setActiveBrand(b.value)}
-                  className={cn(
-                    'shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
-                    activeBrand === b.value
-                      ? 'border-green-600 text-green-600'
-                      : 'border-transparent text-slate-600 hover:text-slate-900',
-                  )}
-                >
-                  {b.label}
-                </Link>
-              ))}
+        {/* Category nav — solo visible en home */}
+        {isHome && (
+          <div className="border-t border-slate-100">
+            <div className="mx-auto max-w-7xl px-4">
+              <div className="flex gap-0 overflow-x-auto scrollbar-hide">
+                {BRANDS.map((b) => (
+                  <Link
+                    key={b.value}
+                    href={b.value ? `/?brand=${b.value}` : '/'}
+                    className={cn(
+                      'shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
+                      activeBrand === b.value
+                        ? 'border-green-600 text-green-600'
+                        : 'border-transparent text-slate-600 hover:text-slate-900',
+                    )}
+                  >
+                    {b.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* Mobile search overlay */}
       {mobileSearch && (
         <div className="fixed inset-0 z-50 bg-white p-4 md:hidden">
           <div className="flex items-center gap-3">
-            {searchBar}
+            <div className="flex-1">
+              <SearchBar
+                query={query}
+                setQuery={setQuery}
+                results={results}
+                showResults={showResults}
+                setShowResults={setShowResults}
+                onSubmit={handleSearch}
+                searchRef={searchRef}
+              />
+            </div>
             <button
-              onClick={() => { setMobileSearch(false); setQuery('') }}
+              onClick={() => { setMobileSearch(false); setQuery(''); setShowResults(false) }}
               className="shrink-0 text-slate-500"
             >
               <X className="h-5 w-5" />
