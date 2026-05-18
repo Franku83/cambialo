@@ -37,7 +37,8 @@ export function ReviewForm({ listingId, reviewedId, reviewedUsername, onSuccess 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const { error } = await supabase.from('reviews').insert({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('reviews') as any).insert({
       listing_id: listingId,
       reviewer_id: user.id,
       reviewed_id: reviewedId,
