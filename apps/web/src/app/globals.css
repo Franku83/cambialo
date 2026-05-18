@@ -1,19 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
-  --color-brand-900: #1e3a8a;
-
-  --color-verified: #16a34a;
-  --color-verified-light: #dcfce7;
+  --color-primary:          #16a34a;
+  --color-primary-hover:    #15803d;
+  --color-bg:               #ffffff;
+  --color-surface:          #f8fafc;
+  --color-border:           #e2e8f0;
+  --color-text:             #0f172a;
+  --color-text-muted:       #64748b;
+  --color-battery-high:     #16a34a;
+  --color-battery-mid:      #d97706;
+  --color-battery-low:      #dc2626;
+  --color-verified:         #16a34a;
+  --color-unverified:       #94a3b8;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -26,8 +25,8 @@
   }
 
   body {
-    background-color: #09090b;
-    color: #fafafa;
+    background-color: #ffffff;
+    color: #0f172a;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: none;
   }
@@ -36,6 +35,22 @@
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes verified-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.verified-badge:hover {
+  animation: verified-pulse 1.5s ease-in-out infinite;
 }
 
 .scrollbar-hide::-webkit-scrollbar { display: none; }
