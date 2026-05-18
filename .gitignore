@@ -51,4 +51,11 @@ redis/
 redis.zip
 
 # Claude
-.claude/settings.local.json
+.claude/
+.mcp.json
+
+# Vercel
+.vercel/
+
+# Railway
+.railway/
