@@ -14,7 +14,7 @@ RUN npm install
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN cd apps/api && npx prisma generate
+RUN npx prisma generate --schema=packages/db/prisma/schema.prisma
 RUN npm run build -w apps/api
 
 # Minimal production image
