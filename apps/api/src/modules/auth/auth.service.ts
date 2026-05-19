@@ -46,11 +46,11 @@ export class AuthService {
       throw new ConflictException('Ese nombre de usuario ya está en uso')
     }
 
-    // Crear usuario en Supabase Auth
+    // Crear usuario en Supabase Auth — email_confirm: true para login inmediato
     const { data: authData, error: authError } = await this.supabase.auth.admin.createUser({
       email: dto.email,
       password: dto.password,
-      email_confirm: false,
+      email_confirm: true,
       user_metadata: {
         username: dto.username,
         full_name: dto.fullName,
@@ -61,7 +61,7 @@ export class AuthService {
       throw new InternalServerErrorException('Error al crear la cuenta: ' + authError.message)
     }
 
-    // Crear perfil en la tabla users (sincronizado con Supabase Auth)
+    // Crear perfil en la tabla users
     const user = await this.prisma.user.create({
       data: {
         id: authData.user.id,
@@ -71,13 +71,8 @@ export class AuthService {
       },
     })
 
-    // Enviar email de confirmación
-    await this.supabase.auth.admin.inviteUserByEmail(dto.email).catch(() => {
-      // Non-blocking — no fallar si el email no se envía
-    })
-
     return {
-      message: 'Cuenta creada. Revisa tu email para confirmar tu cuenta.',
+      message: 'Cuenta creada exitosamente.',
       userId: user.id,
     }
   }

@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { createClient } from '@/lib/supabase/client'
-import { UserPlus, Mail, Lock, User, AtSign, Loader2 } from 'lucide-react'
+import { UserPlus, Lock, User, AtSign, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 
 const registerSchema = z.object({
   username: z.string()
@@ -23,10 +26,9 @@ const inputCls = 'w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-1
 const labelCls = 'text-sm font-medium text-slate-700'
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const supabase = createClient()
 
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -36,37 +38,39 @@ export default function RegisterPage() {
     setLoading(true)
     setError(null)
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
+      // 1. Registrar via API — crea auth user + public.users en un solo paso
+      const res = await fetch(`${API_URL}/api/v1/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: data.username,
+          fullName: data.fullName,
+          email: data.email,
+          password: data.password,
+        }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({})) as { message?: string }
+        throw new Error(body.message ?? 'Error al registrarse')
+      }
+
+      // 2. Auto-login con Supabase para crear la sesión del cliente
+      const supabase = createClient()
+      const { error: loginError } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
-        options: {
-          data: { username: data.username, full_name: data.fullName },
-        },
       })
-      if (signUpError) throw signUpError
-      setSuccess(true)
+      if (loginError) throw loginError
+
+      // 3. Redirigir al dashboard
+      router.push('/dashboard')
+      router.refresh()
     } catch (err: unknown) {
       setError((err as { message?: string })?.message ?? 'Error al registrarse')
     } finally {
       setLoading(false)
     }
-  }
-
-  if (success) {
-    return (
-      <div className="space-y-4 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-green-200 bg-green-50">
-          <Mail className="h-8 w-8 text-green-600" />
-        </div>
-        <h2 className="text-2xl font-semibold text-slate-900">¡Casi listo!</h2>
-        <p className="text-slate-500 text-sm">
-          Enviamos un enlace de confirmación a tu correo. Revisa tu bandeja de entrada.
-        </p>
-        <Link href="/login" className="inline-block font-medium text-green-600 hover:text-green-700">
-          Volver al inicio de sesión
-        </Link>
-      </div>
-    )
   }
 
   return (
@@ -127,7 +131,7 @@ export default function RegisterPage() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 py-2.5 font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
         >
           {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <UserPlus className="h-5 w-5" />}
-          Registrarse
+          {loading ? 'Creando cuenta...' : 'Registrarse'}
         </button>
       </form>
 
