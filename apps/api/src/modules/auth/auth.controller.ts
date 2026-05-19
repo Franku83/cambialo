@@ -3,6 +3,7 @@ import {
   Post,
   Get,
   Body,
+  Query,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -47,6 +48,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Obtener perfil del usuario autenticado' })
   async getMe(@CurrentUser() user: { id: string }) {
     return this.authService.getMe(user.id)
+  }
+
+  @Get('check-username')
+  @ApiOperation({ summary: 'Verificar disponibilidad de username' })
+  async checkUsername(@Query('username') username: string) {
+    return this.authService.checkUsername(username ?? '')
   }
 
   @Post('logout')

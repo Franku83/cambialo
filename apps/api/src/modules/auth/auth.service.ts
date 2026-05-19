@@ -167,6 +167,17 @@ export class AuthService {
     }
   }
 
+  async checkUsername(username: string): Promise<{ available: boolean }> {
+    if (!username || username.length < 3) return { available: false }
+    try {
+      this.usernameValidator.validate(username)
+    } catch {
+      return { available: false }
+    }
+    const existing = await this.prisma.user.findFirst({ where: { username: username.toLowerCase() } })
+    return { available: !existing }
+  }
+
   async logout(accessToken: string) {
     await this.supabase.auth.admin.signOut(accessToken).catch(() => {
       // Best-effort — el token ya puede estar expirado

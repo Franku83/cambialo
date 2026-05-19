@@ -10,6 +10,18 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', user.id)
+          .single()
+        const p = profile as { username?: string | null } | null
+        if (!p?.username) {
+          return NextResponse.redirect(`${origin}/register/complete`)
+        }
+      }
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

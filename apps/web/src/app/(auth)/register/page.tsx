@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { createClient } from '@/lib/supabase/client'
-import { UserPlus, Lock, User, AtSign, Loader2, Mail } from 'lucide-react'
+import { UserPlus, Lock, User, AtSign, Loader2, Mail, Chrome } from 'lucide-react'
 import Link from 'next/link'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -33,6 +33,14 @@ export default function RegisterPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
   })
+
+  const handleGoogleSignUp = async () => {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    })
+  }
 
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true)
@@ -134,6 +142,23 @@ export default function RegisterPage() {
           {loading ? 'Creando cuenta...' : 'Registrarse'}
         </button>
       </form>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-2 text-slate-400">O regístrate con</span>
+        </div>
+      </div>
+
+      <button
+        onClick={() => void handleGoogleSignUp()}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+      >
+        <Chrome className="h-5 w-5" />
+        Google
+      </button>
 
       <p className="text-center text-sm text-slate-500">
         ¿Ya tienes una cuenta?{' '}
