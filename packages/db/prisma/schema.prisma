@@ -120,6 +120,12 @@ model User {
   locationCity         String?   @map("location_city")
   locationState        String?   @map("location_state")
   whatsappNumber       String?   @map("whatsapp_number")
+  whatsappPublic       Boolean   @default(false) @map("whatsapp_public")
+  bio                  String?   @db.Text
+  instagram            String?
+  twitter              String?
+  website              String?
+  tiktok               String?
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 

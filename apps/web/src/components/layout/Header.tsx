@@ -116,32 +116,33 @@ export function Header() {
 
   useEffect(() => {
     const supabase = createClient()
+
+    const loadProfile = async (userId: string) => {
+      const [{ data: profile }, { data: roles }] = await Promise.all([
+        supabase.from('users').select('avatar_url, username').eq('id', userId).single(),
+        supabase.from('user_roles').select('role').eq('user_id', userId),
+      ])
+      const p = profile as { avatar_url?: string; username?: string } | null
+      setAvatarUrl(p?.avatar_url ?? null)
+      setUsername(p?.username ?? null)
+      const r = (roles ?? []) as { role: string }[]
+      setIsAdmin(r.some(x => x.role === 'admin' || x.role === 'owner'))
+    }
+
     void supabase.auth.getUser().then(({ data }) => {
       setUser(data.user)
-      if (data.user) {
-        void supabase
-          .from('users')
-          .select('avatar_url, username')
-          .eq('id', data.user.id)
-          .single()
-          .then(({ data: profile }) => {
-            const p = profile as { avatar_url?: string; username?: string } | null
-            setAvatarUrl(p?.avatar_url ?? null)
-            setUsername(p?.username ?? null)
-          })
-        void supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .then(({ data: roles }) => {
-            const r = (roles ?? []) as { role: string }[]
-            setIsAdmin(r.some(x => x.role === 'admin' || x.role === 'owner'))
-          })
-      }
+      if (data.user) void loadProfile(data.user.id)
     })
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null)
-      if (!session?.user) { setAvatarUrl(null); setUsername(null) }
+      if (session?.user) {
+        void loadProfile(session.user.id)
+      } else {
+        setAvatarUrl(null)
+        setUsername(null)
+        setIsAdmin(false)
+      }
     })
     return () => subscription.unsubscribe()
   }, [])
