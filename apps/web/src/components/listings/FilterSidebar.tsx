@@ -6,7 +6,7 @@ import { X, SlidersHorizontal } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-const BRANDS = ['Apple', 'Samsung', 'Motorola', 'Xiaomi', 'Huawei', 'LG']
+const BRANDS = ['Apple', 'Samsung']
 const CONDITIONS = [
   { value: 'mint', label: 'Nuevo' },
   { value: 'good', label: 'Bueno' },

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Search, Plus, X, User, LogOut, LayoutDashboard } from 'lucide-react'
+import { Search, Plus, X, User, LogOut, LayoutDashboard, ShieldCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -12,8 +12,6 @@ const BRANDS = [
   { label: 'Todos', value: '' },
   { label: 'Apple', value: 'apple' },
   { label: 'Samsung', value: 'samsung' },
-  { label: 'Motorola', value: 'motorola' },
-  { label: 'Xiaomi', value: 'xiaomi' },
 ]
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -105,6 +103,7 @@ export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<QuickResult[]>([])
   const [showResults, setShowResults] = useState(false)
@@ -129,6 +128,14 @@ export function Header() {
             const p = profile as { avatar_url?: string; username?: string } | null
             setAvatarUrl(p?.avatar_url ?? null)
             setUsername(p?.username ?? null)
+          })
+        void supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', data.user.id)
+          .then(({ data: roles }) => {
+            const r = (roles ?? []) as { role: string }[]
+            setIsAdmin(r.some(x => x.role === 'admin' || x.role === 'owner'))
           })
       }
     })
@@ -250,6 +257,11 @@ export function Header() {
                       {username && (
                         <Link href={`/profile/${username}`} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                           <User className="h-4 w-4" /> Mi perfil
+                        </Link>
+                      )}
+                      {isAdmin && (
+                        <Link href="/admin/users" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
+                          <ShieldCheck className="h-4 w-4" /> Panel Admin
                         </Link>
                       )}
                       <hr className="border-slate-100" />

@@ -106,6 +106,9 @@ function Step1({ onNext }: { onNext: () => void }) {
     setQuery(`${m.brand} ${m.modelName}`)
     setModels([])
     setValue('deviceModelId', m.id)
+    if (m.originalStorageOptions?.length > 0) {
+      setValue('storageGb', m.originalStorageOptions[0]!)
+    }
   }
 
   const onSubmit: (data: Step1Form) => Promise<void> = async (data) => {
@@ -750,15 +753,19 @@ function Step5({ onBack }: { onBack: () => void }) {
 // ─── Page principal ──────────────────────────────────────────────────────────
 
 export default function SellPage() {
-  const { currentStep, nextStep, prevStep, step1, step2, step3, listingId, setListingId, reset } =
+  const { currentStep, nextStep, prevStep, listingId, setListingId, reset } =
     useSellStore()
   const [creatingDraft, setCreatingDraft] = useState(false)
+  const [draftError, setDraftError] = useState<string | null>(null)
 
   // Crear el draft al terminar el paso 1
+  // Usa getState() para leer el store actualizado (evita closure stale de React)
   const handleStep1Next = async () => {
-    if (listingId) return nextStep() // ya existe el draft
+    const { step1: s1, step2: s2, listingId: lid } = useSellStore.getState()
+    if (lid) { nextStep(); return }
 
     setCreatingDraft(true)
+    setDraftError(null)
     try {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
@@ -774,23 +781,25 @@ export default function SellPage() {
           Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
-          deviceModelId: step1.deviceModelId,
-          storageGb: step1.storageGb,
-          imeiLast4: step1.imeiLast4,
-          // Defaults for required fields — se actualizan en pasos siguientes
+          deviceModelId: s1.deviceModelId,
+          storageGb: s1.storageGb,
+          imeiLast4: s1.imeiLast4,
           priceUsd: 1,
           color: 'No especificado',
-          batteryHealth: step2.batteryHealth ?? 85,
-          condition: step2.condition ?? 'good',
+          batteryHealth: s2.batteryHealth ?? 85,
+          condition: s2.condition ?? 'good',
         }),
       })
 
-      if (!res.ok) throw new Error('Error creando borrador')
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as { message?: string }
+        throw new Error(err.message ?? `Error ${res.status} creando borrador`)
+      }
       const data = await res.json() as { id: string }
       setListingId(data.id)
       nextStep()
-    } catch {
-      // El error se muestra inline en el paso 1 si necesario
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : 'Error inesperado. Intenta de nuevo.')
     } finally {
       setCreatingDraft(false)
     }
@@ -801,7 +810,14 @@ export default function SellPage() {
       <StepIndicator currentStep={currentStep} steps={STEPS} />
 
       {currentStep === 1 && (
-        <Step1 onNext={() => void handleStep1Next()} />
+        <>
+          <Step1 onNext={() => void handleStep1Next()} />
+          {draftError && (
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {draftError}
+            </div>
+          )}
+        </>
       )}
       {currentStep === 2 && (
         <Step2 onNext={nextStep} onBack={prevStep} />
