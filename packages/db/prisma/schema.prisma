@@ -167,6 +167,7 @@ model DeviceModel {
 
   listings    Listing[]
   imeiReports ImeiReport[]
+  priceIndex  PriceIndex[]
 
   @@map("device_models")
 }
@@ -211,11 +212,17 @@ model Listing {
   // Precio negociable
   acceptsOffers   Boolean            @default(false) @map("accepts_offers")
   minOfferUsd     Decimal?           @map("min_offer_usd") @db.Decimal(10, 2)
+  acceptsTradeIn  Boolean            @default(false) @map("accepts_trade_in")
+
+  // Interacciones
+  whatsappClicks  Int                @default(0) @map("whatsapp_clicks")
 
   // Ubicación
   city            String?
   state           String?
   meetAtMall      Boolean            @default(true) @map("meet_at_mall")
+  latitude        Float?
+  longitude       Float?
 
   expiresAt       DateTime           @default(dbgenerated("NOW() + INTERVAL '60 days'")) @map("expires_at")
   createdAt       DateTime           @default(now()) @map("created_at")
@@ -399,6 +406,23 @@ model Notification {
 
   @@index([userId, isRead, createdAt(sort: Desc)])
   @@map("notifications")
+}
+
+model PriceIndex {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  deviceModelId String   @map("device_model_id") @db.Uuid
+  storageGb     Int      @map("storage_gb")
+  avgPrice      Decimal  @map("avg_price") @db.Decimal(10, 2)
+  medianPrice   Decimal  @map("median_price") @db.Decimal(10, 2)
+  minPrice      Decimal  @map("min_price") @db.Decimal(10, 2)
+  maxPrice      Decimal  @map("max_price") @db.Decimal(10, 2)
+  sampleSize    Int      @map("sample_size")
+  calculatedAt  DateTime @default(now()) @map("calculated_at")
+
+  deviceModel   DeviceModel @relation(fields: [deviceModelId], references: [id])
+
+  @@unique([deviceModelId, storageGb])
+  @@map("price_index")
 }
 
 model ImeiReport {

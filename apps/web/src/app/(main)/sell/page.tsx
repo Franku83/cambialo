@@ -398,9 +398,10 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const priceUsd = watch('priceUsd')
   const acceptsOffers = step3.acceptsOffers ?? false
   const meetAtMall = step3.meetAtMall ?? true
+  const acceptsTradeIn = step3.acceptsTradeIn ?? false
 
   const onSubmit: (data: Step3Form) => Promise<void> = async (data) => {
-    updateStep3({ ...data, acceptsOffers, meetAtMall })
+    updateStep3({ ...data, acceptsOffers, meetAtMall, acceptsTradeIn })
     onNext()
   }
 
@@ -492,6 +493,24 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           )}
         >
           <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', meetAtMall ? 'translate-x-4' : 'translate-x-0')} />
+        </button>
+      </div>
+
+      {/* Trade-in */}
+      <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div>
+          <p className="text-sm font-medium text-slate-700">Acepto equipos como parte de pago (Trade-in)</p>
+          <p className="text-xs text-slate-400">El comprador puede ofrecerte su equipo + diferencia</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => updateStep3({ acceptsTradeIn: !acceptsTradeIn })}
+          className={cn(
+            'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
+            acceptsTradeIn ? 'bg-green-600' : 'bg-slate-200',
+          )}
+        >
+          <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', acceptsTradeIn ? 'translate-x-4' : 'translate-x-0')} />
         </button>
       </div>
 

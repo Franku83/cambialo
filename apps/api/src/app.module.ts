@@ -18,6 +18,7 @@ import { AdminModule } from './modules/admin/admin.module'
 import { FraudReportsModule } from './modules/fraud-reports/fraud-reports.module'
 import { SearchAlertsModule } from './modules/search-alerts/search-alerts.module'
 import { DeviceModelsModule } from './modules/device-models/device-models.module'
+import { PriceIndexModule } from './modules/price-index/price-index.module'
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { DeviceModelsModule } from './modules/device-models/device-models.module
     FraudReportsModule,
     SearchAlertsModule,
     DeviceModelsModule,
+    PriceIndexModule,
   ],
 })
 export class AppModule {}

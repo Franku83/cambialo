@@ -5,6 +5,8 @@ import { MapPin, Shield, Star } from 'lucide-react'
 import { ListingGallery } from '@/components/listings/ListingGallery'
 import { SaveButton } from '@/components/listings/SaveButton'
 import { ListingCard } from '@/components/listings/ListingCard'
+import PriceIndicator from '@/components/listings/PriceIndicator'
+import TradeInSimulator from '@/components/listings/TradeInSimulator'
 import { formatPrice } from '@/lib/utils'
 import type { ListingCondition, VerificationStatus } from '@cambialo/types'
 
@@ -24,6 +26,7 @@ interface ListingDetail {
   hasIcloudLock: boolean; hasGoogleLock: boolean; hasRepairs: boolean; repairDetails: string | null
   includesBox: boolean; includesCharger: boolean; includesEarphones: boolean
   description: string | null; acceptsOffers: boolean; minOfferUsd: string | null
+  acceptsTradeIn: boolean
   city: string | null; state: string | null; meetAtMall: boolean
   isBumped: boolean; viewsCount: number; savesCount: number; isSaved: boolean
   photos: Photo[]; seller: Seller; deviceModel: DeviceModel
@@ -264,6 +267,22 @@ export default async function ListingDetailPage({ params }: Props) {
             <p className="border-t border-slate-100 pt-3 text-sm text-slate-600">{listing.description}</p>
           )}
         </div>
+
+        {/* Price indicator */}
+        <PriceIndicator
+          listingPrice={Number(listing.priceUsd)}
+          deviceModelId={listing.deviceModel.id}
+          storageGb={listing.storageGb}
+        />
+
+        {/* Trade-in */}
+        {listing.acceptsTradeIn && (
+          <TradeInSimulator
+            listingPrice={Number(listing.priceUsd)}
+            listingId={listing.id}
+            {...(listing.seller.whatsappNumber && { sellerWhatsapp: listing.seller.whatsappNumber })}
+          />
+        )}
 
         {/* Vendedor */}
         <Link

@@ -41,6 +41,7 @@ export interface Step3Data {
   city: string
   state: string
   meetAtMall: boolean
+  acceptsTradeIn: boolean
   description: string
 }
 

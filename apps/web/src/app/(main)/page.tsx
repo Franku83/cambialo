@@ -9,6 +9,7 @@ import { ListingCard, ListingCardSkeleton, type ViewMode } from '@/components/li
 import { FilterSidebar } from '@/components/listings/FilterSidebar'
 import { ViewToggle } from '@/components/listings/ViewToggle'
 import { EmptyStateWithFilters, EmptyStateFeed } from '@/components/listings/EmptyState'
+import LocationBanner from '@/components/home/LocationBanner'
 import type { ListingCondition, VerificationStatus } from '@cambialo/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -152,6 +153,7 @@ function FeedContent() {
   return (
     <div className="min-h-screen bg-white">
       <TrustSignals />
+      <LocationBanner />
 
       <div className="mx-auto max-w-7xl px-4 py-6">
         {/* Feed header */}

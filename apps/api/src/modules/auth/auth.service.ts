@@ -8,6 +8,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { PrismaService } from '../../common/database/prisma.service'
+import { UsernameValidatorService } from '../users/username-validator.service'
 import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
 import { MagicLinkDto } from './dto/magic-link.dto'
@@ -19,6 +20,7 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
+    private readonly usernameValidator: UsernameValidatorService,
   ) {
     this.supabase = createClient(
       this.config.get<string>('NEXT_PUBLIC_SUPABASE_URL')!,
@@ -27,6 +29,9 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
+    // Validar formato y censura del username
+    this.usernameValidator.validate(dto.username)
+
     // Verificar unicidad antes de crear en Supabase
     const existingUser = await this.prisma.user.findFirst({
       where: {

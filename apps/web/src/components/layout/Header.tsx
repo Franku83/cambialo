@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 const BRANDS = [
-  { label: 'Todos', value: '' },
-  { label: 'Apple', value: 'apple' },
-  { label: 'Samsung', value: 'samsung' },
+  { label: 'Todos', value: '', href: '/' },
+  { label: 'Apple', value: 'apple', href: '/apple' },
+  { label: 'Samsung', value: 'samsung', href: '/samsung' },
 ]
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -190,7 +190,7 @@ export function Header() {
     router.refresh()
   }
 
-  const isHome = pathname === '/'
+  const isHome = pathname === '/' || pathname.startsWith('/apple') || pathname.startsWith('/samsung')
 
   return (
     <>
@@ -260,9 +260,14 @@ export function Header() {
                         </Link>
                       )}
                       {isAdmin && (
-                        <Link href="/admin/users" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
-                          <ShieldCheck className="h-4 w-4" /> Panel Admin
-                        </Link>
+                        <>
+                          <Link href="/admin/users" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
+                            <ShieldCheck className="h-4 w-4" /> Usuarios
+                          </Link>
+                          <Link href="/admin/moderation" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
+                            <ShieldCheck className="h-4 w-4" /> Moderación
+                          </Link>
+                        </>
                       )}
                       <hr className="border-slate-100" />
                       <button onClick={handleSignOut} className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
@@ -291,10 +296,10 @@ export function Header() {
                 {BRANDS.map((b) => (
                   <Link
                     key={b.value}
-                    href={b.value ? `/?brand=${b.value}` : '/'}
+                    href={b.href}
                     className={cn(
                       'shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
-                      activeBrand === b.value
+                      (b.value === '' ? pathname === '/' : pathname.startsWith(`/${b.value}`))
                         ? 'border-green-600 text-green-600'
                         : 'border-transparent text-slate-600 hover:text-slate-900',
                     )}

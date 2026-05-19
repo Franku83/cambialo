@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common'
 import { AdminController } from './admin.controller'
 import { AdminService } from './admin.service'
 import { ModerationController } from './moderation.controller'
+import { ModerationQueueController } from './moderation-queue.controller'
 import { ModerationService } from './moderation.service'
 import { NotificationsModule } from '../notifications/notifications.module'
 
 @Module({
   imports: [NotificationsModule],
-  controllers: [AdminController, ModerationController],
+  controllers: [AdminController, ModerationController, ModerationQueueController],
   providers: [AdminService, ModerationService],
   exports: [AdminService, ModerationService],
 })

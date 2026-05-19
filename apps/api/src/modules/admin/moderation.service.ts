@@ -46,6 +46,54 @@ export class ModerationService {
     })
   }
 
+  async approveListing(listingId: string, moderatorId: string) {
+    await this.assertModerator(moderatorId)
+
+    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+
+    await this.prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        verificationStatus: 'verified',
+        verifiedAt: new Date(),
+        status: 'active',
+      },
+    })
+
+    await this.notifications.createNotification({
+      userId: listing.sellerId,
+      type: 'listing_verified',
+      title: '¡Tu equipo fue verificado!',
+      body: 'Tu listing ya es visible en el feed de Cambialo.',
+      payload: { listingId },
+    })
+
+    return { approved: true }
+  }
+
+  async rejectListing(listingId: string, moderatorId: string, reason?: string) {
+    await this.assertModerator(moderatorId)
+
+    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+
+    await this.prisma.listing.update({
+      where: { id: listingId },
+      data: { verificationStatus: 'rejected', status: 'draft' },
+    })
+
+    await this.notifications.createNotification({
+      userId: listing.sellerId,
+      type: 'listing_rejected',
+      title: 'Listing rechazado',
+      body: reason ?? 'Tu listing fue rechazado. Revisa las fotos y vuelve a enviarlo.',
+      payload: { listingId, reason },
+    })
+
+    return { rejected: true, reason }
+  }
+
   async banUser(userId: string, reason: string, moderatorId: string) {
     await this.assertAdmin(moderatorId) // solo admins pueden banear
 
@@ -76,15 +124,15 @@ export class ModerationService {
 
   private async assertModerator(userId: string) {
     const role = await this.prisma.userRole_Assignment.findFirst({
-      where: { userId, role: { in: ['moderator', 'admin'] } },
+      where: { userId, role: { in: ['moderator', 'admin', 'owner'] } },
     })
-    if (!role) throw new UnauthorizedException('Se requiere rol de moderador o admin')
+    if (!role) throw new UnauthorizedException('Se requiere rol de moderador, admin u owner')
   }
 
   private async assertAdmin(userId: string) {
     const role = await this.prisma.userRole_Assignment.findFirst({
-      where: { userId, role: 'admin' },
+      where: { userId, role: { in: ['admin', 'owner'] } },
     })
-    if (!role) throw new UnauthorizedException('Se requiere rol de admin')
+    if (!role) throw new UnauthorizedException('Se requiere rol de admin u owner')
   }
 }
