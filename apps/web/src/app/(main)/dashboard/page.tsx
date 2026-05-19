@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ShoppingBag, TrendingUp, Award, Layers, PlusCircle, List, ShieldCheck } from 'lucide-react'
+import { ShoppingBag, TrendingUp, Award, Layers, PlusCircle, List, ShieldCheck, Crown } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function DashboardPage() {
@@ -20,6 +20,14 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single() as unknown as Promise<{ data: ProfileRow | null; error: unknown }>)
 
+  const { data: roles } = await (supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user.id) as unknown as Promise<{ data: { role: string }[] | null; error: unknown }>)
+
+  const isAdmin = roles?.some(r => r.role === 'admin' || r.role === 'owner') ?? false
+  const isOwner = roles?.some(r => r.role === 'owner') ?? false
+
   const { count: activeListings } = await (supabase
     .from('listings')
     .select('*', { count: 'exact', head: true })
@@ -36,11 +44,29 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-8 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">
-            ¡Hola, {profile?.full_name?.split(' ')[0] ?? 'Usuario'}!
-          </h1>
-          <p className="mt-1 text-sm text-slate-500">Resumen de tu actividad</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-slate-900">
+                ¡Hola, {profile?.full_name?.split(' ')[0] ?? profile?.username ?? 'Usuario'}!
+              </h1>
+              {isOwner && (
+                <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-700">
+                  <Crown className="h-3 w-3" /> Owner
+                </span>
+              )}
+              {!isOwner && isAdmin && (
+                <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-bold text-purple-700">Admin</span>
+              )}
+            </div>
+            {profile?.username && (
+              <p className="mt-0.5 text-sm text-slate-400">@{profile.username}</p>
+            )}
+            <p className="mt-1 text-sm text-slate-500">Resumen de tu actividad</p>
+          </div>
+          {profile?.avatar_url && (
+            <img src={profile.avatar_url} alt="avatar" className="h-12 w-12 rounded-full object-cover border-2 border-slate-200" />
+          )}
         </div>
 
         {/* Stats */}
@@ -114,6 +140,23 @@ export default async function DashboardPage() {
             </Link>
           ))}
         </div>
+
+        {/* Admin panel — solo para admin/owner */}
+        {isAdmin && (
+          <div className="rounded-2xl border border-purple-200 bg-purple-50 p-5">
+            <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-purple-900">
+              <ShieldCheck className="h-4 w-4" /> Panel de administración
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/admin/users" className="rounded-lg border border-purple-200 bg-white px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors">
+                Gestión de usuarios
+              </Link>
+              <Link href="/admin/moderation" className="rounded-lg border border-purple-200 bg-white px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors">
+                Cola de moderación
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

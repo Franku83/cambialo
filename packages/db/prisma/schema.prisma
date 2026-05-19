@@ -88,6 +88,8 @@ enum NotificationType {
   verification_rejected
   review_received
   listing_expired
+  listing_verified
+  listing_rejected
 }
 
 enum TransactionType {
@@ -112,14 +114,14 @@ model User {
   totalSales           Int       @default(0) @map("total_sales")
   totalPurchases       Int       @default(0) @map("total_purchases")
   isVerifiedSeller     Boolean   @default(false) @map("is_verified_seller")
-  verifiedSellerUntil  DateTime? @map("verified_seller_until")
+  verifiedSellerUntil DateTime? @map("verified_seller_until") @db.Timestamptz(6)
   isBanned             Boolean   @default(false) @map("is_banned")
   banReason            String?   @map("ban_reason")
   locationCity         String?   @map("location_city")
   locationState        String?   @map("location_state")
   whatsappNumber       String?   @map("whatsapp_number")
-  createdAt            DateTime  @default(now()) @map("created_at")
-  updatedAt            DateTime  @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relaciones
   roles                UserRole_Assignment[]
@@ -144,7 +146,7 @@ model UserRole_Assignment {
   userId    String   @map("user_id") @db.Uuid
   role      UserRole
   grantedBy String?  @map("granted_by") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   granter   User? @relation("RoleGrantedBy", fields: [grantedBy], references: [id])
@@ -163,7 +165,7 @@ model DeviceModel {
   originalColors         String[] @map("original_colors")
   imageUrl               String?  @map("image_url")
   isActive               Boolean  @default(true) @map("is_active")
-  createdAt              DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   listings    Listing[]
   imeiReports ImeiReport[]
@@ -225,8 +227,8 @@ model Listing {
   longitude       Float?
 
   expiresAt       DateTime           @default(dbgenerated("NOW() + INTERVAL '60 days'")) @map("expires_at")
-  createdAt       DateTime           @default(now()) @map("created_at")
-  updatedAt       DateTime           @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relaciones
   seller          User               @relation(fields: [sellerId], references: [id], onDelete: Cascade)
@@ -264,7 +266,7 @@ model ListingPhoto {
   isVerificationPhoto  Boolean  @default(false) @map("is_verification_photo")
   isCover              Boolean  @default(false) @map("is_cover")
   sortOrder            Int      @default(0) @map("sort_order")
-  createdAt            DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
@@ -281,7 +283,7 @@ model Offer {
   status        OfferStatus @default(pending)
   counterAmount Decimal?    @map("counter_amount") @db.Decimal(10, 2)
   expiresAt     DateTime    @default(dbgenerated("NOW() + INTERVAL '24 hours'")) @map("expires_at")
-  createdAt     DateTime    @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   buyer   User    @relation("BuyerOffers", fields: [buyerId], references: [id])
@@ -298,7 +300,7 @@ model Review {
   rating          Int
   comment         String?
   transactionType TransactionType @map("transaction_type")
-  createdAt       DateTime        @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   listing  Listing @relation(fields: [listingId], references: [id])
   reviewer User    @relation("ReviewsGiven", fields: [reviewerId], references: [id])
@@ -320,7 +322,7 @@ model SafeZone {
   googleMapsUrl String?      @map("google_maps_url")
   openingHours  Json?        @map("opening_hours")   // {"mon-fri": "9:00-21:00"}
   isActive      Boolean      @default(true) @map("is_active")
-  createdAt     DateTime     @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@map("safe_zones")
 }
@@ -334,7 +336,7 @@ model FraudReport {
   evidenceUrls   String[]          @map("evidence_urls")
   status         FraudReportStatus @default(open)
   adminNotes     String?           @map("admin_notes")
-  createdAt      DateTime          @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   reporter     User     @relation("ReporterFraud", fields: [reporterId], references: [id])
   reportedUser User     @relation("ReportedFraud", fields: [reportedUserId], references: [id])
@@ -353,7 +355,7 @@ model PaymentEvent {
   reference     String?
   status        PaymentStatus    @default(pending)
   confirmedAt   DateTime?        @map("confirmed_at")
-  createdAt     DateTime         @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user    User     @relation(fields: [userId], references: [id])
   listing Listing? @relation(fields: [listingId], references: [id])
@@ -364,7 +366,7 @@ model PaymentEvent {
 model SavedListing {
   userId    String   @map("user_id") @db.Uuid
   listingId String   @map("listing_id") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
@@ -384,7 +386,7 @@ model SearchAlert {
   city           String?
   isActive       Boolean  @default(true) @map("is_active")
   lastNotifiedAt DateTime? @map("last_notified_at")
-  createdAt      DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -400,7 +402,7 @@ model Notification {
   data       Json?                              // Payload extra (listing_id, offer_id, etc.)
   isRead     Boolean          @default(false) @map("is_read")
   pushSentAt DateTime?        @map("push_sent_at")
-  createdAt  DateTime         @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -435,7 +437,7 @@ model ImeiReport {
   flagged         Boolean   @default(false)
   flaggedAt       DateTime? @map("flagged_at")
   adminNotes      String?   @map("admin_notes")
-  createdAt       DateTime  @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   deviceModel DeviceModel? @relation(fields: [deviceModelId], references: [id])
   listing     Listing?     @relation(fields: [listingId], references: [id])
