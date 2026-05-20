@@ -40,6 +40,7 @@
 | **Sprint 6.2** | ✅ | KYC completo + auto-moderación + panel vendedor |
 | **Sprint 6.3** | ✅ | Geolocalización + límite listings KYC + notificaciones moderación |
 | **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad + panel usuario admin + MarkSoldModal + PriceIndicator |
+| **Sprint 6.5** | ✅ | Listings permanentes — lifecycle completo, sin hard delete |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -182,6 +183,33 @@
 
 ---
 
+## Sprint 6.5 — Completado (20 Mayo 2026)
+
+**Listings permanentes:**
+- ✅ Schema: `pending_review` agregado al enum `ListingStatus` + campo `soldAt DateTime?`
+- ✅ DELETE endpoint eliminado — ningún listing se borra de la DB jamás
+- ✅ `PATCH /listings/:id/status` con DTO validado y transiciones por rol
+  - Seller: `active↔paused`, `active/paused→sold`, `pending_review→paused`
+  - Moderador/Admin/Owner: `pending_review→active/removed`, `active/paused/sold→removed`
+- ✅ `getById` acepta listings inactivos — acceso controlado para draft/pending_review
+- ✅ `verification.service` marca listing como `pending_review` al enviar fotos
+- ✅ `MyListingsPanel`: sin botón borrar, confirmación inline para marcar vendido, overlays sold/removed, badges de estado con colores, opacidad para paused/expired
+- ✅ `ListingCard`: prop `status` con badges y overlays
+- ✅ `listings/[id]`: banners sold/expired/removed, contacto deshabilitado para inactivos
+- ✅ Perfil público: pestañas Activos / Vendidos con conteo
+
+**Fixes y mejoras adicionales (misma sesión):**
+- ✅ Verificación manual por admin: `POST /admin/users/:id/verify`
+- ✅ Auto-verify al asignar rol: moderator/admin/owner → `idVerified=true` automático
+- ✅ Owner oculto en UI de roles — solo moderator/admin asignables por interfaz
+- ✅ Barra de límite de listings desactivada en UI (`LISTING_LIMITS_UI` comentado)
+- ✅ 3 usuarios con rol elevado auto-verificados en producción (franku, alianexo, ubwnricardo)
+- ✅ Bug username desde email al registrar: trigger + upsert en API
+- ✅ Toggle switches FilterSidebar roto en móvil
+- ✅ Botón "Volver al feed" en listing detail
+
+---
+
 ## Pendientes — Sprint 7
 
 ### Variables de entorno pendientes (Railway / Vercel)
@@ -194,8 +222,8 @@
 - Sentry + Posthog
 - Dominio custom (`cambialo.app`)
 - k6 load testing
-- C1B: Magic link por dispositivo nuevo para vendedores verificados
-- MarkSoldModal UI completo con búsqueda de comprador por username
+- C1B: Magic link por dispositivo nuevo para vendedores verificados (`TrustedDevice` model + Resend)
+- Activar `LISTING_LIMITS_UI` en `MyListingsPanel` cuando se decida implementar límites
 
 ---
 
