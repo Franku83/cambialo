@@ -268,6 +268,9 @@ export function Header() {
                           <Link href="/admin/moderation" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
                             <ShieldCheck className="h-4 w-4" /> Moderación
                           </Link>
+                          <Link href="/admin/kyc" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">
+                            <ShieldCheck className="h-4 w-4" /> KYC
+                          </Link>
                         </>
                       )}
                       <hr className="border-slate-100" />

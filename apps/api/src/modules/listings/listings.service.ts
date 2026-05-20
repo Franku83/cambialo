@@ -2,10 +2,12 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { PrismaService } from '../../common/database/prisma.service'
+import { AutoModerationService } from '../admin/auto-moderation.service'
 import { CreateListingDto } from './dto/create-listing.dto'
 import { ListingFiltersDto } from './dto/listing-filters.dto'
 
@@ -28,6 +30,7 @@ const PUBLIC_SELLER_SELECT = {
 export class ListingsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly autoMod: AutoModerationService,
     @InjectQueue('listings') private readonly listingsQueue: Queue,
   ) {}
 
@@ -186,6 +189,9 @@ export class ListingsService {
       },
     })
 
+    // Auto-moderación (fire and forget — no bloquea la creación)
+    void this.autoMod.applyCheck(listing.id).catch(() => null)
+
     // Disparar job anti-fraude de IMEI
     await this.listingsQueue.add('check-imei', {
       listingId: listing.id,
@@ -234,6 +240,87 @@ export class ListingsService {
       .catch(() => null)
 
     return { saved: false }
+  }
+
+  async getMyStats(userId: string) {
+    const listings = await this.prisma.listing.findMany({
+      where: { sellerId: userId },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        priceUsd: true,
+        storageGb: true,
+        status: true,
+        verificationStatus: true,
+        viewsCount: true,
+        savesCount: true,
+        whatsappClicks: true,
+        createdAt: true,
+        deviceModel: { select: { brand: true, modelName: true } },
+        photos: {
+          where: { isCover: true },
+          take: 1,
+          select: { cloudinaryUrl: true },
+        },
+      },
+    })
+
+    return listings.map((l) => ({
+      id: l.id,
+      brand: l.deviceModel.brand,
+      modelName: l.deviceModel.modelName,
+      storageGb: l.storageGb,
+      priceUsd: l.priceUsd,
+      status: l.status,
+      verificationStatus: l.verificationStatus,
+      viewsCount: l.viewsCount,
+      savesCount: l.savesCount,
+      whatsappClicks: l.whatsappClicks,
+      coverPhotoUrl: l.photos[0]?.cloudinaryUrl ?? null,
+      createdAt: l.createdAt,
+    }))
+  }
+
+  async updateStatus(listingId: string, userId: string, newStatus: 'active' | 'paused' | 'sold') {
+    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+    if (listing.sellerId !== userId) throw new ForbiddenException('No tienes permiso para modificar este listing')
+
+    const allowed: Record<string, string[]> = {
+      active: ['paused', 'draft'],
+      paused: ['active', 'paused'],
+      sold: ['active', 'paused', 'draft', 'sold'],
+    }
+    if (!allowed[newStatus]?.includes(listing.status)) {
+      throw new BadRequestException(`No se puede pasar de '${listing.status}' a '${newStatus}'`)
+    }
+
+    await this.prisma.listing.update({
+      where: { id: listingId },
+      data: { status: newStatus },
+    })
+
+    return { status: newStatus }
+  }
+
+  async deleteListing(listingId: string, userId: string) {
+    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+    if (listing.sellerId !== userId) throw new ForbiddenException('No tienes permiso para eliminar este listing')
+
+    await this.prisma.listing.update({
+      where: { id: listingId },
+      data: { status: 'removed' },
+    })
+
+    return { deleted: true }
+  }
+
+  async trackWhatsappClick(listingId: string) {
+    await this.prisma.listing
+      .update({ where: { id: listingId }, data: { whatsappClicks: { increment: 1 } } })
+      .catch(() => null)
+    return { ok: true }
   }
 
   async getSafeZonesByCity(city: string) {

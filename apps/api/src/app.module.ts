@@ -19,6 +19,7 @@ import { FraudReportsModule } from './modules/fraud-reports/fraud-reports.module
 import { SearchAlertsModule } from './modules/search-alerts/search-alerts.module'
 import { DeviceModelsModule } from './modules/device-models/device-models.module'
 import { PriceIndexModule } from './modules/price-index/price-index.module'
+import { KycModule } from './modules/kyc/kyc.module'
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { PriceIndexModule } from './modules/price-index/price-index.module'
     SearchAlertsModule,
     DeviceModelsModule,
     PriceIndexModule,
+    KycModule,
   ],
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Delete,
   Param,
   Body,
@@ -26,6 +27,14 @@ export class ListingsController {
   @ApiOperation({ summary: 'Feed principal con cursor-based pagination y filtros' })
   async getFeed(@Query() filters: ListingFiltersDto) {
     return this.listingsService.getFeed(filters)
+  }
+
+  @Get('mine/stats')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listings del usuario con stats' })
+  async myStats(@CurrentUser() user: { id: string }) {
+    return this.listingsService.getMyStats(user.id)
   }
 
   @Get(':id/similar')
@@ -84,5 +93,37 @@ export class ListingsController {
     @CurrentUser() user: { id: string },
   ) {
     return this.listingsService.unsaveListing(id, user.id)
+  }
+
+  @Patch(':id/status')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Cambiar estado de un listing (pausar, reactivar, marcar vendido)' })
+  async updateStatus(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+    @Body() body: { status: 'active' | 'paused' | 'sold' },
+  ) {
+    return this.listingsService.updateStatus(id, user.id, body.status)
+  }
+
+  @Delete(':id')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Eliminar listing propio' })
+  async deleteListing(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+  ) {
+    return this.listingsService.deleteListing(id, user.id)
+  }
+
+  @Post(':id/whatsapp-click')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Registrar click en botón WhatsApp (fire-and-forget)' })
+  async trackWhatsappClick(@Param('id') id: string) {
+    return this.listingsService.trackWhatsappClick(id)
   }
 }

@@ -1,12 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ShoppingBag, TrendingUp, Award, Layers, PlusCircle, List, ShieldCheck, Crown } from 'lucide-react'
+import { ShoppingBag, TrendingUp, Award, Layers, ShieldCheck, Crown } from 'lucide-react'
 import Link from 'next/link'
+import MyListingsPanel from '@/components/dashboard/MyListingsPanel'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) redirect('/login')
+  const user = session.user
 
   type ProfileRow = {
     username: string; full_name: string; avatar_url: string | null
@@ -33,6 +35,15 @@ export default async function DashboardPage() {
     .select('*', { count: 'exact', head: true })
     .eq('seller_id', user.id)
     .eq('status', 'active') as unknown as Promise<{ count: number | null; data: null; error: unknown }>)
+
+  // Fetch KYC status
+  const kycRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api/v1/kyc/status`, {
+    headers: { Authorization: `Bearer ${session.access_token}` },
+    cache: 'no-store',
+  }).catch(() => null)
+  const kycData = kycRes?.ok ? await kycRes.json() as { status: string; rejectionReason?: string } : null
+  const kycStatus = kycData?.status ?? 'none'
+  const rejectionReason = kycData?.rejectionReason
 
   const stats = [
     { label: 'Ventas',           value: profile?.total_sales ?? 0,      icon: TrendingUp,  iconCls: 'text-green-600',  bgCls: 'bg-green-50' },
@@ -69,6 +80,44 @@ export default async function DashboardPage() {
           )}
         </div>
 
+        {/* KYC Status Banner */}
+        {kycStatus !== 'approved' && (
+          <div
+            className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border p-5 transition-all shadow-sm ${
+              kycStatus === 'rejected'
+                ? 'border-red-200 bg-red-55/30 bg-red-50 text-red-900'
+                : kycStatus === 'pending'
+                ? 'border-amber-200 bg-amber-50 text-amber-900'
+                : 'border-green-200 bg-green-50 text-green-950'
+            }`}
+          >
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 font-bold text-slate-900 text-sm sm:text-base">
+                {kycStatus === 'rejected' && '❌ Tu verificación fue rechazada'}
+                {kycStatus === 'pending' && '⏳ Tu verificación está en revisión'}
+                {kycStatus === 'none' && '🔒 Verifica tu identidad y publica con más confianza'}
+              </div>
+              <p className="text-xs sm:text-sm text-slate-600 leading-normal">
+                {kycStatus === 'rejected' && (rejectionReason || 'Tus documentos no cumplen con los requisitos de legibilidad o validez.')}
+                {kycStatus === 'pending' && 'Estamos revisando tu información. Te notificaremos pronto.'}
+                {kycStatus === 'none' && 'Obtén el badge verificado, mayor visibilidad y publica hasta 10 listings.'}
+              </p>
+            </div>
+            {kycStatus !== 'pending' && (
+              <Link
+                href="/kyc"
+                className={`shrink-0 rounded-xl px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all shadow-sm active:scale-[0.98] text-center ${
+                  kycStatus === 'rejected'
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
+                }`}
+              >
+                {kycStatus === 'rejected' ? 'Reintentar verificación' : 'Verificar ahora — tarda 5 minutos'}
+              </Link>
+            )}
+          </div>
+        )}
+
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((s) => (
@@ -82,49 +131,9 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        {/* Quick actions */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h2 className="text-base font-semibold text-slate-900 mb-4">Acciones rápidas</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Link
-              href="/sell"
-              className="group flex items-center gap-4 rounded-xl border border-slate-200 p-4 transition-all hover:border-green-300 hover:bg-green-50"
-            >
-              <div className="rounded-lg bg-green-50 p-3 group-hover:bg-green-100 transition-colors">
-                <PlusCircle className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 text-sm">Publicar equipo</p>
-                <p className="text-xs text-slate-500 mt-0.5">Empieza a vender hoy mismo</p>
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard/listings"
-              className="group flex items-center gap-4 rounded-xl border border-slate-200 p-4 transition-all hover:border-slate-300 hover:bg-slate-50"
-            >
-              <div className="rounded-lg bg-slate-100 p-3 group-hover:bg-slate-200 transition-colors">
-                <List className="h-5 w-5 text-slate-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 text-sm">Mis listings</p>
-                <p className="text-xs text-slate-500 mt-0.5">Gestiona tus publicaciones</p>
-              </div>
-            </Link>
-
-            <Link
-              href="/verify-identity"
-              className="group flex items-center gap-4 rounded-xl border border-slate-200 p-4 transition-all hover:border-green-300 hover:bg-green-50"
-            >
-              <div className="rounded-lg bg-green-50 p-3 group-hover:bg-green-100 transition-colors">
-                <ShieldCheck className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 text-sm">Verificar identidad</p>
-                <p className="text-xs text-slate-500 mt-0.5">Aumenta tu reputación</p>
-              </div>
-            </Link>
-          </div>
+        {/* Seller listings panel component */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+          <MyListingsPanel authToken={session.access_token} />
         </div>
 
         {/* Nav links */}
@@ -143,7 +152,7 @@ export default async function DashboardPage() {
 
         {/* Admin panel — solo para admin/owner */}
         {isAdmin && (
-          <div className="rounded-2xl border border-purple-200 bg-purple-50 p-5">
+          <div className="rounded-2xl border border-purple-200 bg-purple-50 p-5 shadow-sm">
             <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-purple-900">
               <ShieldCheck className="h-4 w-4" /> Panel de administración
             </h2>
@@ -153,6 +162,9 @@ export default async function DashboardPage() {
               </Link>
               <Link href="/admin/moderation" className="rounded-lg border border-purple-200 bg-white px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors">
                 Cola de moderación
+              </Link>
+              <Link href="/admin/kyc" className="rounded-lg border border-purple-200 bg-white px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-100 transition-colors">
+                Verificaciones KYC
               </Link>
             </div>
           </div>

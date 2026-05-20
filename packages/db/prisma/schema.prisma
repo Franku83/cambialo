@@ -23,6 +23,13 @@ enum UserRole {
   owner
 }
 
+enum KycStatus {
+  none
+  pending
+  approved
+  rejected
+}
+
 enum ListingCondition {
   mint
   good
@@ -126,11 +133,13 @@ model User {
   twitter              String?
   website              String?
   tiktok               String?
+  kycStatus            KycStatus @default(none) @map("kyc_status")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relaciones
   roles                UserRole_Assignment[]
+  kycSubmissions       KycSubmission[]
   listings             Listing[]
   buyerOffers          Offer[]              @relation("BuyerOffers")
   sellerOffers         Offer[]              @relation("SellerOffers")
@@ -431,6 +440,25 @@ model PriceIndex {
 
   @@unique([deviceModelId, storageGb])
   @@map("price_index")
+}
+
+model KycSubmission {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  documentFrontPath   String    @map("document_front_path")
+  selfiePath          String    @map("selfie_path")
+  whatsappNumber      String    @map("whatsapp_number")
+  status              KycStatus @default(pending)
+  rejectionReason     String?   @map("rejection_reason")
+  reviewedBy          String?   @map("reviewed_by") @db.Uuid
+  reviewedAt          DateTime? @map("reviewed_at") @db.Timestamptz(6)
+  submittedAt         DateTime  @default(now()) @map("submitted_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("kyc_submissions")
 }
 
 model ImeiReport {
