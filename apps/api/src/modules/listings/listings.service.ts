@@ -433,7 +433,7 @@ export class ListingsService {
       where: { id: listingId },
       data: {
         status: newStatus,
-        soldAt: newStatus === 'sold' ? new Date() : undefined,
+        soldAt: newStatus === 'sold' ? new Date() : null,
       },
     })
 
