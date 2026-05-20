@@ -31,6 +31,7 @@ interface ListingCardProps {
   seller?: SellerInfo
   viewMode?: ViewMode
   distanceKm?: number
+  avgMarketPrice?: number | null
 }
 
 const CONDITION_MAP: Record<ListingCondition, { label: string; cls: string }> = {
@@ -61,6 +62,13 @@ function BatteryBar({ health }: { health: number }) {
   )
 }
 
+function getPriceTag(priceUsd: number, avgMarketPrice: number): { label: string; cls: string } {
+  const diff = ((priceUsd - avgMarketPrice) / avgMarketPrice) * 100
+  if (diff <= -5) return { label: '🟢 Buen precio', cls: 'text-green-600' }
+  if (diff <= 10) return { label: '🟡 Precio justo', cls: 'text-amber-600' }
+  return { label: '🔴 Sobre el mercado', cls: 'text-red-500' }
+}
+
 export function ListingCard({
   id,
   coverPhoto,
@@ -77,6 +85,7 @@ export function ListingCard({
   seller,
   viewMode = 'list',
   distanceKm,
+  avgMarketPrice,
 }: ListingCardProps) {
   const price = Number(priceUsd)
   const { label: condLabel, cls: condCls } = CONDITION_MAP[condition] ?? CONDITION_MAP.good
@@ -248,6 +257,11 @@ export function ListingCard({
           ${price.toLocaleString('es-VE')}
         </span>
         <span className="text-[11px] text-slate-400">USD</span>
+        {avgMarketPrice && price > 0 && (
+          <span className={`text-[10px] font-medium ${getPriceTag(price, avgMarketPrice).cls}`}>
+            {getPriceTag(price, avgMarketPrice).label}
+          </span>
+        )}
         {acceptsOffers && (
           <span className="text-[10px] text-slate-400">Ofertas</span>
         )}

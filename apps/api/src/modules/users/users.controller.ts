@@ -4,6 +4,7 @@ import {
   Put,
   Post,
   Param,
+  Query,
   Body,
   UseGuards,
   UseInterceptors,
@@ -20,6 +21,14 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator'
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('search')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Buscar usuarios por username (para mark-sold modal)' })
+  async searchUsers(@Query('q') q: string) {
+    return this.usersService.searchByUsername(q)
+  }
 
   @Get(':username')
   @ApiOperation({ summary: 'Obtener perfil público de un usuario' })

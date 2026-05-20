@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'
+import MarkSoldModal from '@/components/listings/MarkSoldModal'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 
@@ -50,6 +51,7 @@ export default function MyListingsPanel({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actioningId, setActioningId] = useState<string | null>(null)
+  const [markSoldListing, setMarkSoldListing] = useState<{ id: string; name: string } | null>(null)
 
   const activeCount = listings.filter((l) => ['active', 'paused', 'draft'].includes(l.status)).length
   const limit = isVerifiedSeller ? 25 : idVerified ? 10 : 3
@@ -80,27 +82,15 @@ export default function MyListingsPanel({
     void fetchListings()
   }, [fetchListings])
 
-  const handleUpdateStatus = async (id: string, newStatus: 'active' | 'paused' | 'sold') => {
-    if (newStatus === 'sold') {
-      const confirmSold = window.confirm('¿Confirmas que vendiste este equipo?')
-      if (!confirmSold) return
-    }
-
+  const handleUpdateStatus = async (id: string, newStatus: 'active' | 'paused') => {
     setActioningId(id)
     try {
       const res = await fetch(`${API_URL}/api/v1/listings/${id}/status`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: `Bearer ${authToken}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       })
-
-      if (!res.ok) {
-        throw new Error('No se pudo actualizar el estado del listing')
-      }
-
+      if (!res.ok) throw new Error('No se pudo actualizar el estado del listing')
       await fetchListings()
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Error al actualizar el estado')
@@ -356,7 +346,7 @@ export default function MyListingsPanel({
                             Pausar
                           </button>
                           <button
-                            onClick={() => handleUpdateStatus(item.id, 'sold')}
+                            onClick={() => setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })}
                             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-green-50 border border-green-200 px-3.5 py-2 text-xs font-bold text-green-700 hover:bg-green-100 transition-colors"
                           >
                             <CheckCircle className="h-3 w-3" />
@@ -368,14 +358,14 @@ export default function MyListingsPanel({
                       {isStatusPaused && (
                         <>
                           <button
-                            onClick={() => handleUpdateStatus(item.id, 'active')}
+                            onClick={() => void handleUpdateStatus(item.id, 'active')}
                             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl border border-green-200 bg-green-50 px-3.5 py-2 text-xs font-bold text-green-700 hover:bg-green-100 transition-colors"
                           >
                             <Play className="h-3 w-3 fill-green-700" />
                             Reactivar
                           </button>
                           <button
-                            onClick={() => handleUpdateStatus(item.id, 'sold')}
+                            onClick={() => setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })}
                             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
                           >
                             <CheckCircle className="h-3 w-3" />
@@ -402,6 +392,15 @@ export default function MyListingsPanel({
             )
           })}
         </div>
+      )}
+      {markSoldListing && (
+        <MarkSoldModal
+          listingId={markSoldListing.id}
+          listingName={markSoldListing.name}
+          authToken={authToken}
+          onConfirm={() => { setMarkSoldListing(null); void fetchListings() }}
+          onCancel={() => setMarkSoldListing(null)}
+        />
       )}
     </div>
   )

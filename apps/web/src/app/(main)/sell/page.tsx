@@ -379,8 +379,41 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
 // ─── Paso 3: Precio ─────────────────────────────────────────────────────────
 
+interface MarketContext {
+  avgPrice: number | null
+  medianPrice: number | null
+  sampleSize: number
+  comparables: { batteryHealth: number; condition: string; priceUsd: number }[]
+}
+
+function getPriceColor(diff: number) {
+  if (diff <= -5) return 'text-green-600'
+  if (diff <= 10) return 'text-amber-600'
+  return 'text-red-500'
+}
+function getPriceLabel(diff: number) {
+  if (diff <= -5) return '🟢 Buen precio — venderás rápido'
+  if (diff <= 10) return '🟡 Precio justo'
+  return '🔴 Sobre el mercado — considera bajar el precio'
+}
+
 function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
-  const { step3, updateStep3 } = useSellStore()
+  const { step1, step3, updateStep3 } = useSellStore()
+  const [marketCtx, setMarketCtx] = useState<MarketContext | null>(null)
+  const [loadingCtx, setLoadingCtx] = useState(false)
+
+  useEffect(() => {
+    const deviceModelId = step1.deviceModelId
+    const storageGb = step1.storageGb
+    if (!deviceModelId || !storageGb) return
+    void (async () => {
+      setLoadingCtx(true)
+      try {
+        const res = await fetch(`${API_URL}/api/v1/price-index/context?deviceModelId=${deviceModelId}&storageGb=${storageGb}`)
+        if (res.ok) setMarketCtx(await res.json() as MarketContext)
+      } catch { /* silencioso */ } finally { setLoadingCtx(false) }
+    })()
+  }, [step1.deviceModelId, step1.storageGb])
 
   useEffect(() => {
     if (typeof navigator !== 'undefined' && navigator.geolocation) {
@@ -441,11 +474,49 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         </div>
         {priceUsd > 0 && (
           <p className="mt-1 text-xs text-slate-400">
-            Mostrará: <span className="font-medium text-white">{formatPrice(priceUsd)}</span>
+            Mostrará: <span className="font-medium text-slate-700">{formatPrice(priceUsd)}</span>
           </p>
         )}
         {errors.priceUsd && (
           <p className="mt-1 text-xs text-red-400">{errors.priceUsd.message}</p>
+        )}
+
+        {/* Price context widget */}
+        {loadingCtx && (
+          <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
+            <Loader2 className="h-3 w-3 animate-spin" /> Cargando datos del mercado...
+          </div>
+        )}
+        {!loadingCtx && marketCtx && marketCtx.sampleSize >= 3 && marketCtx.avgPrice && (
+          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
+            <p className="text-xs font-semibold text-slate-600">
+              📊 Mercado actual — {step1.brand} {step1.modelName} {step1.storageGb}GB
+            </p>
+            <div className="divide-y divide-slate-100">
+              {marketCtx.comparables.slice(0, 5).map((c, i) => (
+                <div key={i} className="flex items-center justify-between py-1">
+                  <span className="text-xs text-slate-500">
+                    {c.batteryHealth}% · {c.condition === 'mint' ? 'Nuevo' : c.condition === 'good' ? 'Bueno' : c.condition === 'fair' ? 'Regular' : 'Detalles'}
+                  </span>
+                  <span className="text-xs font-medium text-slate-700">${c.priceUsd}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between border-t border-slate-200 pt-2">
+              <span className="text-xs text-slate-500">Promedio del mercado</span>
+              <span className="text-xs font-semibold text-slate-900">${marketCtx.avgPrice}</span>
+            </div>
+            {priceUsd > 0 && (
+              <p className={`text-xs font-semibold ${getPriceColor(((priceUsd - marketCtx.avgPrice) / marketCtx.avgPrice) * 100)}`}>
+                {getPriceLabel(((priceUsd - marketCtx.avgPrice) / marketCtx.avgPrice) * 100)}
+              </p>
+            )}
+          </div>
+        )}
+        {!loadingCtx && marketCtx && marketCtx.sampleSize < 3 && (
+          <p className="mt-2 text-xs text-slate-400">
+            No hay suficientes datos de mercado para este modelo todavía.
+          </p>
         )}
       </div>
 

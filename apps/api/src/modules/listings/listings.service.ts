@@ -91,7 +91,33 @@ export class ListingsService {
     const data = hasMore ? items.slice(0, limit) : items
     const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
 
-    return { data, nextCursor, total }
+    const enriched = await this.attachMarketPrice(data)
+    return { data: enriched, nextCursor, total }
+  }
+
+  private async attachMarketPrice<T extends { deviceModel: { id: string }; storageGb: number }>(
+    items: T[],
+  ): Promise<(T & { avgMarketPrice: number | null })[]> {
+    if (items.length === 0) return items.map(i => ({ ...i, avgMarketPrice: null }))
+
+    const pairs = [...new Map(
+      items.map(l => [`${l.deviceModel.id}-${l.storageGb}`, { deviceModelId: l.deviceModel.id, storageGb: l.storageGb }])
+    ).values()]
+
+    const priceIndexes = await this.prisma.priceIndex.findMany({
+      where: { OR: pairs },
+      select: { deviceModelId: true, storageGb: true, avgPrice: true, sampleSize: true },
+    })
+
+    const piMap = new Map(priceIndexes
+      .filter(pi => pi.sampleSize >= 3)
+      .map(pi => [`${pi.deviceModelId}-${pi.storageGb}`, Number(pi.avgPrice)])
+    )
+
+    return items.map(l => ({
+      ...l,
+      avgMarketPrice: piMap.get(`${l.deviceModel.id}-${l.storageGb}`) ?? null,
+    }))
   }
 
   async getById(id: string, userId?: string) {
@@ -433,6 +459,7 @@ export class ListingsService {
       accepts_offers: boolean
       created_at: Date
       distance_km: number | null
+      device_model_id: string
       brand: string
       model_name: string
       image_url: string | null
@@ -473,6 +500,7 @@ export class ListingsService {
             )
           ELSE NULL
         END AS distance_km,
+        dm.id AS device_model_id,
         dm.brand,
         dm.model_name,
         dm.image_url,
@@ -531,7 +559,7 @@ export class ListingsService {
       acceptsOffers: r.accepts_offers,
       createdAt: r.created_at,
       distanceKm: r.distance_km !== null ? Number(r.distance_km) : undefined,
-      deviceModel: { brand: r.brand, modelName: r.model_name, imageUrl: r.image_url },
+      deviceModel: { id: r.device_model_id as string, brand: r.brand, modelName: r.model_name, imageUrl: r.image_url },
       seller: {
         id: r.seller_id,
         username: r.seller_username,
@@ -547,7 +575,8 @@ export class ListingsService {
     }))
 
     const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
-    return { data, nextCursor, total: null } // total desconocido en raw query — no afecta el feed
+    const enriched = await this.attachMarketPrice(data)
+    return { data: enriched, nextCursor, total: null }
   }
 
   // ─── Utils ────────────────────────────────────────────────────────────────

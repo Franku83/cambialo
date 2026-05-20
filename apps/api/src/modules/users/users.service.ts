@@ -99,6 +99,19 @@ export class UsersService {
     }
   }
 
+  async searchByUsername(q: string) {
+    if (!q || q.length < 2) return []
+    return this.prisma.user.findMany({
+      where: {
+        username: { contains: q, mode: 'insensitive' },
+        isBanned: false,
+      },
+      select: { id: true, username: true, fullName: true, avatarUrl: true },
+      take: 5,
+      orderBy: { username: 'asc' },
+    })
+  }
+
   async updateProfile(userId: string, dto: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id: userId },
