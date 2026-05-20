@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 20 Mayo 2026 (v2)
+> Última actualización: 20 Mayo 2026
 
 ---
 
@@ -35,9 +35,11 @@
 | Sprint 3 | ✅ | Wizard publicación 5 pasos, código verificación física, upload fotos Cloudinary |
 | Sprint 4 | ✅ | Reviews, reputationScore, zonas seguras, ReportButton, ReputationBadge |
 | Sprint 5 | ✅ | PWA, push notifications VAPID, alertas de búsqueda, Lighthouse >90 |
-| **Sprint 6** | ✅ | UI redesign Swappa-like + Sprint QA Features — ver detalle abajo |
-| **Sprint 6.1** | ✅ | Google OAuth, DB sync, username en producción — ver detalle abajo |
-| **Sprint 6.2** | ✅ | KYC, auto-moderación, panel vendedor, tracking WhatsApp — ver detalle abajo |
+| **Sprint 6** | ✅ | UI redesign Swappa-like + Sprint QA Features |
+| **Sprint 6.1** | ✅ | Google OAuth + DB sync producción |
+| **Sprint 6.2** | ✅ | KYC completo + auto-moderación + panel vendedor |
+| **Sprint 6.3** | ✅ | Geolocalización + límite listings KYC + notificaciones moderación |
+| **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -53,143 +55,126 @@
 - ✅ `FilterSidebar` con FAB móvil + bottom sheet Framer Motion
 - ✅ `ViewToggle`, `EmptyStates`, `TrustSignals` en home
 - ✅ WhatsApp CTA button en listing detail
-- ✅ Cloudinary helpers para thumbnails uniformes (`c_fill,g_center,w_192,h_192`)
+- ✅ Cloudinary helpers para thumbnails uniformes
 
 ### Sprint QA Features
-
-**Catálogo de dispositivos:**
-- ✅ Seed completo: Apple iPhone 7 → 17 Pro Max (39 modelos) + Samsung S7 → S26 Ultra + Serie A + Foldables (44 modelos) = **83 modelos totales**
-- ✅ Motorola, Xiaomi, Huawei, LG removidos de toda la UI y desactivados en DB
-- ✅ Endpoint `GET /api/v1/device-models?search=&brand=&limit=`
-
-**Rutas por marca:**
-- ✅ `/apple` y `/samsung` — catálogos agrupados por año/serie
-- ✅ `/apple/[model-slug]` y `/samsung/[model-slug]` — listings del modelo con filtros rápidos
-- ✅ Header: Apple y Samsung linkan directo a sus páginas (tab activo en esas rutas)
-- ✅ `lib/slug.ts` — `modelToSlug()` / `slugToWords()`
-
-**Roles complejos:**
-- ✅ Enum `UserRole`: `user | moderator | admin | owner`
-- ✅ Panel `/admin/users` — toggle de roles por usuario (click para dar/quitar)
-- ✅ Panel `/admin/moderation` — cola de listings pendientes, vista split, aprobar/rechazar
-- ✅ `AdminService` + endpoints `GET /admin/users`, `POST/DELETE /admin/users/:id/roles/:role`
-- ✅ `ModerationQueueController` — `GET /moderation/queue`, `POST /moderation/:id/approve|reject`
-- ✅ `ModerationService.approveListing` + `rejectListing` + notificaciones push al vendedor
-
-**Price Index:**
-- ✅ Modelo `PriceIndex` en schema (avg/median/min/max/sampleSize por modelo+storage)
-- ✅ `PriceIndexService` — calcula con listings verificados de los últimos 90 días, mínimo 3 muestras
-- ✅ Cron `@Cron(EVERY_6_HOURS)` automático
-- ✅ `GET /api/v1/price-index?deviceModelId=&storageGb=`
-- ✅ Componente `PriceIndicator` en listing detail — Buen precio / Precio justo / Sobre el precio
-
-**Trade-in:**
-- ✅ Campo `acceptsTradeIn Boolean` en Listing
-- ✅ Toggle en Step3 del wizard de publicación
-- ✅ Componente `TradeInSimulator` — calcula valor estimado con multiplicadores condición+batería, genera mensaje WhatsApp
-
-**Username validator:**
-- ✅ `UsernameValidatorService` — regex + blacklist con normalización anti-leet speak
-- ✅ Integrado en `AuthService.register()`
-
-**Geolocalización:**
-- ✅ Hook `useLocation` — `navigator.geolocation` + `sessionStorage`
-- ✅ `LocationBanner` en home — prompt no bloqueante, descartable
-
-**Fix wizard de publicación:**
-- ✅ Bug crítico: `handleStep1Next` usaba closure stale → ahora usa `useSellStore.getState()`
-- ✅ Auto-selecciona primer `storageGb` disponible al elegir modelo
-- ✅ Error visible si falla la creación del draft
-
-**Fix autenticación:**
-- ✅ `register/page.tsx` llama `POST /api/v1/auth/register` (no `supabase.auth.signUp()`)
-- ✅ `AuthService` usa `email_confirm: true` — login inmediato, sin emails de Supabase
-- ✅ Trigger `on_auth_user_created` en Supabase — futuros usuarios por OAuth/magic-link crean fila en `public.users`
-
-**Usuarios y roles (DB via Supabase MCP):**
-- ✅ 3 usuarios reales creados en `public.users` (franku, ubwnricardo, riazfe)
-- ✅ Rol `owner` asignado a franku, `user` a los demás
-- ✅ `NotificationType` extendido: + `listing_verified`, `listing_rejected`
-- ✅ Columnas nuevas en `users`: `bio`, `instagram`, `twitter`, `tiktok`, `website`, `whatsapp_public`
-
-**Perfil público y edición:**
-- ✅ `/profile/[username]` — banner verde, avatar, bio, redes clicables, badge Owner/Admin, listings, reseñas, stats
-- ✅ Botón "Editar perfil" visible solo al dueño
-- ✅ `/profile/edit` — nombre, bio, ciudad/estado (dropdown VE), WhatsApp + toggle público, Instagram, Twitter, TikTok, sitio web
-- ✅ Dashboard muestra `@username` + badge Owner/Admin + sección admin para admin/owner
-
-**Schema Prisma (cambios Sprint 6):**
-- `UserRole` enum: + `owner`
-- `NotificationType` enum: + `listing_verified`, `listing_rejected`
-- `Listing`: + `acceptsTradeIn`, `whatsappClicks`, `latitude`, `longitude`
-- Modelo `PriceIndex` nuevo
-- `User`: + `bio`, `instagram`, `twitter`, `tiktok`, `website`, `whatsappPublic`
-- Seed actualizado a upsert (insert + update existentes)
+- ✅ Seed 83 modelos Apple+Samsung / Motorola+Xiaomi removidos
+- ✅ Rutas `/apple`, `/samsung`, `/apple/[slug]`, `/samsung/[slug]`
+- ✅ Roles `user|moderator|admin|owner` + panel admin users + moderación
+- ✅ `PriceIndex` model + cron 6h + `PriceIndicator` en listing detail
+- ✅ Trade-in: `acceptsTradeIn` + `TradeInSimulator`
+- ✅ `UsernameValidatorService` — regex + blacklist anti-leet speak
+- ✅ `useLocation` hook + `LocationBanner` en home
 
 ---
 
 ## Sprint 6.1 — Completado (20 Mayo 2026)
 
-**Google OAuth completo:**
-- ✅ Botón "Continuar con Google" agregado a `/register`
-- ✅ `/auth/callback` detecta usuarios sin `username` y redirige a `/register/complete`
-- ✅ `/register/complete` — elige username con disponibilidad en tiempo real
-- ✅ `GET /auth/check-username` endpoint nuevo en API
-- ✅ `AuthService.checkUsername()` con validación + unicidad
-
-**DB Producción sincronizada:**
-- ✅ `prisma db push` — tabla `PriceIndex` creada, campos `acceptsTradeIn` / `whatsappClicks` / `latitude` / `longitude` en `Listing` ahora en prod
-- ✅ `prisma db seed` — 101 modelos actualizados (38 Apple + 63 Samsung)
-- ✅ `package.json` de `packages/db` con `"prisma": { "seed": "ts-node prisma/seed.ts" }`
-
-**DB directa:**
-- ✅ Username `riazfe` → `alianexo` en producción
+- ✅ Google OAuth en login + registro
+- ✅ `/register/complete` para usuarios Google sin username (detección en callback)
+- ✅ `GET /auth/check-username` — disponibilidad en tiempo real
+- ✅ `prisma db push` + `prisma db seed` aplicados en producción (101 modelos)
+- ✅ Username `riazfe` → `alianexo` en DB
 
 ---
 
 ## Sprint 6.2 — Completado (20 Mayo 2026)
 
-**KYC — Verificación de identidad:**
-- ✅ `KycStatus` enum + `KycSubmission` model en schema (db push aplicado)
-- ✅ Bucket privado `kyc-documents` en Supabase Storage (10MB, solo imágenes)
-- ✅ `KycModule` con endpoints: `POST /kyc/submit` (multer, sube a Storage), `GET /kyc/status`, `GET /kyc/pending` (admin), `POST /kyc/:id/approve`, `POST /kyc/:id/reject`
-- ✅ Al aprobar: `user.kycStatus = approved`, `idVerified = true`, `isVerifiedSeller = true`
-- ✅ `/kyc` — wizard 4 pasos: foto documento + selfie + WhatsApp + confirmación
-- ✅ `/admin/kyc` — cola con fotos firmadas (1h), aprobar/rechazar con razón
-- ✅ Dashboard — banner KYC condicional (none/pending/rejected/approved)
-- ✅ Header dropdown — link KYC para admin/owner
-- ❌ Límite de 3 listings sin verificar (excluido a propósito — activar cuando se decida)
+**KYC:**
+- ✅ `KycStatus` enum + `KycSubmission` model + bucket privado `kyc-documents` en Supabase Storage
+- ✅ Endpoints: submit (multer), status, pending (admin), approve, reject
+- ✅ Al aprobar: `idVerified = true`, `isVerifiedSeller = true`
+- ✅ `/kyc` wizard 4 pasos + `/admin/kyc` cola con fotos firmadas
+- ✅ Banner KYC en dashboard según estado
 
 **Auto-moderación:**
-- ✅ `AutoModerationService` — check al crear listing (fire-and-forget):
-  - IMEI duplicado (mismo modelo, otro listing activo)
-  - Precio sospechoso (< 40% del avg del PriceIndex)
-  - Palabras prohibidas en descripción
-- ✅ Flags se anotan en la descripción para que moderadores los vean en la cola
+- ✅ `AutoModerationService` — IMEI duplicado, precio < 40% avg, palabras prohibidas (fire-and-forget al crear listing)
 
-**Panel de vendedor:**
-- ✅ `GET /listings/mine/stats` — listings del seller con viewsCount, savesCount, whatsappClicks
-- ✅ `PATCH /listings/:id/status` — pausar/reactivar/marcar vendido (solo dueño)
-- ✅ `DELETE /listings/:id` — elimina (cambia status a removed, solo dueño)
-- ✅ `POST /listings/:id/whatsapp-click` — tracking de clicks WA (sin auth)
-- ✅ `MyListingsPanel` — stats por listing + acciones con confirmación inline
-- ✅ `WhatsAppButton` — tracking automático al hacer click
+**Panel vendedor:**
+- ✅ `GET /listings/mine/stats`, `PATCH /listings/:id/status`, `DELETE /listings/:id`
+- ✅ `POST /listings/:id/whatsapp-click` — tracking WA
+- ✅ `MyListingsPanel` — stats + acciones + barra de progreso KYC
+- ✅ `WhatsAppButton` con tracking automático
 
 ---
 
-## Pendientes — Sprint QA Features (del archivo original)
+## Sprint 6.3 — Completado (20 Mayo 2026)
 
-### Tarea 4 — KYC ✅ (completo, excepto límite de listings)
-- ✅ Flujo KYC completo + bucket privado + panel admin
-- ✅ Banner en dashboard según estado KYC
-- ❌ Límite 3 listings para sellers sin verificar (excluido intencionalmente)
+**Geolocalización:**
+- ✅ Extensiones `cube` + `earthdistance` activas en Supabase
+- ✅ `ListingFiltersDto` + `lat`, `lng`, `rangeKm`
+- ✅ `getFeedByDistance()` — raw SQL earthdistance; listings sin coords van al final
+- ✅ Coords capturadas silenciosamente en Step3 del wizard
+- ✅ Slider de rango en `FilterSidebar` (visible solo si geoloc activa)
+- ✅ Badge `distanceKm` en `ListingCard`
 
-### Tarea 5 — Auto-moderación ✅
-- ✅ Panel de moderación manual
-- ✅ Auto-check: IMEI duplicado, precio fuera de rango, palabras prohibidas
+**Límite de listings por KYC:**
+- ✅ `user-levels.ts` — `LISTING_LIMITS` (unverified=3, verified=10, pro=25)
+- ✅ Validación en `createDraft` → 403 con `upgradeUrl: '/kyc'`
+- ✅ Barra de progreso en `MyListingsPanel`
+- ✅ Manejo del 403 en wizard + banner en `/kyc?reason=listing_limit`
 
-### Tarea 9 — Panel de vendedores ✅
-- ✅ Stats por listing + acciones + tracking WhatsApp
+**Notificaciones moderación:**
+- ✅ `ModerationService` notifica in-app al aprobar y rechazar listing
+
+---
+
+## Sprint 6.4 — Completado (20 Mayo 2026)
+
+**2FA (TOTP para admin/moderator/owner):**
+- ✅ Middleware detecta rol crítico → redirige a `/setup-2fa` o `/verify-2fa`
+- ✅ `/setup-2fa` — enroll TOTP con QR, verificación con código 6 dígitos
+- ✅ `/verify-2fa` — challenge + verify, 3 intentos → logout forzado
+- ✅ Rutas `/sell`, `/dashboard`, `/admin`, `/kyc` protegidas por auth
+
+**Admin avanzado (C2):**
+- ✅ `AdminService` — suspend/unsuspend/ban/unban con razón
+- ✅ Ban agrega email a `BannedEmail` + desactiva todos sus listings
+- ✅ `AuthService.register` verifica `BannedEmail` antes de crear cuenta
+- ✅ Suspensión expirada se levanta automáticamente en el guard
+- ✅ `SupabaseAuthGuard` verifica ban/suspensión en cada request autenticado
+- ✅ Endpoints: `POST /admin/users/:id/suspend|unsuspend|ban|unban`
+- ✅ `listUsers` con búsqueda por nombre/email/username + filtro por status
+
+**Owner-only:**
+- ✅ `GET /admin/owner/metrics` — totales de usuarios, listings, ventas
+- ✅ `GET /admin/owner/audit-log` — historial de acciones de admins/mods
+- ✅ `GET/PUT /admin/owner/config` — configuración global de la plataforma
+- ✅ `AuditLog` model — se registra automáticamente en cada acción admin
+- ✅ `PlatformConfig` seed: bump price, límites de listings, días de expiración
+- ✅ Rol `owner` no se puede asignar por UI (error 403)
+
+**Review popup al marcar vendido (C3):**
+- ✅ `POST /listings/:id/mark-sold` — crea `PendingReview` para seller y buyer
+- ✅ `PendingReview` model en schema (expira en 14 días)
+
+**Price context en wizard (C8):**
+- ✅ `PriceIndexService.getContext()` — comparables + avg + sampleSize
+- ✅ `GET /api/v1/price-index/context?deviceModelId=&storageGb=`
+
+**api-client (C9):**
+- ✅ `lib/api-client.ts` — wrapper con timeout 10s, errores tipados (`NO_CONNECTION`, `API_DOWN`, `TIMEOUT`, `HTTP_xxx`)
+- ✅ `buildListingsQuery()` — sanitiza params (sin NaN, sin undefined)
+
+**Schema (db push aplicado):**
+- `User`: + `isSuspended`, `suspendedUntil`, `suspendReason`
+- Nuevos modelos: `BannedEmail`, `PendingReview`, `AuditLog`, `PlatformConfig`
+
+**Homepage y páginas estáticas (Agy):**
+- ✅ `(main)/page.tsx` → landing homepage: hero, trust signals, cómo funciona, listings recientes, CTA vendedor
+- ✅ `/explore` → feed completo con filtros (antes era la home)
+- ✅ `/faq` — acordeón con preguntas frecuentes
+- ✅ `/roadmap` — timeline de estados sin fechas
+- ✅ `/about` — quiénes somos
+
+**Fixes UI (Agy):**
+- ✅ Header: `min-w-0` en contenedor de búsqueda (bug de crecimiento)
+- ✅ FilterSidebar: switches controlados (verifiedOnly, acceptsOffers, includesBox)
+- ✅ Login + Register: botón ojo para mostrar/ocultar contraseña
+- ✅ Panel moderación: contraste de texto corregido + responsive en móvil
+- ✅ Feed: `pb-24 lg:pb-0` para que el FAB no tape listings
+- ✅ Register: trust blurb antes del botón de submit
+- ✅ `ErrorStates.tsx` — `ApiDownBanner`, `ConnectionError`, `ApiError`, `TimeoutError`
 
 ---
 
@@ -200,12 +185,13 @@
 - `CLOUDINARY_CLOUD_NAME` / `API_KEY` / `API_SECRET` — upload de fotos
 - `TYPESENSE_*` — search (desactivado sin crash por ahora)
 
-### Producto
+### Producto (beta launch)
 - RLS policies en Supabase (urgente antes de beta pública)
 - Sentry + Posthog
 - Dominio custom (`cambialo.app`)
-- Landing page pública
 - k6 load testing
+- C1B: Magic link por dispositivo nuevo para vendedores verificados
+- MarkSoldModal UI completo con búsqueda de comprador por username
 
 ---
 
@@ -221,3 +207,7 @@
 | `email_confirm: true` en admin.createUser | Login inmediato sin email — experiencia más fluida |
 | Supabase pooler `aws-1-us-east-2:6543` | Direct connection port 5432 bloqueado en Railway |
 | `binaryTargets = linux-musl-openssl-3.0.x` | Alpine Linux usa OpenSSL 3, requerido por Prisma 5 |
+| `earthdistance` + `$queryRaw` para geo-feed | Prisma no soporta funciones PostGIS nativas — raw SQL necesario |
+| `AuditLog` fire-and-forget en guard | Nunca bloquear el request por logging |
+| 2FA via Supabase MFA (TOTP nativo) | Sin dependencias extra, integrado con el flujo de sesión existente |
+| Soft delete en listings (status = removed) | Preserva historial, PendingReviews y referencias sin romper foreign keys |
