@@ -39,7 +39,7 @@
 | **Sprint 6.1** | ✅ | Google OAuth + DB sync producción |
 | **Sprint 6.2** | ✅ | KYC completo + auto-moderación + panel vendedor |
 | **Sprint 6.3** | ✅ | Geolocalización + límite listings KYC + notificaciones moderación |
-| **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad |
+| **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad + panel usuario admin + MarkSoldModal + PriceIndicator |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -147,10 +147,14 @@
 **Review popup al marcar vendido (C3):**
 - ✅ `POST /listings/:id/mark-sold` — crea `PendingReview` para seller y buyer
 - ✅ `PendingReview` model en schema (expira en 14 días)
+- ✅ `MarkSoldModal` — modal 3 pasos: confirmar venta → buscar comprador por username → confirmar
+- ✅ `GET /users/search?q=` — búsqueda de usuarios para el modal
 
 **Price context en wizard (C8):**
 - ✅ `PriceIndexService.getContext()` — comparables + avg + sampleSize
 - ✅ `GET /api/v1/price-index/context?deviceModelId=&storageGb=`
+- ✅ Widget price context en Step3 del wizard — tabla comparables + promedio + indicador coloreado
+- ✅ `PriceIndicator` en `ListingCard` — tag 🟢/🟡/🔴 debajo del precio (batch-query, sin N+1)
 
 **api-client (C9):**
 - ✅ `lib/api-client.ts` — wrapper con timeout 10s, errores tipados (`NO_CONNECTION`, `API_DOWN`, `TIMEOUT`, `HTTP_xxx`)
