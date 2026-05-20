@@ -32,6 +32,10 @@ export class AuthService {
     // Validar formato y censura del username
     this.usernameValidator.validate(dto.username)
 
+    // Verificar email baneado
+    const banned = await this.prisma.bannedEmail.findUnique({ where: { email: dto.email } })
+    if (banned) throw new ConflictException('No es posible crear una cuenta con este email')
+
     // Verificar unicidad antes de crear en Supabase
     const existingUser = await this.prisma.user.findFirst({
       where: {

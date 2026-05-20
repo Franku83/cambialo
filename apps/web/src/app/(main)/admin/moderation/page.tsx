@@ -130,9 +130,9 @@ export default function ModerationPage() {
           <p className="font-semibold text-slate-700">Cola vacía — todo revisado</p>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-5">
+        <div className="flex flex-col gap-5 md:grid md:grid-cols-4">
           {/* Lista izquierda */}
-          <div className="col-span-1 space-y-2 overflow-y-auto" style={{ maxHeight: '80vh' }}>
+          <div className="md:col-span-1 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-visible pb-2 md:pb-0" style={{ maxHeight: 'none' }}>
             {listings.map(l => (
               <button
                 key={l.id}
@@ -156,7 +156,7 @@ export default function ModerationPage() {
 
           {/* Detalle derecho */}
           {active && (
-            <div className="col-span-3 rounded-2xl border border-slate-200 bg-white p-6 space-y-5">
+            <div className="md:col-span-3 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-5">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">
@@ -233,7 +233,7 @@ export default function ModerationPage() {
                           <button
                             key={r}
                             onClick={() => void handleAction('reject', active.id, r)}
-                            className="w-full px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-red-50 hover:text-red-700"
+                            className="w-full px-4 py-2.5 text-left text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-700"
                           >
                             {r}
                           </button>

@@ -25,6 +25,16 @@ export class PriceIndexController {
     return this.service.getForModel(deviceModelId)
   }
 
+  @Get('context')
+  @ApiOperation({ summary: 'Contexto de mercado para el wizard de publicación' })
+  async getContext(
+    @Query('deviceModelId') deviceModelId: string,
+    @Query('storageGb') storageGb: string,
+  ) {
+    if (!deviceModelId || !storageGb) return null
+    return this.service.getContext(deviceModelId, Number(storageGb))
+  }
+
   @Post('calculate')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()

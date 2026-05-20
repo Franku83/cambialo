@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { createClient } from '@/lib/supabase/client'
-import { UserPlus, Lock, User, AtSign, Loader2, Mail, Chrome } from 'lucide-react'
+import { UserPlus, Lock, User, AtSign, Loader2, Mail, Chrome, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -29,6 +29,7 @@ export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -122,7 +123,20 @@ export default function RegisterPage() {
           <label className={labelCls}>Contraseña</label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input {...register('password')} type="password" className={inputCls} placeholder="Mínimo 8 caracteres" />
+            <input
+              {...register('password')}
+              type={showPassword ? 'text' : 'password'}
+              className={`${inputCls} pr-10`}
+              placeholder="Mínimo 8 caracteres"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(v => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
           </div>
           {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
         </div>
@@ -132,6 +146,17 @@ export default function RegisterPage() {
             <p className="text-center text-sm text-red-600">{error}</p>
           </div>
         )}
+
+        {/* Trust blurb */}
+        <div className="rounded-xl border border-green-100 bg-green-50/60 px-4 py-3 space-y-2">
+          <p className="text-xs font-semibold text-slate-600">Al unirte a Cambialo:</p>
+          <ul className="space-y-1 text-xs text-slate-600">
+            <li>✅ Publicas gratis tus primeros equipos.</li>
+            <li>🛡 Accedes a listings verificados con foto en vivo.</li>
+            <li>📊 Ves el precio real del mercado antes de comprar.</li>
+            <li>💱 Propones trade-ins con valor estimado automático.</li>
+          </ul>
+        </div>
 
         <button
           type="submit"

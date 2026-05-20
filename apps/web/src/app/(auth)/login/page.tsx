@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { LogIn, Mail, Lock, Chrome, Loader2 } from 'lucide-react'
+import { LogIn, Mail, Lock, Chrome, Loader2, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
 const loginSchema = z.object({
@@ -24,6 +24,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -117,7 +118,20 @@ export default function LoginPage() {
             </div>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input {...register('password')} type="password" className={inputCls} placeholder="••••••••" />
+              <input
+                {...register('password')}
+                type={showPassword ? 'text' : 'password'}
+                className={`${inputCls} pr-10`}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
             {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
           </div>

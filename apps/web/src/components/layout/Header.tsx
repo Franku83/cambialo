@@ -204,7 +204,7 @@ export function Header() {
           </Link>
 
           {/* Search — desktop */}
-          <div className="hidden flex-1 justify-center px-4 md:flex max-w-[500px] mx-auto">
+          <div className="hidden flex-1 min-w-0 justify-center px-4 md:flex max-w-[500px] mx-auto">
             <SearchBar
               query={query}
               setQuery={setQuery}
