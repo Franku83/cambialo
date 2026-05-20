@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 19 Mayo 2026
+> Última actualización: 20 Mayo 2026
 
 ---
 
@@ -36,6 +36,7 @@
 | Sprint 4 | ✅ | Reviews, reputationScore, zonas seguras, ReportButton, ReputationBadge |
 | Sprint 5 | ✅ | PWA, push notifications VAPID, alertas de búsqueda, Lighthouse >90 |
 | **Sprint 6** | ✅ | UI redesign Swappa-like + Sprint QA Features — ver detalle abajo |
+| **Sprint 6.1** | ✅ | Google OAuth, DB sync, username en producción — ver detalle abajo |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -126,28 +127,57 @@
 
 ---
 
-## Pendientes para próxima sesión
+## Sprint 6.1 — Completado (20 Mayo 2026)
 
-### Requiere comandos manuales en producción
-```bash
-cd packages/db && npx prisma db push   # aplica PriceIndex + nuevos campos Listing
-cd packages/db && npx prisma db seed   # carga 83 modelos Apple+Samsung
-```
-Las columnas de `users` (bio, instagram, etc.) ya están en Supabase (aplicadas via MCP).
-Las tablas `PriceIndex` y campos nuevos de `Listing` aún necesitan `db push`.
+**Google OAuth completo:**
+- ✅ Botón "Continuar con Google" agregado a `/register`
+- ✅ `/auth/callback` detecta usuarios sin `username` y redirige a `/register/complete`
+- ✅ `/register/complete` — elige username con disponibilidad en tiempo real
+- ✅ `GET /auth/check-username` endpoint nuevo en API
+- ✅ `AuthService.checkUsername()` con validación + unicidad
+
+**DB Producción sincronizada:**
+- ✅ `prisma db push` — tabla `PriceIndex` creada, campos `acceptsTradeIn` / `whatsappClicks` / `latitude` / `longitude` en `Listing` ahora en prod
+- ✅ `prisma db seed` — 101 modelos actualizados (38 Apple + 63 Samsung)
+- ✅ `package.json` de `packages/db` con `"prisma": { "seed": "ts-node prisma/seed.ts" }`
+
+**DB directa:**
+- ✅ Username `riazfe` → `alianexo` en producción
+
+---
+
+## Pendientes — Sprint QA Features (del archivo original)
+
+### Tarea 4 — KYC como palanca de crecimiento ❌ (parcial)
+- ❌ Límite de 3 listings para sellers no verificados (bloquear 4to intento)
+- ❌ Banner de incentivo en dashboard + wizard al llegar al límite
+- ❌ Flujo KYC: fotos cédula/pasaporte + selfie + OTP WhatsApp
+- ❌ Bucket privado Supabase Storage para fotos KYC
+
+### Tarea 5 — Auto-moderación al publicar ❌ (parcial)
+- ✅ Panel de moderación manual existe
+- ❌ Auto-check instantáneo: IMEI duplicado, precio fuera de rango, palabras prohibidas en descripción
+
+### Tarea 9 — Panel de vendedores ❌
+- ❌ Stats por listing: views 7d, clicks WhatsApp, guardados en watchlist, tasa de conversión
+- ❌ Acciones: Pausar/Reactivar, Marcar como vendido, Bump, Eliminar
+- ❌ `whatsappClicks`: incrementar al hacer click en el botón WA del listing
+
+---
+
+## Pendientes — Sprint 7
 
 ### Variables de entorno pendientes (Railway / Vercel)
 - `VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY` — push notifications
 - `CLOUDINARY_CLOUD_NAME` / `API_KEY` / `API_SECRET` — upload de fotos
 - `TYPESENSE_*` — search (desactivado sin crash por ahora)
 
-### Pendientes de producto (Sprint 7)
-- KYC: límite de 3 listings para vendedores sin verificar + banner de incentivo en dashboard
-- `whatsappClicks`: trackear clicks en el botón de WhatsApp del listing
+### Producto
 - RLS policies en Supabase (urgente antes de beta pública)
 - Sentry + Posthog
 - Dominio custom (`cambialo.app`)
 - Landing page pública
+- k6 load testing
 
 ---
 
