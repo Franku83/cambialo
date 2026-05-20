@@ -153,7 +153,6 @@ function FeedContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <TrustSignals />
       <LocationBanner />
 
       <div className="mx-auto max-w-7xl px-4 py-6">
@@ -175,7 +174,7 @@ function FeedContent() {
           <FilterSidebar />
 
           {/* Feed */}
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 pb-24 lg:pb-0">
             {isError && (
               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 Error cargando el feed. Revisa tu conexión.

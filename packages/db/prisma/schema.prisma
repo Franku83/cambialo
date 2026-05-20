@@ -104,6 +104,11 @@ enum TransactionType {
   sell
 }
 
+enum PendingReviewType {
+  seller_to_buyer
+  buyer_to_seller
+}
+
 // ─────────────────────────────────────────
 // MODELOS
 // ─────────────────────────────────────────
@@ -134,12 +139,17 @@ model User {
   website              String?
   tiktok               String?
   kycStatus            KycStatus @default(none) @map("kyc_status")
+  isSuspended          Boolean   @default(false) @map("is_suspended")
+  suspendedUntil       DateTime? @map("suspended_until") @db.Timestamptz(6)
+  suspendReason        String?   @map("suspend_reason")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Relaciones
   roles                UserRole_Assignment[]
   kycSubmissions       KycSubmission[]
+  pendingReviewsGiven  PendingReview[]       @relation("ReviewerPending")
+  pendingReviewsTarget PendingReview[]       @relation("ReviewedPending")
   listings             Listing[]
   buyerOffers          Offer[]              @relation("BuyerOffers")
   sellerOffers         Offer[]              @relation("SellerOffers")
@@ -479,4 +489,56 @@ model ImeiReport {
   @@unique([imeiLast4, listingId])
   @@index([imeiLast4])
   @@map("imei_reports")
+}
+
+model BannedEmail {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  reason    String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("banned_emails")
+}
+
+model PendingReview {
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId  String            @map("listing_id") @db.Uuid
+  reviewerId String            @map("reviewer_id") @db.Uuid
+  reviewedId String            @map("reviewed_id") @db.Uuid
+  type       PendingReviewType
+  completed  Boolean           @default(false)
+  expiresAt  DateTime          @default(dbgenerated("now() + interval '14 days'")) @map("expires_at") @db.Timestamptz(6)
+  createdAt  DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  reviewer User @relation("ReviewerPending", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewed User @relation("ReviewedPending", fields: [reviewedId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([reviewerId, completed])
+  @@map("pending_reviews")
+}
+
+model AuditLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId    String   @map("actor_id") @db.Uuid
+  actorRole  String   @map("actor_role")
+  action     String
+  targetId   String?  @map("target_id")
+  targetType String?  @map("target_type")
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+model PlatformConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy String   @map("updated_by") @db.Uuid
+
+  @@map("platform_config")
 }

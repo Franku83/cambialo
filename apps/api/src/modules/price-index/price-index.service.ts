@@ -87,4 +87,42 @@ export class PriceIndexService {
       orderBy: { storageGb: 'asc' },
     })
   }
+
+  async getContext(deviceModelId: string, storageGb: number) {
+    const [index, comparables] = await Promise.all([
+      this.prisma.priceIndex.findUnique({
+        where: { deviceModelId_storageGb: { deviceModelId, storageGb } },
+      }),
+      this.prisma.listing.findMany({
+        where: {
+          deviceModelId,
+          storageGb,
+          status: 'active',
+          verificationStatus: 'verified',
+        },
+        orderBy: { batteryHealth: 'desc' },
+        take: 5,
+        select: {
+          batteryHealth: true,
+          condition: true,
+          priceUsd: true,
+        },
+      }),
+    ])
+
+    if (!index || index.sampleSize < 3) {
+      return { sampleSize: index?.sampleSize ?? 0, avgPrice: null, comparables: [] }
+    }
+
+    return {
+      avgPrice: Number(index.avgPrice),
+      medianPrice: Number(index.medianPrice),
+      sampleSize: index.sampleSize,
+      comparables: comparables.map((c) => ({
+        batteryHealth: c.batteryHealth,
+        condition: c.condition,
+        priceUsd: Number(c.priceUsd),
+      })),
+    }
+  }
 }

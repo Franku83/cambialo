@@ -95,6 +95,19 @@ export class ListingsController {
     return this.listingsService.unsaveListing(id, user.id)
   }
 
+  @Post(':id/mark-sold')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Marcar listing como vendido + crear pending reviews' })
+  async markAsSold(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+    @Body() body: { buyerUsername?: string },
+  ) {
+    return this.listingsService.markAsSold(id, user.id, body.buyerUsername)
+  }
+
   @Patch(':id/status')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()

@@ -244,6 +244,25 @@ function FiltersContent({
         </div>
       )}
 
+      {/* Switches */}
+      <div className="space-y-1 border-t border-slate-100 pt-3">
+        <Toggle
+          checked={local.onlyVerified}
+          onChange={(v) => setLocal((p) => ({ ...p, onlyVerified: v }))}
+          label="Solo verificados"
+        />
+        <Toggle
+          checked={local.acceptsOffers}
+          onChange={(v) => setLocal((p) => ({ ...p, acceptsOffers: v }))}
+          label="Acepta ofertas"
+        />
+        <Toggle
+          checked={local.includesBox}
+          onChange={(v) => setLocal((p) => ({ ...p, includesBox: v }))}
+          label="Incluye caja"
+        />
+      </div>
+
       <button
         onClick={() => onApply(local)}
         className="w-full rounded-xl bg-green-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700"

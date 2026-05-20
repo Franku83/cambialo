@@ -308,6 +308,37 @@ export class ListingsService {
     }))
   }
 
+  async markAsSold(listingId: string, sellerId: string, buyerUsername?: string) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId, sellerId },
+      include: { deviceModel: { select: { modelName: true } } },
+    })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+
+    await this.prisma.listing.update({
+      where: { id: listingId },
+      data: { status: 'sold' },
+    })
+
+    if (buyerUsername) {
+      const buyer = await this.prisma.user.findUnique({
+        where: { username: buyerUsername },
+        select: { id: true },
+      })
+      if (buyer) {
+        await this.prisma.pendingReview.createMany({
+          data: [
+            { listingId, reviewerId: sellerId, reviewedId: buyer.id, type: 'seller_to_buyer' },
+            { listingId, reviewerId: buyer.id, reviewedId: sellerId, type: 'buyer_to_seller' },
+          ],
+          skipDuplicates: true,
+        })
+      }
+    }
+
+    return { sold: true }
+  }
+
   async updateStatus(listingId: string, userId: string, newStatus: 'active' | 'paused' | 'sold') {
     const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
     if (!listing) throw new NotFoundException('Listing no encontrado')
