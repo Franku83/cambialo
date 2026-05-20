@@ -83,7 +83,7 @@ export class VerificationService {
 
     await this.prisma.listing.update({
       where: { id: listingId },
-      data: { verificationStatus: 'pending' },
+      data: { verificationStatus: 'pending', status: 'pending_review' },
     })
 
     await this.verificationQueue.add('verify-listing', { listingId })

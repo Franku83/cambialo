@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, Shield, Star, ArrowLeft } from 'lucide-react'
+import { MapPin, Shield, Star, ArrowLeft, CheckCircle, Clock, AlertTriangle } from 'lucide-react'
 import { ListingGallery } from '@/components/listings/ListingGallery'
 import { SaveButton } from '@/components/listings/SaveButton'
 import { ListingCard } from '@/components/listings/ListingCard'
@@ -122,7 +122,10 @@ export default async function ListingDetailPage({ params }: Props) {
     getSafeZones(id),
   ])
 
-  if (!listing || listing.status !== 'active') notFound()
+  const isInactive = ['sold', 'expired', 'removed'].includes(listing?.status ?? '')
+  if (!listing || (!isInactive && listing.status !== 'active')) {
+    notFound()
+  }
 
   const message = encodeURIComponent(
     `Hola! Vi tu ${listing.deviceModel.modelName} en Cambialo ` +
@@ -151,6 +154,49 @@ export default async function ListingDetailPage({ params }: Props) {
 
         {/* Galería */}
         <ListingGallery photos={listing.photos} alt={`${listing.deviceModel.brand} ${listing.deviceModel.modelName}`} />
+
+        {/* Status Warning Banners */}
+        {listing.status === 'sold' && (
+          <div className="rounded-2xl border border-blue-200 bg-blue-50/50 p-5 flex items-start gap-4">
+            <div className="rounded-full bg-blue-100 p-2.5 text-blue-600 shrink-0">
+              <CheckCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-blue-950 text-sm">Este equipo ya fue vendido</h3>
+              <p className="text-xs text-blue-700 leading-relaxed mt-0.5">
+                El vendedor ha marcado esta publicación como vendida. El contacto ha sido desactivado. ¡Busca otros equipos similares a continuación!
+              </p>
+            </div>
+          </div>
+        )}
+
+        {listing.status === 'expired' && (
+          <div className="rounded-2xl border border-orange-200 bg-orange-50/50 p-5 flex items-start gap-4">
+            <div className="rounded-full bg-orange-100 p-2.5 text-orange-600 shrink-0">
+              <Clock className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-orange-950 text-sm">Esta publicación ha expirado</h3>
+              <p className="text-xs text-orange-700 leading-relaxed mt-0.5">
+                El tiempo de publicación de este equipo ha finalizado. El contacto con el vendedor está inhabilitado.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {listing.status === 'removed' && (
+          <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 flex items-start gap-4">
+            <div className="rounded-full bg-red-100 p-2.5 text-red-600 shrink-0">
+              <AlertTriangle className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-red-950 text-sm">Publicación removida por moderación</h3>
+              <p className="text-xs text-red-700 leading-relaxed mt-0.5">
+                Esta publicación ha sido desactivada permanentemente por infringir las normas de nuestra comunidad.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
@@ -187,8 +233,14 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
             <p className="text-xs text-slate-400">{listing.viewsCount} vistas</p>
           </div>
-          {whatsappUrl && (
-            <WhatsAppButton url={whatsappUrl} listingId={listing.id} responseTime="~2 horas" />
+          {isInactive ? (
+            <div className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-3 text-sm font-bold text-slate-500 cursor-not-allowed">
+              Contacto deshabilitado
+            </div>
+          ) : (
+            whatsappUrl && (
+              <WhatsAppButton url={whatsappUrl} listingId={listing.id} responseTime="~2 horas" />
+            )
           )}
         </div>
 
@@ -264,7 +316,7 @@ export default async function ListingDetailPage({ params }: Props) {
         />
 
         {/* Trade-in */}
-        {listing.acceptsTradeIn && (
+        {listing.acceptsTradeIn && !isInactive && (
           <TradeInSimulator
             listingPrice={Number(listing.priceUsd)}
             listingId={listing.id}

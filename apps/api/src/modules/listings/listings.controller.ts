@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Patch,
-  Delete,
   Param,
   Body,
   Query,
@@ -15,6 +14,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
 import { ListingsService } from './listings.service'
 import { CreateListingDto } from './dto/create-listing.dto'
 import { ListingFiltersDto } from './dto/listing-filters.dto'
+import { UpdateListingStatusDto } from './dto/update-listing-status.dto'
 import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard'
 import { CurrentUser } from '../../common/decorators/current-user.decorator'
 
@@ -112,25 +112,13 @@ export class ListingsController {
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Cambiar estado de un listing (pausar, reactivar, marcar vendido)' })
+  @ApiOperation({ summary: 'Cambiar estado de un listing (pausar, reactivar, marcar vendido, remover)' })
   async updateStatus(
     @Param('id') id: string,
     @CurrentUser() user: { id: string },
-    @Body() body: { status: 'active' | 'paused' | 'sold' },
+    @Body() body: UpdateListingStatusDto,
   ) {
     return this.listingsService.updateStatus(id, user.id, body.status)
-  }
-
-  @Delete(':id')
-  @UseGuards(SupabaseAuthGuard)
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Eliminar listing propio' })
-  async deleteListing(
-    @Param('id') id: string,
-    @CurrentUser() user: { id: string },
-  ) {
-    return this.listingsService.deleteListing(id, user.id)
   }
 
   @Post(':id/whatsapp-click')

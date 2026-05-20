@@ -46,6 +46,7 @@ enum VerificationStatus {
 
 enum ListingStatus {
   draft
+  pending_review
   active
   paused
   sold
@@ -252,6 +253,7 @@ model Listing {
   longitude       Float?
 
   expiresAt       DateTime           @default(dbgenerated("NOW() + INTERVAL '60 days'")) @map("expires_at")
+  soldAt          DateTime?          @map("sold_at") @db.Timestamptz(6)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 

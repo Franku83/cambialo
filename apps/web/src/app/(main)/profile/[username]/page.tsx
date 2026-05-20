@@ -1,11 +1,14 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Shield, Star, MapPin, Calendar, Trophy, Sparkles, Instagram, Twitter, Globe, Edit, Crown, Package } from 'lucide-react'
+import { Shield, Star, MapPin, Calendar, Trophy, Sparkles, Instagram, Twitter, Globe, Edit, Crown, Package, CheckCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice } from '@/lib/utils'
 
-interface Props { params: Promise<{ username: string }> }
+interface Props {
+  params: Promise<{ username: string }>
+  searchParams: Promise<{ tab?: string }>
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username } = await params
@@ -55,7 +58,7 @@ type ReviewData = {
   reviewer: { username: string; avatar_url: string | null } | null
 }
 type ListingData = {
-  id: string; price_usd: number; battery_health: number; condition: string; verification_status: string
+  id: string; price_usd: number; battery_health: number; condition: string; verification_status: string; status: string
   city: string | null; is_bumped: boolean
   photos: { cloudinary_url: string; is_cover: boolean }[]
   device_model: { brand: string; model_name: string } | null
@@ -66,8 +69,9 @@ const conditionLabel: Record<string, string> = {
   mint: 'Nuevo', good: 'Bueno', fair: 'Regular', poor: 'Con detalles',
 }
 
-export default async function PublicProfilePage({ params }: Props) {
+export default async function PublicProfilePage({ params, searchParams }: Props) {
   const { username } = await params
+  const tab = (await searchParams).tab || 'activos'
   const supabase = await createClient()
 
   const { data: { user: authUser } } = await supabase.auth.getUser()
@@ -103,18 +107,22 @@ export default async function PublicProfilePage({ params }: Props) {
       .limit(5) as unknown as Promise<{ data: ReviewData[] | null }>,
     supabase
       .from('listings')
-      .select('id, price_usd, battery_health, condition, verification_status, city, is_bumped, photos:listing_photos(cloudinary_url, is_cover), device_model:device_models(brand, model_name)')
+      .select('id, price_usd, battery_health, condition, verification_status, status, city, is_bumped, photos:listing_photos(cloudinary_url, is_cover), device_model:device_models(brand, model_name)')
       .eq('seller_id', profile.id)
-      .eq('status', 'active')
+      .in('status', ['active', 'sold'])
       .order('is_bumped', { ascending: false })
       .order('created_at', { ascending: false })
-      .limit(6) as unknown as Promise<{ data: ListingData[] | null }>,
+      .limit(50) as unknown as Promise<{ data: ListingData[] | null }>,
   ])
 
   const avgRating = reviews?.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : null
   const isTopSeller = profile.total_sales >= 50 && profile.reputation_score >= 90
   const isNew = profile.total_sales < 5
   const joinedDate = new Date(profile.created_at).toLocaleDateString('es-VE', { month: 'long', year: 'numeric' })
+
+  const activeListings = listings?.filter(l => l.status === 'active') || []
+  const soldListings = listings?.filter(l => l.status === 'sold') || []
+  const displayedListings = tab === 'vendidos' ? soldListings : activeListings
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -280,43 +288,80 @@ export default async function PublicProfilePage({ params }: Props) {
           </div>
         )}
 
-        {/* Listings activos */}
+        {/* Listings Section */}
         {listings && listings.length > 0 && (
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-                <Package className="h-4 w-4 text-green-600" /> Equipos en venta
-              </h2>
-              <span className="text-xs text-slate-400">{listings.length} listing{listings.length !== 1 ? 's' : ''}</span>
+            {/* Tabs */}
+            <div className="flex border-b border-slate-200 mb-6">
+              <Link
+                href={`/profile/${username}?tab=activos`}
+                scroll={false}
+                className={`flex-1 pb-3 text-center text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 ${
+                  tab === 'activos'
+                    ? 'border-green-600 text-green-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                <Package className="h-4 w-4" />
+                Activos ({activeListings.length})
+              </Link>
+              <Link
+                href={`/profile/${username}?tab=vendidos`}
+                scroll={false}
+                className={`flex-1 pb-3 text-center text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 ${
+                  tab === 'vendidos'
+                    ? 'border-green-600 text-green-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                <CheckCircle className="h-4 w-4" />
+                Vendidos ({soldListings.length})
+              </Link>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {listings.map(l => {
-                const cover = l.photos?.find(p => p.is_cover) ?? l.photos?.[0]
-                return (
-                  <Link key={l.id} href={`/listings/${l.id}`}
-                    className="group overflow-hidden rounded-xl border border-slate-200 hover:border-green-400 hover:shadow-sm transition-all">
-                    <div className="relative aspect-square bg-slate-100 overflow-hidden">
-                      {cover ? (
-                        <img src={cover.cloudinary_url} alt="" className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-3xl">📱</div>
-                      )}
-                      {l.is_bumped && (
-                        <span className="absolute top-1.5 left-1.5 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-white">⬆</span>
-                      )}
-                      {l.verification_status === 'verified' && (
-                        <span className="absolute top-1.5 right-1.5 rounded-full bg-green-600 px-1.5 py-0.5 text-[10px] font-bold text-white">🛡</span>
-                      )}
-                    </div>
-                    <div className="p-2">
-                      <p className="text-[11px] text-slate-400">{l.device_model?.brand} {l.device_model?.model_name}</p>
-                      <p className="text-sm font-bold text-slate-900">{formatPrice(Number(l.price_usd))}</p>
-                      <p className="text-[10px] text-slate-400">{conditionLabel[l.condition] ?? l.condition} · {l.battery_health}%</p>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
+
+            {displayedListings.length === 0 ? (
+              <div className="text-center py-8 text-slate-400 text-sm">
+                {tab === 'vendidos'
+                  ? 'Aún no hay equipos vendidos por este usuario.'
+                  : 'Aún no hay equipos activos en venta.'}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {displayedListings.map(l => {
+                  const cover = l.photos?.find(p => p.is_cover) ?? l.photos?.[0]
+                  return (
+                    <Link key={l.id} href={`/listings/${l.id}`}
+                      className="group overflow-hidden rounded-xl border border-slate-200 hover:border-green-400 hover:shadow-sm transition-all relative">
+                      <div className="relative aspect-square bg-slate-100 overflow-hidden">
+                        {cover ? (
+                          <img src={cover.cloudinary_url} alt="" className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-3xl">📱</div>
+                        )}
+                        {l.is_bumped && (
+                          <span className="absolute top-1.5 left-1.5 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-white">⬆</span>
+                        )}
+                        {l.verification_status === 'verified' && (
+                          <span className="absolute top-1.5 right-1.5 rounded-full bg-green-600 px-1.5 py-0.5 text-[10px] font-bold text-white">🛡</span>
+                        )}
+                        {l.status === 'sold' && (
+                          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 backdrop-blur-[0.5px]">
+                            <span className="rounded bg-green-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+                              Vendido
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-2">
+                        <p className="text-[11px] text-slate-400">{l.device_model?.brand} {l.device_model?.model_name}</p>
+                        <p className="text-sm font-bold text-slate-900">{formatPrice(Number(l.price_usd))}</p>
+                        <p className="text-[10px] text-slate-400">{conditionLabel[l.condition] ?? l.condition} · {l.battery_health}%</p>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
 

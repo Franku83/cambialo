@@ -122,7 +122,7 @@ export class ListingsService {
 
   async getById(id: string, userId?: string) {
     const listing = await this.prisma.listing.findUnique({
-      where: { id, status: 'active' },
+      where: { id },
       include: {
         deviceModel: true,
         seller: { select: PUBLIC_SELLER_SELECT },
@@ -134,6 +134,22 @@ export class ListingsService {
     })
 
     if (!listing) throw new NotFoundException('Listing no encontrado')
+
+    // Si es draft o pending_review, solo el propio vendedor o moderadores/admins/owner pueden verlo
+    if (['draft', 'pending_review'].includes(listing.status)) {
+      if (!userId) {
+        throw new ForbiddenException('No tienes permiso para ver este listing')
+      }
+      const isSeller = listing.sellerId === userId
+      const userRoles = await this.prisma.userRole_Assignment.findMany({
+        where: { userId },
+        select: { role: true }
+      })
+      const isModerator = userRoles.some(r => ['moderator', 'admin', 'owner'].includes(r.role))
+      if (!isSeller && !isModerator) {
+        throw new ForbiddenException('No tienes permiso para ver este listing')
+      }
+    }
 
     // Incrementar views de forma async (fire and forget)
     void this.prisma.listing
@@ -343,7 +359,7 @@ export class ListingsService {
 
     await this.prisma.listing.update({
       where: { id: listingId },
-      data: { status: 'sold' },
+      data: { status: 'sold', soldAt: new Date() },
     })
 
     if (buyerUsername) {
@@ -365,39 +381,63 @@ export class ListingsService {
     return { sold: true }
   }
 
-  async updateStatus(listingId: string, userId: string, newStatus: 'active' | 'paused' | 'sold') {
-    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
-    if (!listing) throw new NotFoundException('Listing no encontrado')
-    if (listing.sellerId !== userId) throw new ForbiddenException('No tienes permiso para modificar este listing')
+  async updateStatus(
+    listingId: string,
+    userId: string,
+    newStatus: 'active' | 'paused' | 'sold' | 'removed'
+  ) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId }
+    })
 
-    const allowed: Record<string, string[]> = {
-      active: ['paused', 'draft'],
-      paused: ['active', 'paused'],
-      sold: ['active', 'paused', 'draft', 'sold'],
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+
+    // Consultar rol en la DB
+    const roleRecord = await this.prisma.userRole_Assignment.findFirst({
+      where: { userId },
+    })
+    const requesterRole = roleRecord?.role ?? 'user'
+
+    const isModerator = ['moderator', 'admin', 'owner'].includes(requesterRole)
+    const isSeller = listing.sellerId === userId
+
+    if (!isModerator && !isSeller) {
+      throw new ForbiddenException('No tienes permiso para modificar este listing')
     }
-    if (!allowed[newStatus]?.includes(listing.status)) {
-      throw new BadRequestException(`No se puede pasar de '${listing.status}' a '${newStatus}'`)
+
+    const SELLER_ALLOWED_TRANSITIONS: Record<string, string[]> = {
+      active:         ['paused', 'sold'],
+      paused:         ['active', 'sold'],
+      pending_review: ['paused'],
+    }
+
+    const MODERATOR_ALLOWED_TRANSITIONS: Record<string, string[]> = {
+      pending_review: ['active', 'removed'],
+      active:         ['removed'],
+      paused:         ['removed'],
+      sold:           ['removed'],
+    }
+
+    // Validar transición permitida
+    const allowedTransitions = isModerator
+      ? MODERATOR_ALLOWED_TRANSITIONS[listing.status] ?? []
+      : SELLER_ALLOWED_TRANSITIONS[listing.status] ?? []
+
+    if (!allowedTransitions.includes(newStatus)) {
+      throw new BadRequestException(
+        `No puedes cambiar de "${listing.status}" a "${newStatus}"`
+      )
     }
 
     await this.prisma.listing.update({
       where: { id: listingId },
-      data: { status: newStatus },
+      data: {
+        status: newStatus,
+        soldAt: newStatus === 'sold' ? new Date() : undefined,
+      },
     })
 
     return { status: newStatus }
-  }
-
-  async deleteListing(listingId: string, userId: string) {
-    const listing = await this.prisma.listing.findUnique({ where: { id: listingId } })
-    if (!listing) throw new NotFoundException('Listing no encontrado')
-    if (listing.sellerId !== userId) throw new ForbiddenException('No tienes permiso para eliminar este listing')
-
-    await this.prisma.listing.update({
-      where: { id: listingId },
-      data: { status: 'removed' },
-    })
-
-    return { deleted: true }
   }
 
   async trackWhatsappClick(listingId: string) {

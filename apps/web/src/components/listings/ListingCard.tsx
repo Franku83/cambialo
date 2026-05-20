@@ -32,6 +32,7 @@ interface ListingCardProps {
   viewMode?: ViewMode
   distanceKm?: number
   avgMarketPrice?: number | null
+  status?: 'draft' | 'pending_review' | 'active' | 'paused' | 'sold' | 'expired' | 'removed'
 }
 
 const CONDITION_MAP: Record<ListingCondition, { label: string; cls: string }> = {
@@ -86,6 +87,7 @@ export function ListingCard({
   viewMode = 'list',
   distanceKm,
   avgMarketPrice,
+  status,
 }: ListingCardProps) {
   const price = Number(priceUsd)
   const { label: condLabel, cls: condCls } = CONDITION_MAP[condition] ?? CONDITION_MAP.good
@@ -107,6 +109,7 @@ export function ListingCard({
           'group relative flex flex-col overflow-hidden rounded-xl border bg-white transition-all duration-200',
           'hover:shadow-md hover:border-slate-300',
           isBumped ? 'border-amber-300 bg-amber-50/30' : 'border-slate-200',
+          ['paused', 'expired'].includes(status ?? '') ? 'opacity-60' : 'opacity-100'
         )}
       >
         {isBumped && (
@@ -130,6 +133,22 @@ export function ListingCard({
               <Smartphone className="h-10 w-10 text-slate-300" />
             </div>
           )}
+
+          {/* Overlays for Grid View */}
+          {status === 'sold' && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
+              <span className="inline-flex items-center gap-1 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white shadow-md">
+                ✅ Vendido
+              </span>
+            </div>
+          )}
+          {status === 'removed' && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-950/80 p-2 text-center">
+              <span className="text-[10px] font-bold text-white leading-tight uppercase tracking-wider">
+                ⚠️ Removido por moderación
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-1.5 p-3">
           <h3 className="line-clamp-1 text-sm font-semibold text-slate-900">
@@ -138,6 +157,26 @@ export function ListingCard({
           </h3>
           <BatteryBar health={batteryHealth} />
           <div className="flex items-center gap-1.5 mt-0.5">
+            {status && (
+              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold border shrink-0', 
+                status === 'active' ? 'bg-green-100 text-green-800 border-green-200' :
+                status === 'paused' ? 'bg-slate-100 text-slate-600 border-slate-200' :
+                status === 'pending_review' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                status === 'sold' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                status === 'expired' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+                status === 'removed' ? 'bg-red-100 text-red-800 border-red-200' : 'bg-slate-100 text-slate-600 border-slate-200'
+              )}>
+                {
+                  status === 'active' ? 'Activo' :
+                  status === 'paused' ? 'Pausado' :
+                  status === 'pending_review' ? 'En revisión' :
+                  status === 'sold' ? 'Vendido' :
+                  status === 'expired' ? 'Expirado' :
+                  status === 'removed' ? 'Removido' :
+                  status === 'draft' ? 'Borrador' : status
+                }
+              </span>
+            )}
             <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase', condCls)}>
               {condLabel}
             </span>
@@ -179,6 +218,7 @@ export function ListingCard({
         isBumped
           ? 'border-amber-300 bg-amber-50/20 hover:border-amber-400'
           : 'border-slate-200 hover:border-slate-300 hover:border-l-[3px] hover:border-l-green-500',
+        ['paused', 'expired'].includes(status ?? '') ? 'opacity-60' : 'opacity-100'
       )}
     >
       {isBumped && (
@@ -202,6 +242,22 @@ export function ListingCard({
             <Smartphone className="h-8 w-8 text-slate-300" />
           </div>
         )}
+
+        {/* Overlays for List View */}
+        {status === 'sold' && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
+            <span className="inline-flex items-center gap-0.5 rounded bg-green-600 px-1 py-0.5 text-[10px] font-bold text-white shadow-sm">
+              ✅ Vendido
+            </span>
+          </div>
+        )}
+        {status === 'removed' && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-950/80 p-1 text-center">
+            <span className="text-[9px] font-bold text-white leading-tight uppercase">
+              ⚠️ Removido
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Info */}
@@ -218,6 +274,26 @@ export function ListingCard({
 
         {/* Badges: condición + verificado */}
         <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+          {status && (
+            <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold border shrink-0', 
+              status === 'active' ? 'bg-green-100 text-green-800 border-green-200' :
+              status === 'paused' ? 'bg-slate-100 text-slate-600 border-slate-200' :
+              status === 'pending_review' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+              status === 'sold' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+              status === 'expired' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+              status === 'removed' ? 'bg-red-100 text-red-800 border-red-200' : 'bg-slate-100 text-slate-600 border-slate-200'
+            )}>
+              {
+                status === 'active' ? 'Activo' :
+                status === 'paused' ? 'Pausado' :
+                status === 'pending_review' ? 'En revisión' :
+                status === 'sold' ? 'Vendido' :
+                status === 'expired' ? 'Expirado' :
+                status === 'removed' ? 'Removido' :
+                status === 'draft' ? 'Borrador' : status
+              }
+            </span>
+          )}
           <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase', condCls)}>
             {condLabel}
           </span>

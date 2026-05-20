@@ -6,7 +6,7 @@
 export type UserRole = 'user' | 'moderator' | 'admin'
 export type ListingCondition = 'mint' | 'good' | 'fair' | 'poor'
 export type VerificationStatus = 'pending' | 'verified' | 'rejected' | 'expired'
-export type ListingStatus = 'draft' | 'active' | 'paused' | 'sold' | 'expired' | 'removed'
+export type ListingStatus = 'draft' | 'pending_review' | 'active' | 'paused' | 'sold' | 'expired' | 'removed'
 export type OfferStatus = 'pending' | 'accepted' | 'rejected' | 'countered' | 'expired'
 export type NotificationType =
   | 'new_offer'
