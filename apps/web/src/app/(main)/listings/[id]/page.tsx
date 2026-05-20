@@ -70,15 +70,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const listing = await getListing(id)
   if (!listing) return { title: 'Listing no encontrado' }
   const title = `${listing.deviceModel.brand} ${listing.deviceModel.modelName} ${listing.storageGb}GB — ${formatPrice(Number(listing.priceUsd))}`
-  const description = `${listing.condition === 'mint' ? 'Nuevo' : 'Buen estado'} · Batería ${listing.batteryHealth}% · ${listing.city ?? 'Venezuela'} · ${listing.verificationStatus === 'verified' ? 'Verificado ✓' : 'Pendiente'}`
+  const description = `${listing.deviceModel.modelName} ${listing.storageGb}GB en ${CONDITION_LABEL[listing.condition]}, batería ${listing.batteryHealth}%, ${formatPrice(Number(listing.priceUsd))} USD. Vendedor verificado en ${listing.city ?? 'Venezuela'}.`
   return {
     title,
     description,
     openGraph: {
       title,
       description,
-      images: listing.photos[0] ? [{ url: listing.photos[0].cloudinaryUrl }] : [],
+      images: listing.photos[0] ? [{ url: listing.photos[0].cloudinaryUrl, width: 800, height: 800, alt: title }] : [{ url: '/og-image.png' }],
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: listing.photos[0] ? [listing.photos[0].cloudinaryUrl] : ['/og-image.png'],
     },
   }
 }
@@ -142,8 +148,28 @@ export default async function ListingDetailPage({ params }: Props) {
     listing.includesEarphones && 'Auriculares',
   ].filter(Boolean)
 
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `${listing.deviceModel.brand} ${listing.deviceModel.modelName} ${listing.storageGb}GB`,
+    description: listing.description ?? `${listing.deviceModel.modelName} ${listing.storageGb}GB en ${CONDITION_LABEL[listing.condition]}, batería ${listing.batteryHealth}%`,
+    image: listing.photos.map((p) => p.cloudinaryUrl),
+    brand: { '@type': 'Brand', name: listing.deviceModel.brand },
+    offers: {
+      '@type': 'Offer',
+      price: listing.priceUsd,
+      priceCurrency: 'USD',
+      availability: listing.status === 'active' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Person', name: listing.seller.username },
+    },
+  }
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="mx-auto max-w-4xl px-4 py-6 space-y-5">
 
         {/* Back */}
