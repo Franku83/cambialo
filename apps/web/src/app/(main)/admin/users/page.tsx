@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Shield, User, Crown, Loader2, Plus, X, Search } from 'lucide-react'
+import { Shield, User, Crown, Loader2, Plus, X, Search, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
@@ -144,6 +145,7 @@ export default function AdminUsersPage() {
                 <th className="px-4 py-3 text-left font-medium text-slate-500">Email</th>
                 <th className="px-4 py-3 text-left font-medium text-slate-500">Roles</th>
                 <th className="px-4 py-3 text-left font-medium text-slate-500">Registrado</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -202,6 +204,14 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-4 py-3 text-slate-400">
                       {new Date(u.createdAt).toLocaleDateString('es-VE', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/admin/users/${u.id}`}
+                        className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium"
+                      >
+                        Ver <ChevronRight className="h-3.5 w-3.5" />
+                      </Link>
                     </td>
                   </tr>
                 )
