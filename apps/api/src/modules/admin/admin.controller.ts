@@ -73,6 +73,13 @@ export class AdminController {
     return this.adminService.removeRole(user.id, targetId, role as UserRole)
   }
 
+  @Post('users/:id/verify')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verificar manualmente a un usuario sin KYC' })
+  async verifyUser(@CurrentUser() user: User, @Param('id') targetId: string) {
+    return this.adminService.verifyUser(user.id, targetId)
+  }
+
   @Post('users/:id/suspend')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Suspender usuario temporalmente' })

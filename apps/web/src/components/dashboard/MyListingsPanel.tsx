@@ -7,13 +7,13 @@ import {
   MessageCircle,
   BarChart2,
   Loader2,
-  Trash2,
   Play,
   Pause,
   CheckCircle,
   Shield,
   PlusCircle,
   ExternalLink,
+  AlertTriangle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'
@@ -27,7 +27,7 @@ interface MyListingStats {
   modelName: string
   storageGb: number
   priceUsd: string
-  status: 'draft' | 'active' | 'paused' | 'sold' | 'expired' | 'removed'
+  status: 'draft' | 'active' | 'paused' | 'sold' | 'expired' | 'removed' | 'pending_review'
   verificationStatus: 'pending' | 'verified' | 'rejected' | 'expired'
   viewsCount: number
   savesCount: number
@@ -52,6 +52,7 @@ export default function MyListingsPanel({
   const [error, setError] = useState<string | null>(null)
   const [actioningId, setActioningId] = useState<string | null>(null)
   const [markSoldListing, setMarkSoldListing] = useState<{ id: string; name: string } | null>(null)
+  const [confirmingAction, setConfirmingAction] = useState<string | null>(null)
 
   const activeCount = listings.filter((l) => ['active', 'paused', 'draft'].includes(l.status)).length
   const limit = isVerifiedSeller ? 25 : idVerified ? 10 : 3
@@ -82,7 +83,7 @@ export default function MyListingsPanel({
     void fetchListings()
   }, [fetchListings])
 
-  const handleUpdateStatus = async (id: string, newStatus: 'active' | 'paused') => {
+  const handleUpdateStatus = async (id: string, newStatus: 'active' | 'paused' | 'sold' | 'removed') => {
     setActioningId(id)
     try {
       const res = await fetch(`${API_URL}/api/v1/listings/${id}/status`, {
@@ -94,31 +95,6 @@ export default function MyListingsPanel({
       await fetchListings()
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Error al actualizar el estado')
-    } finally {
-      setActioningId(null)
-    }
-  }
-
-  const handleDeleteListing = async (id: string) => {
-    const confirmDelete = window.confirm('¿Eliminar este listing? Esta acción no se puede deshacer.')
-    if (!confirmDelete) return
-
-    setActioningId(id)
-    try {
-      const res = await fetch(`${API_URL}/api/v1/listings/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-
-      if (!res.ok) {
-        throw new Error('No se pudo eliminar el listing')
-      }
-
-      await fetchListings()
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Error al eliminar el listing')
     } finally {
       setActioningId(null)
     }
@@ -159,34 +135,11 @@ export default function MyListingsPanel({
         </Link>
       </div>
 
-      {/* Barra de progreso de límite de listings publicados */}
+      {/* LISTING_LIMITS_UI — desactivado, activar cuando se implemente la lógica de límites
       <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 space-y-3">
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-semibold text-slate-700">Límite de publicaciones</span>
-          <span className="font-medium text-slate-500">{activeCount} / {limit} listings</span>
-        </div>
-        <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all duration-500 ${
-              percentage >= 100 ? 'bg-red-500' : percentage >= 80 ? 'bg-amber-500' : 'bg-green-600'
-            }`}
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
-        {activeCount >= limit && (
-          <p className="text-xs text-red-500 font-medium">
-            Alcanzaste tu límite de {limit} listings.
-          </p>
-        )}
-        {!isVerifiedSeller && (
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>¿Necesitas publicar más?</span>
-            <Link href="/kyc" className="font-semibold text-green-600 hover:text-green-700">
-              Verifica tu identidad para publicar hasta 10 listings →
-            </Link>
-          </div>
-        )}
+        ...límite de publicaciones...
       </div>
+      */}
 
       {listings.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white py-12 px-4 text-center space-y-3">
@@ -224,8 +177,33 @@ export default function MyListingsPanel({
                 key={item.id}
                 className={`relative overflow-hidden rounded-2xl border bg-white p-4 sm:p-5 transition-all hover:shadow-md ${
                   isActioning ? 'opacity-60 pointer-events-none' : 'border-slate-200'
+                } ${
+                  ['paused', 'expired'].includes(item.status) ? 'opacity-60' : 'opacity-100'
                 }`}
               >
+                {/* Sold Overlay */}
+                {item.status === 'sold' && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
+                    <div className="flex flex-col items-center gap-1 rounded-2xl bg-white/95 px-5 py-3 shadow-md border border-slate-100">
+                      <CheckCircle className="h-6 w-6 text-green-600 animate-bounce" />
+                      <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">Vendido</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Removed Overlay */}
+                {item.status === 'removed' && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/75 backdrop-blur-[1px] p-4 text-center">
+                    <div className="flex flex-col items-center gap-1 max-w-[85%] rounded-2xl bg-white/95 px-5 py-3 shadow-md border border-red-100">
+                      <AlertTriangle className="h-5 w-5 text-red-600" />
+                      <span className="text-xs font-bold text-red-700 uppercase tracking-wider">Removido por Moderación</span>
+                      <p className="text-[10px] text-slate-500 leading-normal">
+                        Este listing infringe nuestras normas comunitarias y ha sido desactivado.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                   
                   {/* Left Side: Thumbnail & Title Details */}
@@ -253,22 +231,30 @@ export default function MyListingsPanel({
                         </Link>
                         
                         {/* Status Badge */}
-                        <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border shrink-0 bg-slate-50 text-slate-600 border-slate-200">
-                          {isStatusActive && (
-                            <>
-                              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                              Activo
-                            </>
+                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border shrink-0 ${
+                          item.status === 'active' ? 'bg-green-50 text-green-700 border-green-200' :
+                          item.status === 'paused' ? 'bg-slate-50 text-slate-600 border-slate-200' :
+                          item.status === 'pending_review' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
+                          item.status === 'sold' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                          item.status === 'expired' ? 'bg-orange-50 text-orange-700 border-orange-200' :
+                          item.status === 'removed' ? 'bg-red-50 text-red-700 border-red-200' :
+                          'bg-slate-50 text-slate-600 border-slate-200'
+                        }`}>
+                          {item.status === 'active' && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                           )}
-                          {isStatusPaused && (
-                            <>
-                              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                              Pausado
-                            </>
+                          {item.status === 'paused' && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
                           )}
-                          {isStatusSold && 'Vendido'}
-                          {isStatusExpired && 'Expirado'}
-                          {item.status === 'draft' && 'Borrador'}
+                          {
+                            item.status === 'active' ? 'Activo' :
+                            item.status === 'paused' ? 'Pausado' :
+                            item.status === 'pending_review' ? 'En revisión' :
+                            item.status === 'sold' ? 'Vendido' :
+                            item.status === 'expired' ? 'Expirado' :
+                            item.status === 'removed' ? 'Removido' :
+                            item.status === 'draft' ? 'Borrador' : item.status
+                          }
                         </span>
                       </div>
 
@@ -336,7 +322,7 @@ export default function MyListingsPanel({
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap items-center gap-2 justify-end">
-                      {isStatusActive && (
+                      {item.status === 'active' && (
                         <>
                           <button
                             onClick={() => handleUpdateStatus(item.id, 'paused')}
@@ -345,17 +331,54 @@ export default function MyListingsPanel({
                             <Pause className="h-3 w-3" />
                             Pausar
                           </button>
+
+                          {confirmingAction === item.id + '_sold' ? (
+                            <div className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50/50 p-1 px-2.5">
+                              <span className="text-[11px] font-semibold text-amber-800">¿Seguro que se vendió?</span>
+                              <button
+                                onClick={() => {
+                                  setConfirmingAction(null)
+                                  setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })
+                                }}
+                                className="rounded-lg bg-green-600 px-2 py-1 text-[11px] font-bold text-white hover:bg-green-700 transition-colors"
+                              >
+                                Sí, vendido
+                              </button>
+                              <button
+                                onClick={() => setConfirmingAction(null)}
+                                className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmingAction(item.id + '_sold')}
+                              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-green-50 border border-green-200 px-3.5 py-2 text-xs font-bold text-green-700 hover:bg-green-100 transition-colors"
+                            >
+                              <CheckCircle className="h-3 w-3" />
+                              Marcar vendido
+                            </button>
+                          )}
+
                           <button
-                            onClick={() => setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })}
-                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-green-50 border border-green-200 px-3.5 py-2 text-xs font-bold text-green-700 hover:bg-green-100 transition-colors"
+                            disabled
+                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-medium text-slate-400 cursor-not-allowed"
+                            title="Próximamente"
                           >
-                            <CheckCircle className="h-3 w-3" />
-                            Marcar vendido
+                            Editar
+                          </button>
+                          <button
+                            disabled
+                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-amber-200 bg-amber-50/50 px-3.5 py-2 text-xs font-medium text-amber-600 cursor-not-allowed"
+                            title="Próximamente"
+                          >
+                            ⬆ Destacar $1
                           </button>
                         </>
                       )}
 
-                      {isStatusPaused && (
+                      {item.status === 'paused' && (
                         <>
                           <button
                             onClick={() => void handleUpdateStatus(item.id, 'active')}
@@ -364,25 +387,65 @@ export default function MyListingsPanel({
                             <Play className="h-3 w-3 fill-green-700" />
                             Reactivar
                           </button>
+
+                          {confirmingAction === item.id + '_sold' ? (
+                            <div className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50/50 p-1 px-2.5">
+                              <span className="text-[11px] font-semibold text-amber-800">¿Seguro que se vendió?</span>
+                              <button
+                                onClick={() => {
+                                  setConfirmingAction(null)
+                                  setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })
+                                }}
+                                className="rounded-lg bg-green-600 px-2 py-1 text-[11px] font-bold text-white hover:bg-green-700 transition-colors"
+                              >
+                                Sí, vendido
+                              </button>
+                              <button
+                                onClick={() => setConfirmingAction(null)}
+                                className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmingAction(item.id + '_sold')}
+                              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
+                            >
+                              <CheckCircle className="h-3 w-3" />
+                              Marcar vendido
+                            </button>
+                          )}
+
                           <button
-                            onClick={() => setMarkSoldListing({ id: item.id, name: `${item.brand} ${item.modelName} ${item.storageGb}GB` })}
-                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
+                            disabled
+                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-medium text-slate-400 cursor-not-allowed"
+                            title="Próximamente"
                           >
-                            <CheckCircle className="h-3 w-3" />
-                            Marcar vendido
+                            Editar
                           </button>
                         </>
                       )}
 
-                      {/* Delete is visible except if already deleted */}
-                      <button
-                        onClick={() => handleDeleteListing(item.id)}
-                        className="inline-flex items-center justify-center rounded-xl border border-red-200 bg-red-50/50 px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
-                        title="Eliminar listing"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        <span className="ml-1 sm:hidden">Eliminar</span>
-                      </button>
+                      {item.status === 'pending_review' && (
+                        <button
+                          onClick={() => handleUpdateStatus(item.id, 'paused')}
+                          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+                        >
+                          <Pause className="h-3 w-3" />
+                          Pausar
+                        </button>
+                      )}
+
+                      {item.status === 'expired' && (
+                        <button
+                          disabled
+                          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl bg-green-600 border border-green-700 px-3.5 py-2 text-xs font-bold text-white hover:bg-green-700 transition-colors opacity-50 cursor-not-allowed"
+                          title="Próximamente"
+                        >
+                          Renovar
+                        </button>
+                      )}
                     </div>
 
                   </div>

@@ -247,6 +247,35 @@ export default function AdminUserDetailPage() {
             </span>
           )}
         </div>
+        {/* Solo mostrar controles de asignación para roles no-owner */}
+        {!userRoles.includes('owner') && (
+          <div className="flex flex-wrap gap-2 pt-1 border-t border-slate-100">
+            {(['moderator', 'admin'] as const).map(role => {
+              const hasRole = userRoles.includes(role)
+              const meta = ROLE_META[role]
+              return (
+                <button
+                  key={role}
+                  onClick={() => void call(`users/${id}/roles${hasRole ? `/${role}` : ''}`, hasRole ? 'DELETE' : 'POST', hasRole ? undefined : { role })}
+                  disabled={!!actionLoading}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all border',
+                    hasRole
+                      ? `${meta.color} border-transparent`
+                      : 'border-dashed border-slate-300 text-slate-400 hover:border-slate-400',
+                    actionLoading && 'opacity-50',
+                  )}
+                >
+                  {actionLoading === `users/${id}/roles/${role}` || actionLoading === `users/${id}/roles`
+                    ? <Loader2 className="h-3 w-3 animate-spin" />
+                    : <Shield className="h-3 w-3" />
+                  }
+                  {hasRole ? `Quitar ${meta.label}` : `Dar ${meta.label}`}
+                </button>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {/* Acciones */}
@@ -286,6 +315,23 @@ export default function AdminUserDetailPage() {
             >
               {actionLoading === `users/${id}/unban` ? <Loader2 className="h-4 w-4 animate-spin inline" /> : 'Desbanear'}
             </button>
+          )}
+          {!user.idVerified && (
+            <button
+              onClick={() => void call(`users/${id}/verify`, 'POST')}
+              disabled={!!actionLoading}
+              className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors disabled:opacity-50"
+            >
+              {actionLoading === `users/${id}/verify`
+                ? <Loader2 className="h-4 w-4 animate-spin inline" />
+                : '✓ Verificar manualmente'
+              }
+            </button>
+          )}
+          {user.idVerified && (
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
+              <CheckCircle2 className="h-4 w-4" /> Verificado
+            </span>
           )}
         </div>
       </div>

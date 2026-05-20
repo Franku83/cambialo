@@ -118,6 +118,14 @@ export class AdminService {
       update: { grantedBy: adminId },
     })
 
+    // Usuarios con rol elevado quedan auto-verificados — no necesitan KYC
+    if (['moderator', 'admin', 'owner'].includes(role)) {
+      await this.prisma.user.update({
+        where: { id: targetUserId },
+        data: { idVerified: true, kycStatus: 'approved' },
+      })
+    }
+
     await this.auditLog(adminId, 'role.assign', targetUserId, 'user', { role })
     return { ok: true }
   }
@@ -195,6 +203,18 @@ export class AdminService {
 
     await this.auditLog(adminId, 'user.unban', userId, 'user', {})
     return { unbanned: true }
+  }
+
+  async verifyUser(adminId: string, userId: string) {
+    await this.assertOwnerOrAdmin(adminId)
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { idVerified: true, kycStatus: 'approved' },
+    })
+
+    await this.auditLog(adminId, 'user.verify_manual', userId, 'user', {})
+    return { verified: true }
   }
 
   async deleteUserListing(adminId: string, listingId: string) {

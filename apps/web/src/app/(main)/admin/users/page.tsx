@@ -30,7 +30,7 @@ const ROLE_META: Record<UserRole, { label: string; color: string; icon: React.Re
   owner:     { label: 'Owner',     color: 'bg-amber-100 text-amber-700',  icon: <Crown className="h-3 w-3" /> },
 }
 
-const ALL_ROLES: UserRole[] = ['user', 'moderator', 'admin', 'owner']
+const ASSIGNABLE_ROLES: UserRole[] = ['moderator', 'admin']
 
 export default function AdminUsersPage() {
   const router = useRouter()
@@ -171,7 +171,7 @@ export default function AdminUsersPage() {
                     <td className="px-4 py-3 text-slate-500">{u.email}</td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1.5">
-                        {ALL_ROLES.filter(r => r !== 'user').map(role => {
+                        {ASSIGNABLE_ROLES.map(role => {
                           const hasRole = userRoles.includes(role)
                           const meta = ROLE_META[role]
                           const isPending = pendingRole?.userId === u.id && pendingRole.role === role
