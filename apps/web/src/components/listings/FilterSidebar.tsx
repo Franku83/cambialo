@@ -50,25 +50,24 @@ function Toggle({
   label: string
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between py-1">
-      <span className="text-sm text-slate-700">{label}</span>
-      <button
+    <div className="flex cursor-pointer items-center justify-between py-1" onClick={() => onChange(!checked)}>
+      <span className="text-sm text-slate-700 select-none">{label}</span>
+      <div
         role="switch"
         aria-checked={checked}
-        onClick={() => onChange(!checked)}
         className={cn(
-          'relative h-5 w-9 rounded-full transition-colors',
+          'relative h-5 w-9 shrink-0 rounded-full transition-colors',
           checked ? 'bg-green-600' : 'bg-slate-200',
         )}
       >
         <span
           className={cn(
             'absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform',
-            checked ? 'translate-x-4' : 'translate-x-0.5',
+            checked ? 'translate-x-[18px]' : 'translate-x-0.5',
           )}
         />
-      </button>
-    </label>
+      </div>
+    </div>
   )
 }
 

@@ -65,11 +65,16 @@ export class AuthService {
       throw new InternalServerErrorException('Error al crear la cuenta: ' + authError.message)
     }
 
-    // Crear perfil en la tabla users
-    const user = await this.prisma.user.create({
-      data: {
+    // Crear perfil en la tabla users (upsert por si el trigger ya insertó la fila)
+    const user = await this.prisma.user.upsert({
+      where: { id: authData.user.id },
+      create: {
         id: authData.user.id,
         email: dto.email,
+        username: dto.username,
+        fullName: dto.fullName,
+      },
+      update: {
         username: dto.username,
         fullName: dto.fullName,
       },

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, Shield, Star } from 'lucide-react'
+import { MapPin, Shield, Star, ArrowLeft } from 'lucide-react'
 import { ListingGallery } from '@/components/listings/ListingGallery'
 import { SaveButton } from '@/components/listings/SaveButton'
 import { ListingCard } from '@/components/listings/ListingCard'
@@ -142,6 +142,12 @@ export default async function ListingDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-4xl px-4 py-6 space-y-5">
+
+        {/* Back */}
+        <Link href="/explore" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+          Volver al feed
+        </Link>
 
         {/* Galería */}
         <ListingGallery photos={listing.photos} alt={`${listing.deviceModel.brand} ${listing.deviceModel.modelName}`} />
