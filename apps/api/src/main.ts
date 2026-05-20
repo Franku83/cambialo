@@ -13,6 +13,8 @@ async function bootstrap() {
   const allowedOrigins = [
     process.env.NEXT_PUBLIC_APP_URL,
     process.env.CORS_ORIGIN,
+    'https://cambialo.app',
+    'https://www.cambialo.app',
     'https://cambialo.vercel.app',
     'https://cambialo-franku83s-projects.vercel.app',
     'http://localhost:3000',
