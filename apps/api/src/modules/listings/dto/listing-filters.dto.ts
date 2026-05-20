@@ -76,6 +76,25 @@ export class ListingFiltersDto {
   @IsOptional()
   acceptsOffers?: boolean
 
+  @ApiPropertyOptional({ description: 'Latitud del usuario para filtro por distancia' })
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  lat?: number
+
+  @ApiPropertyOptional({ description: 'Longitud del usuario para filtro por distancia' })
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
+  lng?: number
+
+  @ApiPropertyOptional({ description: 'Radio de búsqueda en km (default 40)', default: 40 })
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  rangeKm?: number
+
   @ApiPropertyOptional({ description: 'Cursor para paginación (ID del último listing)' })
   @IsString()
   @IsOptional()

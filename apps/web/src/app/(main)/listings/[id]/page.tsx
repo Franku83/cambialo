@@ -36,6 +36,7 @@ interface SimilarListing {
   id: string; priceUsd: string; storageGb: number; batteryHealth: number
   condition: ListingCondition; verificationStatus: VerificationStatus; isBumped: boolean
   city: string | null; photos: Photo[]; deviceModel: { brand: string; modelName: string }
+  distance_km?: number
 }
 
 async function getListing(id: string): Promise<ListingDetail | null> {
@@ -334,6 +335,7 @@ export default async function ListingDetailPage({ params }: Props) {
                   deviceModel={item.deviceModel}
                   viewMode="grid"
                   {...(item.photos[0] && { coverPhoto: item.photos[0] })}
+                  {...(item.distance_km !== undefined && { distanceKm: item.distance_km })}
                 />
               ))}
             </div>

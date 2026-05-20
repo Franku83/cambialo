@@ -63,10 +63,10 @@ export class ModerationService {
 
     await this.notifications.createNotification({
       userId: listing.sellerId,
-      type: 'listing_verified',
-      title: '¡Tu equipo fue verificado!',
-      body: 'Tu listing ya es visible en el feed de Cambialo.',
-      payload: { listingId },
+      type: 'verification_approved',
+      title: '¡Listing verificado! ✅',
+      body: 'Tu equipo fue verificado y ya está publicado en Cambialo.',
+      payload: { listing_id: listingId },
     })
 
     return { approved: true }
@@ -85,10 +85,10 @@ export class ModerationService {
 
     await this.notifications.createNotification({
       userId: listing.sellerId,
-      type: 'listing_rejected',
-      title: 'Listing rechazado',
-      body: reason ?? 'Tu listing fue rechazado. Revisa las fotos y vuelve a enviarlo.',
-      payload: { listingId, reason },
+      type: 'verification_rejected',
+      title: 'Verificación rechazada',
+      body: `Tu foto de verificación fue rechazada. Motivo: ${reason ?? 'No especificado'}`,
+      payload: { listing_id: listingId, reason: reason ?? 'No especificado' },
     })
 
     return { rejected: true, reason }

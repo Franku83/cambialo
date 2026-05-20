@@ -43,6 +43,8 @@ export interface Step3Data {
   meetAtMall: boolean
   acceptsTradeIn: boolean
   description: string
+  latitude?: number
+  longitude?: number
 }
 
 export interface Step4Data {

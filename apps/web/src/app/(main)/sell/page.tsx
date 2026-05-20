@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -380,6 +381,20 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 
 function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const { step3, updateStep3 } = useSellStore()
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          useSellStore.getState().updateStep3({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          })
+        },
+        () => {} // silencioso si rechaza
+      )
+    }
+  }, [])
 
   const {
     register,
@@ -780,7 +795,7 @@ export default function SellPage() {
   // Crear el draft al terminar el paso 1
   // Usa getState() para leer el store actualizado (evita closure stale de React)
   const handleStep1Next = async () => {
-    const { step1: s1, step2: s2, listingId: lid } = useSellStore.getState()
+    const { step1: s1, step2: s2, step3: s3, listingId: lid } = useSellStore.getState()
     if (lid) { nextStep(); return }
 
     setCreatingDraft(true)
@@ -807,8 +822,16 @@ export default function SellPage() {
           color: 'No especificado',
           batteryHealth: s2.batteryHealth ?? 85,
           condition: s2.condition ?? 'good',
+          ...(s3.latitude !== undefined && { latitude: s3.latitude }),
+          ...(s3.longitude !== undefined && { longitude: s3.longitude }),
         }),
       })
+
+      if (res.status === 403) {
+        const body = await res.json().catch(() => ({})) as { message: string; upgradeUrl?: string }
+        setDraftError(body.message + (body.upgradeUrl ? ' — Verifica tu identidad para publicar más.' : ''))
+        return
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({})) as { message?: string }
@@ -832,8 +855,16 @@ export default function SellPage() {
         <>
           <Step1 onNext={() => void handleStep1Next()} />
           {draftError && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-              {draftError}
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 space-y-2">
+              <p>{draftError}</p>
+              {draftError.includes('Límite') && (
+                <Link
+                  href="/kyc?reason=listing_limit"
+                  className="inline-block rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white hover:bg-green-700 transition-colors"
+                >
+                  Verificar Identidad
+                </Link>
+              )}
             </div>
           )}
         </>

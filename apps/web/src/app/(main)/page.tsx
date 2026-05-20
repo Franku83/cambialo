@@ -28,6 +28,7 @@ interface FeedItem {
   deviceModel: { brand: string; modelName: string }
   photos: { cloudinaryUrl: string; isCover: boolean }[]
   seller?: { username: string; reputationScore: number; totalSales: number }
+  distance_km?: number
 }
 
 interface FeedPage {
@@ -215,6 +216,7 @@ function FeedContent() {
                       {...(item.seller && { seller: item.seller })}
                       viewMode={viewMode}
                       {...(item.photos[0] && { coverPhoto: item.photos[0] })}
+                      {...(item.distance_km !== undefined && { distanceKm: item.distance_km })}
                     />
                   </motion.div>
                 ))}

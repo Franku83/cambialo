@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
   ShieldCheck,
@@ -27,6 +27,8 @@ interface UploadedFile {
 
 export default function KycPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const reason = searchParams.get('reason')
   const [loading, setLoading] = useState(true)
   const [kycStatus, setKycStatus] = useState<KycStatus>('loading')
   const [rejectionReason, setRejectionReason] = useState<string | null>(null)
@@ -253,6 +255,18 @@ export default function KycPage() {
     <div className="min-h-screen bg-slate-50 py-10 px-4">
       <div className="mx-auto max-w-md bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-8">
         
+        {reason === 'listing_limit' && kycStatus === 'none' && (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 flex items-start gap-2.5">
+            <AlertCircle className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+            <div>
+              <strong className="font-semibold">Alcanzaste el límite de listings</strong>
+              <p className="text-xs text-amber-700 mt-0.5">
+                Verifica tu identidad para poder publicar hasta 10 listings y obtener el badge de vendedor verificado.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Progress Bar & Header */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">

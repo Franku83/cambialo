@@ -133,7 +133,11 @@ export default async function DashboardPage() {
 
         {/* Seller listings panel component */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-          <MyListingsPanel authToken={session.access_token} />
+          <MyListingsPanel
+            authToken={session.access_token}
+            isVerifiedSeller={profile?.is_verified_seller ?? false}
+            idVerified={profile?.id_verified ?? false}
+          />
         </div>
 
         {/* Nav links */}

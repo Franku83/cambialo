@@ -37,13 +37,23 @@ interface MyListingStats {
 
 interface MyListingsPanelProps {
   authToken: string
+  isVerifiedSeller?: boolean
+  idVerified?: boolean
 }
 
-export default function MyListingsPanel({ authToken }: MyListingsPanelProps) {
+export default function MyListingsPanel({
+  authToken,
+  isVerifiedSeller = false,
+  idVerified = false,
+}: MyListingsPanelProps) {
   const [listings, setListings] = useState<MyListingStats[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actioningId, setActioningId] = useState<string | null>(null)
+
+  const activeCount = listings.filter((l) => ['active', 'paused', 'draft'].includes(l.status)).length
+  const limit = isVerifiedSeller ? 25 : idVerified ? 10 : 3
+  const percentage = Math.min((activeCount / limit) * 100, 100)
 
   const fetchListings = useCallback(async () => {
     setLoading(true)
@@ -157,6 +167,35 @@ export default function MyListingsPanel({ authToken }: MyListingsPanelProps) {
           <PlusCircle className="h-4 w-4" />
           Publicar nuevo
         </Link>
+      </div>
+
+      {/* Barra de progreso de límite de listings publicados */}
+      <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 space-y-3">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-semibold text-slate-700">Límite de publicaciones</span>
+          <span className="font-medium text-slate-500">{activeCount} / {limit} listings</span>
+        </div>
+        <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              percentage >= 100 ? 'bg-red-500' : percentage >= 80 ? 'bg-amber-500' : 'bg-green-600'
+            }`}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        {activeCount >= limit && (
+          <p className="text-xs text-red-500 font-medium">
+            Alcanzaste tu límite de {limit} listings.
+          </p>
+        )}
+        {!isVerifiedSeller && (
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>¿Necesitas publicar más?</span>
+            <Link href="/kyc" className="font-semibold text-green-600 hover:text-green-700">
+              Verifica tu identidad para publicar hasta 10 listings →
+            </Link>
+          </div>
+        )}
       </div>
 
       {listings.length === 0 ? (

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { X, SlidersHorizontal } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { useLocation } from '@/hooks/useLocation'
 
 const BRANDS = ['Apple', 'Samsung']
 const CONDITIONS = [
@@ -81,6 +82,7 @@ interface Filters {
   onlyVerified: boolean
   acceptsOffers: boolean
   includesBox: boolean
+  rangeKm: number
 }
 
 function parseFilters(params: URLSearchParams): Filters {
@@ -94,6 +96,7 @@ function parseFilters(params: URLSearchParams): Filters {
     onlyVerified: params.get('verified') === '1',
     acceptsOffers: params.get('offers') === '1',
     includesBox: params.get('box') === '1',
+    rangeKm: Number(params.get('rangeKm') ?? 40),
   }
 }
 
@@ -115,10 +118,14 @@ function FiltersContent({
   filters,
   onApply,
   onClear,
+  status,
+  coords,
 }: {
   filters: Filters
   onApply: (f: Filters) => void
   onClear: () => void
+  status: string
+  coords: { lat: number; lng: number } | null
 }) {
   const [local, setLocal] = useState<Filters>(filters)
 
@@ -218,12 +225,24 @@ function FiltersContent({
         </div>
       </div>
 
-      {/* Toggles */}
-      <div className="border-t border-slate-100 pt-3 space-y-1">
-        <Toggle checked={local.onlyVerified} onChange={(v) => setLocal((p) => ({ ...p, onlyVerified: v }))} label="Solo verificados" />
-        <Toggle checked={local.acceptsOffers} onChange={(v) => setLocal((p) => ({ ...p, acceptsOffers: v }))} label="Acepta ofertas" />
-        <Toggle checked={local.includesBox} onChange={(v) => setLocal((p) => ({ ...p, includesBox: v }))} label="Incluye caja" />
-      </div>
+      {/* Geolocation Range Slider */}
+      {status === 'granted' && (
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Rango de distancia</p>
+            <span className="text-xs font-semibold text-green-600">{local.rangeKm} km</span>
+          </div>
+          <input
+            type="range"
+            min={10}
+            max={100}
+            step={5}
+            value={local.rangeKm}
+            onChange={(e) => setLocal((p) => ({ ...p, rangeKm: Number(e.target.value) }))}
+            className="w-full accent-green-600"
+          />
+        </div>
+      )}
 
       <button
         onClick={() => onApply(local)}
@@ -241,6 +260,7 @@ export function FilterSidebar() {
   const searchParams = useSearchParams()
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  const { status, coords } = useLocation()
   const filters = parseFilters(searchParams)
   const activeCount = countActiveFilters(filters)
 
@@ -256,10 +276,18 @@ export function FilterSidebar() {
       if (f.onlyVerified) params.set('verified', '1')
       if (f.acceptsOffers) params.set('offers', '1')
       if (f.includesBox) params.set('box', '1')
+
+      // Si hay coords activas:
+      if (status === 'granted' && coords?.lat && coords?.lng) {
+        params.set('lat', String(coords.lat))
+        params.set('lng', String(coords.lng))
+        params.set('rangeKm', String(f.rangeKm))
+      }
+
       router.push(`${pathname}?${params.toString()}`)
       setMobileOpen(false)
     },
-    [router, pathname],
+    [router, pathname, status, coords],
   )
 
   const clearFilters = useCallback(() => {
@@ -272,7 +300,7 @@ export function FilterSidebar() {
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 lg:block">
         <div className="sticky top-[112px] rounded-xl border border-slate-200 bg-white p-4">
-          <FiltersContent filters={filters} onApply={applyFilters} onClear={clearFilters} />
+          <FiltersContent filters={filters} onApply={applyFilters} onClear={clearFilters} status={status} coords={coords} />
         </div>
       </aside>
 
@@ -314,7 +342,7 @@ export function FilterSidebar() {
               >
                 <X className="h-5 w-5" />
               </button>
-              <FiltersContent filters={filters} onApply={applyFilters} onClear={clearFilters} />
+              <FiltersContent filters={filters} onApply={applyFilters} onClear={clearFilters} status={status} coords={coords} />
             </motion.div>
           </>
         )}

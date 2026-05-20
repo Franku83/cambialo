@@ -10,6 +10,8 @@ import { PrismaService } from '../../common/database/prisma.service'
 import { AutoModerationService } from '../admin/auto-moderation.service'
 import { CreateListingDto } from './dto/create-listing.dto'
 import { ListingFiltersDto } from './dto/listing-filters.dto'
+import { getListingLimit } from '../../common/constants/user-levels'
+import { Prisma } from '@prisma/client'
 
 /** Campos públicos del vendedor — nunca exponer datos sensibles */
 const PUBLIC_SELLER_SELECT = {
@@ -36,19 +38,25 @@ export class ListingsService {
 
   async getFeed(filters: ListingFiltersDto) {
     const limit = filters.limit ?? 20
+    const { lat, lng, rangeKm = 40 } = filters
+
+    // Si hay coords, usar raw SQL con earthdistance — listings sin coords aparecen al final
+    if (lat !== undefined && lng !== undefined) {
+      return this.getFeedByDistance({ ...filters, lat, lng, rangeKm })
+    }
+
     const where = this.buildWhereClause(filters)
 
     const [items, total] = await Promise.all([
       this.prisma.listing.findMany({
         where,
         ...(filters.cursor ? { cursor: { id: filters.cursor }, skip: 1 } : undefined),
-        take: limit + 1, // +1 para saber si hay siguiente página
+        take: limit + 1,
         orderBy: [
           { isBumped: 'desc' },
-          // verified='desc' → verified aparece primero (z > p > e), resto después
           { verificationStatus: 'desc' },
           { createdAt: 'desc' },
-          { id: 'desc' }, // tie-breaker único para cursor pagination estable
+          { id: 'desc' },
         ],
         select: {
           id: true,
@@ -79,13 +87,9 @@ export class ListingsService {
       this.prisma.listing.count({ where }),
     ])
 
-    // Determinar si hay página siguiente y calcular cursor
     const hasMore = items.length > limit
     const data = hasMore ? items.slice(0, limit) : items
     const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
-
-    // Bump expiry se maneja via CRON job en el módulo de listings
-    // No actualizar DB en una operación de lectura (anti-pattern)
 
     return { data, nextCursor, total }
   }
@@ -162,6 +166,27 @@ export class ListingsService {
   }
 
   async createDraft(userId: string, dto: CreateListingDto) {
+    const seller = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { idVerified: true, isVerifiedSeller: true },
+    })
+    if (!seller) throw new NotFoundException('Usuario no encontrado')
+
+    const activeCount = await this.prisma.listing.count({
+      where: { sellerId: userId, status: { in: ['active', 'paused', 'draft'] } },
+    })
+
+    const limit = getListingLimit(seller)
+    if (activeCount >= limit) {
+      throw new ForbiddenException({
+        message: 'Límite de listings alcanzado',
+        currentCount: activeCount,
+        limit,
+        isVerified: seller.idVerified,
+        upgradeUrl: '/kyc',
+      })
+    }
+
     const listing = await this.prisma.listing.create({
       data: {
         sellerId: userId,
@@ -185,6 +210,8 @@ export class ListingsService {
         ...(dto.city && { city: dto.city }),
         ...(dto.state && { state: dto.state }),
         meetAtMall: dto.meetAtMall ?? true,
+        ...(dto.latitude !== undefined && { latitude: dto.latitude }),
+        ...(dto.longitude !== undefined && { longitude: dto.longitude }),
         status: 'draft',
       },
     })
@@ -332,6 +359,164 @@ export class ListingsService {
       orderBy: { name: 'asc' },
       take: 10,
     })
+  }
+
+  // ─── Geo feed ─────────────────────────────────────────────────────────────
+
+  private async getFeedByDistance(filters: ListingFiltersDto & { lat: number; lng: number; rangeKm: number }) {
+    const { lat, lng, rangeKm, limit: rawLimit = 20 } = filters
+    const rangeMeters = rangeKm * 1000
+
+    // Condiciones adicionales como SQL
+    const verifiedClause = filters.verifiedOnly
+      ? Prisma.sql`AND l.verification_status = 'verified'`
+      : Prisma.empty
+    const minPriceClause = filters.minPrice !== undefined
+      ? Prisma.sql`AND l.price_usd >= ${filters.minPrice}`
+      : Prisma.empty
+    const maxPriceClause = filters.maxPrice !== undefined
+      ? Prisma.sql`AND l.price_usd <= ${filters.maxPrice}`
+      : Prisma.empty
+    const minBatteryClause = filters.minBattery !== undefined
+      ? Prisma.sql`AND l.battery_health >= ${filters.minBattery}`
+      : Prisma.empty
+    const brandClause = filters.brand
+      ? Prisma.sql`AND dm.brand ILIKE ${'%' + filters.brand + '%'}`
+      : Prisma.empty
+    const modelClause = filters.model
+      ? Prisma.sql`AND dm.model_name ILIKE ${'%' + filters.model + '%'}`
+      : Prisma.empty
+
+    type RawListing = {
+      id: string
+      price_usd: string
+      storage_gb: number
+      color: string
+      battery_health: number
+      condition: string
+      verification_status: string
+      status: string
+      is_bumped: boolean
+      city: string | null
+      state: string | null
+      accepts_offers: boolean
+      created_at: Date
+      distance_km: number | null
+      brand: string
+      model_name: string
+      image_url: string | null
+      cover_photo_url: string | null
+      seller_id: string
+      seller_username: string
+      seller_full_name: string
+      seller_avatar_url: string | null
+      seller_reputation_score: number
+      seller_total_sales: number
+      seller_is_verified_seller: boolean
+      seller_id_verified: boolean
+      seller_location_city: string | null
+    }
+
+    const rows = await this.prisma.$queryRaw<RawListing[]>`
+      SELECT
+        l.id,
+        l.price_usd,
+        l.storage_gb,
+        l.color,
+        l.battery_health,
+        l.condition,
+        l.verification_status,
+        l.status,
+        l.is_bumped,
+        l.city,
+        l.state,
+        l.accepts_offers,
+        l.created_at,
+        CASE
+          WHEN l.latitude IS NOT NULL AND l.longitude IS NOT NULL THEN
+            ROUND(
+              earth_distance(
+                ll_to_earth(${lat}::float8, ${lng}::float8),
+                ll_to_earth(l.latitude, l.longitude)
+              ) / 1000
+            )
+          ELSE NULL
+        END AS distance_km,
+        dm.brand,
+        dm.model_name,
+        dm.image_url,
+        u.id AS seller_id,
+        u.username AS seller_username,
+        u.full_name AS seller_full_name,
+        u.avatar_url AS seller_avatar_url,
+        u.reputation_score AS seller_reputation_score,
+        u.total_sales AS seller_total_sales,
+        u.is_verified_seller AS seller_is_verified_seller,
+        u.id_verified AS seller_id_verified,
+        u.location_city AS seller_location_city,
+        (
+          SELECT lp.cloudinary_url FROM listing_photos lp
+          WHERE lp.listing_id = l.id AND lp.is_cover = true
+          LIMIT 1
+        ) AS cover_photo_url
+      FROM listings l
+      JOIN device_models dm ON dm.id = l.device_model_id
+      JOIN users u ON u.id = l.seller_id
+      WHERE
+        l.status = 'active'
+        AND (
+          l.latitude IS NULL
+          OR earth_box(ll_to_earth(${lat}::float8, ${lng}::float8), ${rangeMeters}::float8)
+             @> ll_to_earth(l.latitude, l.longitude)
+        )
+        ${verifiedClause}
+        ${minPriceClause}
+        ${maxPriceClause}
+        ${minBatteryClause}
+        ${brandClause}
+        ${modelClause}
+      ORDER BY
+        l.is_bumped DESC,
+        l.verification_status DESC,
+        CASE WHEN l.latitude IS NOT NULL THEN 0 ELSE 1 END ASC,
+        distance_km ASC NULLS LAST,
+        l.created_at DESC
+      LIMIT ${rawLimit + 1}
+    `
+
+    const hasMore = rows.length > rawLimit
+    const data = (hasMore ? rows.slice(0, rawLimit) : rows).map((r) => ({
+      id: r.id,
+      priceUsd: r.price_usd,
+      storageGb: r.storage_gb,
+      color: r.color,
+      batteryHealth: r.battery_health,
+      condition: r.condition,
+      verificationStatus: r.verification_status,
+      status: r.status,
+      isBumped: r.is_bumped,
+      city: r.city,
+      state: r.state,
+      acceptsOffers: r.accepts_offers,
+      createdAt: r.created_at,
+      distanceKm: r.distance_km !== null ? Number(r.distance_km) : undefined,
+      deviceModel: { brand: r.brand, modelName: r.model_name, imageUrl: r.image_url },
+      seller: {
+        id: r.seller_id,
+        username: r.seller_username,
+        fullName: r.seller_full_name,
+        avatarUrl: r.seller_avatar_url,
+        reputationScore: r.seller_reputation_score,
+        totalSales: r.seller_total_sales,
+        isVerifiedSeller: r.seller_is_verified_seller,
+        idVerified: r.seller_id_verified,
+        locationCity: r.seller_location_city,
+      },
+      photos: r.cover_photo_url ? [{ cloudinaryUrl: r.cover_photo_url }] : [],
+    }))
+
+    const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
+    return { data, nextCursor, total: null } // total desconocido en raw query — no afecta el feed
   }
 
   // ─── Utils ────────────────────────────────────────────────────────────────

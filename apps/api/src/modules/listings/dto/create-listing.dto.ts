@@ -126,4 +126,14 @@ export class CreateListingDto {
   @IsBoolean()
   @IsOptional()
   meetAtMall?: boolean
+
+  @ApiPropertyOptional()
+  @IsNumber()
+  @IsOptional()
+  latitude?: number
+
+  @ApiPropertyOptional()
+  @IsNumber()
+  @IsOptional()
+  longitude?: number
 }

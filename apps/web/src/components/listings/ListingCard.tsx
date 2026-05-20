@@ -30,6 +30,7 @@ interface ListingCardProps {
   acceptsOffers?: boolean
   seller?: SellerInfo
   viewMode?: ViewMode
+  distanceKm?: number
 }
 
 const CONDITION_MAP: Record<ListingCondition, { label: string; cls: string }> = {
@@ -75,6 +76,7 @@ export function ListingCard({
   acceptsOffers,
   seller,
   viewMode = 'list',
+  distanceKm,
 }: ListingCardProps) {
   const price = Number(priceUsd)
   const { label: condLabel, cls: condCls } = CONDITION_MAP[condition] ?? CONDITION_MAP.good
@@ -140,11 +142,15 @@ export function ListingCard({
             <span className="text-base font-bold text-green-600">
               ${price.toLocaleString('es-VE')} USD
             </span>
-            {city && (
+            {distanceKm !== undefined && distanceKm !== null ? (
+              <span className="flex items-center gap-0.5 text-[11px] text-slate-400">
+                <MapPin className="h-2.5 w-2.5" />{distanceKm.toFixed(1)} km
+              </span>
+            ) : city ? (
               <span className="flex items-center gap-0.5 text-[11px] text-slate-400">
                 <MapPin className="h-2.5 w-2.5" />{city}
               </span>
-            )}
+            ) : null}
           </div>
           {acceptsOffers && (
             <p className="text-[11px] text-slate-400">Acepta ofertas</p>
@@ -215,11 +221,15 @@ export function ListingCard({
               <Clock className="h-2.5 w-2.5" /> Pendiente
             </span>
           )}
-          {city && (
+          {distanceKm !== undefined && distanceKm !== null ? (
+            <span className="flex items-center gap-0.5 text-[11px] text-slate-400">
+              <MapPin className="h-2.5 w-2.5" />{distanceKm.toFixed(1)} km
+            </span>
+          ) : city ? (
             <span className="flex items-center gap-0.5 text-[11px] text-slate-400">
               <MapPin className="h-2.5 w-2.5" />{city}
             </span>
-          )}
+          ) : null}
         </div>
 
         {/* Vendedor */}
