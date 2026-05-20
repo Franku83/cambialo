@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
@@ -25,7 +25,7 @@ interface UploadedFile {
   preview: string
 }
 
-export default function KycPage() {
+function KycPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const reason = searchParams.get('reason')
@@ -564,5 +564,13 @@ export default function KycPage() {
 
       </div>
     </div>
+  )
+}
+
+export default function KycPageWrapper() {
+  return (
+    <Suspense>
+      <KycPage />
+    </Suspense>
   )
 }

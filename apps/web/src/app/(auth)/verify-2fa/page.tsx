@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ShieldCheck, Loader2 } from 'lucide-react'
 
-export default function Verify2FAPage() {
+function Verify2FAPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next') ?? '/dashboard'
@@ -102,4 +102,8 @@ export default function Verify2FAPage() {
       </div>
     </div>
   )
+}
+
+export default function Verify2FAPageWrapper() {
+  return <Suspense><Verify2FAPage /></Suspense>
 }
