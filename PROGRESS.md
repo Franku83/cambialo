@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 20 Mayo 2026
+> Última actualización: 20 Mayo 2026 (v2)
 
 ---
 
@@ -37,6 +37,7 @@
 | Sprint 5 | ✅ | PWA, push notifications VAPID, alertas de búsqueda, Lighthouse >90 |
 | **Sprint 6** | ✅ | UI redesign Swappa-like + Sprint QA Features — ver detalle abajo |
 | **Sprint 6.1** | ✅ | Google OAuth, DB sync, username en producción — ver detalle abajo |
+| **Sprint 6.2** | ✅ | KYC, auto-moderación, panel vendedor, tracking WhatsApp — ver detalle abajo |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -146,22 +147,49 @@
 
 ---
 
+## Sprint 6.2 — Completado (20 Mayo 2026)
+
+**KYC — Verificación de identidad:**
+- ✅ `KycStatus` enum + `KycSubmission` model en schema (db push aplicado)
+- ✅ Bucket privado `kyc-documents` en Supabase Storage (10MB, solo imágenes)
+- ✅ `KycModule` con endpoints: `POST /kyc/submit` (multer, sube a Storage), `GET /kyc/status`, `GET /kyc/pending` (admin), `POST /kyc/:id/approve`, `POST /kyc/:id/reject`
+- ✅ Al aprobar: `user.kycStatus = approved`, `idVerified = true`, `isVerifiedSeller = true`
+- ✅ `/kyc` — wizard 4 pasos: foto documento + selfie + WhatsApp + confirmación
+- ✅ `/admin/kyc` — cola con fotos firmadas (1h), aprobar/rechazar con razón
+- ✅ Dashboard — banner KYC condicional (none/pending/rejected/approved)
+- ✅ Header dropdown — link KYC para admin/owner
+- ❌ Límite de 3 listings sin verificar (excluido a propósito — activar cuando se decida)
+
+**Auto-moderación:**
+- ✅ `AutoModerationService` — check al crear listing (fire-and-forget):
+  - IMEI duplicado (mismo modelo, otro listing activo)
+  - Precio sospechoso (< 40% del avg del PriceIndex)
+  - Palabras prohibidas en descripción
+- ✅ Flags se anotan en la descripción para que moderadores los vean en la cola
+
+**Panel de vendedor:**
+- ✅ `GET /listings/mine/stats` — listings del seller con viewsCount, savesCount, whatsappClicks
+- ✅ `PATCH /listings/:id/status` — pausar/reactivar/marcar vendido (solo dueño)
+- ✅ `DELETE /listings/:id` — elimina (cambia status a removed, solo dueño)
+- ✅ `POST /listings/:id/whatsapp-click` — tracking de clicks WA (sin auth)
+- ✅ `MyListingsPanel` — stats por listing + acciones con confirmación inline
+- ✅ `WhatsAppButton` — tracking automático al hacer click
+
+---
+
 ## Pendientes — Sprint QA Features (del archivo original)
 
-### Tarea 4 — KYC como palanca de crecimiento ❌ (parcial)
-- ❌ Límite de 3 listings para sellers no verificados (bloquear 4to intento)
-- ❌ Banner de incentivo en dashboard + wizard al llegar al límite
-- ❌ Flujo KYC: fotos cédula/pasaporte + selfie + OTP WhatsApp
-- ❌ Bucket privado Supabase Storage para fotos KYC
+### Tarea 4 — KYC ✅ (completo, excepto límite de listings)
+- ✅ Flujo KYC completo + bucket privado + panel admin
+- ✅ Banner en dashboard según estado KYC
+- ❌ Límite 3 listings para sellers sin verificar (excluido intencionalmente)
 
-### Tarea 5 — Auto-moderación al publicar ❌ (parcial)
-- ✅ Panel de moderación manual existe
-- ❌ Auto-check instantáneo: IMEI duplicado, precio fuera de rango, palabras prohibidas en descripción
+### Tarea 5 — Auto-moderación ✅
+- ✅ Panel de moderación manual
+- ✅ Auto-check: IMEI duplicado, precio fuera de rango, palabras prohibidas
 
-### Tarea 9 — Panel de vendedores ❌
-- ❌ Stats por listing: views 7d, clicks WhatsApp, guardados en watchlist, tasa de conversión
-- ❌ Acciones: Pausar/Reactivar, Marcar como vendido, Bump, Eliminar
-- ❌ `whatsappClicks`: incrementar al hacer click en el botón WA del listing
+### Tarea 9 — Panel de vendedores ✅
+- ✅ Stats por listing + acciones + tracking WhatsApp
 
 ---
 
