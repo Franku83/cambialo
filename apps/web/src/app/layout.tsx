@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
   },
+  verification: {
+    google: 'YR7rcSnU_FGByckWNboyQMbQNXr_L2kNvjRRBSJHyLo',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
