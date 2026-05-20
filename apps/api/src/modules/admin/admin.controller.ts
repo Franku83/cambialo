@@ -4,6 +4,7 @@ import {
   Post,
   Delete,
   Put,
+  Patch,
   Param,
   Body,
   Query,
@@ -71,6 +72,17 @@ export class AdminController {
     @Param('role') role: string,
   ) {
     return this.adminService.removeRole(user.id, targetId, role as UserRole)
+  }
+
+  @Patch('users/:id/username')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Cambiar username de un usuario' })
+  async changeUsername(
+    @CurrentUser() user: User,
+    @Param('id') targetId: string,
+    @Body() body: { username: string },
+  ) {
+    return this.adminService.changeUsername(user.id, targetId, body.username)
   }
 
   @Post('users/:id/verify')

@@ -93,6 +93,11 @@ export default function AdminUserDetailPage() {
   const [banReason, setBanReason] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
+  // Username edit
+  const [usernameEdit, setUsernameEdit] = useState(false)
+  const [newUsername, setNewUsername] = useState('')
+  const [usernameError, setUsernameError] = useState<string | null>(null)
+
   const getToken = useCallback(async () => {
     const supabase = createClient()
     const { data: { session } } = await supabase.auth.getSession()
@@ -145,6 +150,34 @@ export default function AdminUserDetailPage() {
     await call(`users/${id}/ban`, 'POST', { reason: banReason })
     setBanModal(false)
     setBanReason('')
+  }
+
+  const handleUsernameChange = async () => {
+    if (!token) return
+    const clean = newUsername.trim().toLowerCase()
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(clean)) {
+      setUsernameError('3-20 caracteres, solo letras, números y _')
+      return
+    }
+    setUsernameError(null)
+    setActionLoading('username')
+    try {
+      const res = await fetch(`${API_URL}/api/v1/admin/users/${id}/username`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: clean }),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({})) as { message?: string }
+        setUsernameError(body.message ?? 'Error al cambiar el username')
+        return
+      }
+      setUsernameEdit(false)
+      setNewUsername('')
+      await fetchUser(token)
+    } finally {
+      setActionLoading(null)
+    }
   }
 
   const handleDeleteListing = async (listingId: string) => {
@@ -332,6 +365,50 @@ export default function AdminUserDetailPage() {
             <span className="inline-flex items-center gap-1.5 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
               <CheckCircle2 className="h-4 w-4" /> Verificado
             </span>
+          )}
+        </div>
+
+        {/* Cambiar username */}
+        <div className="border-t border-slate-100 pt-3">
+          {!usernameEdit ? (
+            <button
+              onClick={() => { setNewUsername(user.username); setUsernameEdit(true); setUsernameError(null) }}
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              ✏️ Cambiar username (@{user.username})
+            </button>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-slate-600">Nuevo username</p>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">@</span>
+                  <input
+                    value={newUsername}
+                    onChange={e => { setNewUsername(e.target.value); setUsernameError(null) }}
+                    placeholder={user.username}
+                    maxLength={20}
+                    className="w-full rounded-lg border border-slate-200 py-2 pl-7 pr-3 text-sm outline-none focus:border-green-500"
+                    onKeyDown={e => { if (e.key === 'Enter') void handleUsernameChange(); if (e.key === 'Escape') setUsernameEdit(false) }}
+                    autoFocus
+                  />
+                </div>
+                <button
+                  onClick={() => void handleUsernameChange()}
+                  disabled={actionLoading === 'username' || !newUsername.trim()}
+                  className="rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white hover:bg-green-700 disabled:opacity-50 transition-colors"
+                >
+                  {actionLoading === 'username' ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Guardar'}
+                </button>
+                <button
+                  onClick={() => { setUsernameEdit(false); setUsernameError(null) }}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+                >
+                  Cancelar
+                </button>
+              </div>
+              {usernameError && <p className="text-xs text-red-500">{usernameError}</p>}
+            </div>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common'
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException, ConflictException } from '@nestjs/common'
 import { PrismaService } from '../../common/database/prisma.service'
 
 type UserRole = 'user' | 'moderator' | 'admin' | 'owner'
@@ -203,6 +203,28 @@ export class AdminService {
 
     await this.auditLog(adminId, 'user.unban', userId, 'user', {})
     return { unbanned: true }
+  }
+
+  async changeUsername(adminId: string, userId: string, username: string) {
+    await this.assertOwnerOrAdmin(adminId)
+
+    const clean = username.trim().toLowerCase()
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(clean)) {
+      throw new BadRequestException('Username inválido: 3-20 caracteres, solo letras, números y _')
+    }
+
+    const existing = await this.prisma.user.findFirst({ where: { username: clean } })
+    if (existing && existing.id !== userId) {
+      throw new ConflictException('Ese username ya está en uso')
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { username: clean },
+    })
+
+    await this.auditLog(adminId, 'user.username_change', userId, 'user', { username: clean })
+    return { ok: true, username: clean }
   }
 
   async verifyUser(adminId: string, userId: string) {
