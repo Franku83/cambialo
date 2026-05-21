@@ -90,7 +90,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'Cambialo',
   url: 'https://cambialo.app',
-  logo: 'https://cambialo.app/icons/icon-512.png',
+  logo: 'https://cambialo.app/favicon.svg',
   description: 'Marketplace verificado de smartphones en Venezuela',
   foundingDate: '2026',
   areaServed: 'VE',

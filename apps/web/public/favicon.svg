@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1000"
+   height="1000"
+   viewBox="0 0 264.58333 264.58333"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="cambialo logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.66546717"
+     inkscape:cx="395.96243"
+     inkscape:cy="441.04354"
+     inkscape:window-width="1920"
+     inkscape:window-height="986"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path1"
+       style="fill:#24d229;stroke-width:0.264583;fill-opacity:1"
+       d="M 136.98492 47.359899 A 83.295181 83.09639 0 0 0 125.7856 47.737137 A 83.295181 83.09639 0 0 0 71.984753 75.143216 L 101.70904 92.623286 A 51.487953 50.295181 0 0 1 131.59713 80.819872 A 51.487953 50.295181 0 0 1 183.38054 113.84731 L 213.10895 103.83862 A 83.295181 83.09639 0 0 0 136.98492 47.359899 z M 53.735221 108.88224 A 83.295181 83.09639 0 0 0 51.52502 120.18078 A 83.295181 83.09639 0 0 0 105.79251 208.52887 A 83.295181 83.09639 0 0 0 204.20924 175.41203 L 178.03513 158.59032 A 51.487953 50.295181 0 0 1 138.01535 181.21374 A 51.487953 50.295181 0 0 1 83.593863 134.14065 A 51.487953 50.295181 0 0 1 83.700833 126.5039 L 53.735221 108.88224 z " />
+    <path
+       id="rect4"
+       style="fill:#24d229;fill-opacity:1;stroke-width:0.300987"
+       d="m 221.37357,94.960614 -50.3866,16.288406 35.34049,22.18159 z" />
+    <use
+       id="use6"
+       inkscape:spray-origin="#rect4"
+       xlink:href="#rect4"
+       transform="rotate(-142.8056,135.42172,134.14206)" />
+  </g>
+</svg>
