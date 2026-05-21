@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Search, Plus, X, User, LogOut, LayoutDashboard, ShieldCheck } from 'lucide-react'
+import { Search, Plus, X, User, LogOut, LayoutDashboard, ShieldCheck, Settings } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -251,15 +251,25 @@ export function Header() {
                 {userMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+                    <div className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+                      {/* User header */}
+                      {username && (
+                        <div className="px-4 py-2.5 border-b border-slate-100">
+                          <p className="text-sm font-semibold text-slate-900 truncate">@{username}</p>
+                          <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                        </div>
+                      )}
                       <Link href="/dashboard" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
-                        <LayoutDashboard className="h-4 w-4" /> Dashboard
+                        <LayoutDashboard className="h-4 w-4" /> Mi dashboard
                       </Link>
                       {username && (
                         <Link href={`/profile/${username}`} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                           <User className="h-4 w-4" /> Mi perfil
                         </Link>
                       )}
+                      <Link href="/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <Settings className="h-4 w-4" /> Ajustes
+                      </Link>
                       {isAdmin && (
                         <>
                           <Link href="/admin/users" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-purple-700 hover:bg-purple-50 transition-colors">

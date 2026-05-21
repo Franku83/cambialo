@@ -38,11 +38,58 @@ export default function LoginPage() {
     setMessage(null)
     try {
       if (mode === 'password') {
-        const { error: authError } = await supabase.auth.signInWithPassword({
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
           email: data.email,
           password: data.password!,
         })
         if (authError) throw authError
+
+        // Verificar ban / suspensión
+        const { data: rawUser } = await supabase
+          .from('users')
+          .select('is_banned, ban_reason, is_suspended, suspended_until')
+          .eq('id', authData.user.id)
+          .single()
+
+        const userData = rawUser as { is_banned: boolean; ban_reason: string | null; is_suspended: boolean; suspended_until: string | null } | null
+
+        if (userData?.is_banned) {
+          await supabase.auth.signOut()
+          setError(`Cuenta suspendida permanentemente: ${userData.ban_reason ?? 'contacta soporte'}`)
+          return
+        }
+
+        if (userData?.is_suspended && userData.suspended_until && new Date(userData.suspended_until) > new Date()) {
+          await supabase.auth.signOut()
+          const until = new Date(userData.suspended_until).toLocaleDateString('es-VE', { day: '2-digit', month: 'long', year: 'numeric' })
+          setError(`Cuenta suspendida hasta el ${until}.`)
+          return
+        }
+
+        // Verificar 2FA para roles críticos
+        const { data: roleRows } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', authData.user.id)
+
+        const isCritical = ((roleRows ?? []) as { role: string }[]).some((r) =>
+          ['moderator', 'admin', 'owner'].includes(r.role)
+        )
+
+        if (isCritical) {
+          const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+          if (aalData?.nextLevel === 'aal2' && aalData.currentLevel !== 'aal2') {
+            // Tiene 2FA configurado pero no lo ha completado
+            router.push('/verify-2fa?next=/dashboard')
+            return
+          }
+          if (aalData?.nextLevel !== 'aal2') {
+            // No tiene 2FA → forzar setup
+            router.push('/setup-2fa')
+            return
+          }
+        }
+
         router.push('/dashboard')
         router.refresh()
       } else {

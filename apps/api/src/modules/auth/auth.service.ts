@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   InternalServerErrorException,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
@@ -192,5 +193,85 @@ export class AuthService {
       // Best-effort — el token ya puede estar expirado
     })
     return { message: 'Sesión cerrada correctamente' }
+  }
+
+  // ─── Settings ─────────────────────────────────────────────────────────────
+
+  async changeEmail(userId: string, newEmail: string) {
+    const existing = await this.prisma.user.findFirst({ where: { email: newEmail } })
+    if (existing) throw new ConflictException('Ese email ya está en uso')
+
+    const { error } = await this.supabase.auth.admin.updateUserById(userId, {
+      email: newEmail,
+      email_confirm: true,
+    })
+    if (error) throw new BadRequestException('No se pudo actualizar el email: ' + error.message)
+
+    await this.prisma.user.update({ where: { id: userId }, data: { email: newEmail } })
+    return { ok: true }
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    if (newPassword.length < 8) throw new BadRequestException('La contraseña debe tener al menos 8 caracteres')
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { email: true } })
+    if (!user) throw new UnauthorizedException('Usuario no encontrado')
+
+    const { error: authError } = await this.supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    })
+    if (authError) throw new UnauthorizedException('Contraseña actual incorrecta')
+
+    const { error } = await this.supabase.auth.admin.updateUserById(userId, { password: newPassword })
+    if (error) throw new BadRequestException('No se pudo actualizar la contraseña: ' + error.message)
+
+    return { ok: true }
+  }
+
+  async get2FAStatus(userId: string) {
+    const { data } = await this.supabase.auth.admin.mfa.listFactors({ userId })
+    const factors = data?.factors ?? []
+    const totp = factors.filter((f) => f.factor_type === 'totp')
+    return {
+      enabled: totp.some((f) => f.status === 'verified'),
+      factors: totp,
+    }
+  }
+
+  async disable2FA(userId: string, factorId: string) {
+    const roles = await this.prisma.userRole_Assignment.findMany({ where: { userId } })
+    const isCritical = roles.some((r) => ['moderator', 'admin', 'owner'].includes(r.role))
+    if (isCritical) throw new ForbiddenException('Los administradores y moderadores no pueden desactivar el 2FA')
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (this.supabase.auth.admin.mfa as any).deleteFactor({ userId, id: factorId })
+    if (error) throw new BadRequestException('No se pudo desactivar el 2FA: ' + error.message)
+    return { ok: true }
+  }
+
+  async getNotificationPreferences(userId: string) {
+    const prefs = await this.prisma.notificationPreference.findUnique({ where: { userId } })
+    if (!prefs) {
+      // Devolver defaults si no existen
+      return {
+        userId, pushEnabled: true, emailEnabled: true,
+        newOffer: true, listingVerified: true, listingRejected: true,
+        reviewRequest: true, priceAlert: true, searchAlert: true, marketingEmails: false,
+      }
+    }
+    return prefs
+  }
+
+  async updateNotificationPreferences(userId: string, dto: Partial<{
+    pushEnabled: boolean; emailEnabled: boolean; newOffer: boolean;
+    listingVerified: boolean; listingRejected: boolean; reviewRequest: boolean;
+    priceAlert: boolean; searchAlert: boolean; marketingEmails: boolean;
+  }>) {
+    return this.prisma.notificationPreference.upsert({
+      where: { userId },
+      create: { userId, ...dto },
+      update: dto,
+    })
   }
 }
