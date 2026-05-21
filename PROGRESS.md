@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 20 Mayo 2026
+> Última actualización: 20 Mayo 2026 (sesión 2)
 
 ---
 
@@ -41,6 +41,7 @@
 | **Sprint 6.3** | ✅ | Geolocalización + límite listings KYC + notificaciones moderación |
 | **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad + panel usuario admin + MarkSoldModal + PriceIndicator |
 | **Sprint 6.5** | ✅ | Listings permanentes — lifecycle completo, sin hard delete |
+| **Fixes post-6.5** | ✅ | SEO/indexación Google, bugs dashboard drafts, duplicados listings |
 | Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
 
 ---
@@ -210,6 +211,37 @@
 
 ---
 
+## Fixes post-Sprint 6.5 — Completado (20 Mayo 2026, sesión 2)
+
+### SEO e Indexación Google
+- ✅ Meta tag `google-site-verification` en `layout.tsx` — Search Console verificado
+- ✅ `sitemap.ts` — sitemap dinámico en `/sitemap.xml`: páginas estáticas + modelos por marca + listings activos (hasta 1000). Revalidación 1h listings / 24h modelos
+- ✅ `robots.ts` — `/robots.txt` bloquea rutas privadas (`/admin`, `/dashboard`, `/kyc`, `/sell`, etc.)
+- ✅ Metadata global mejorada: keywords detalladas, OG completo, Twitter Card, robots directives, `creator`, `publisher`
+- ✅ JSON-LD `Organization` en layout (schema.org)
+- ✅ JSON-LD `Product` + `Offer` en `/listings/[id]` (schema.org)
+- ✅ `generateMetadata` en listing detail enriquecido con descripción completa y Twitter Card
+- ✅ Fix: `safeDate()` helper en sitemap para evitar `RangeError: Invalid time value` cuando `updatedAt` no está en el select del feed
+
+### Dashboard — Drafts
+- ✅ Fix 404: link del nombre en `MyListingsPanel` para drafts apunta a `/sell?draft=:id` en vez de `/listings/:id`
+- ✅ Botón "Continuar" (verde) en drafts del dashboard principal — retoma el wizard
+- ✅ Botón eliminar borrador (papelera roja) con confirmación en `MyListingsPanel`
+- ✅ Backend: `draft → removed` agregado a `SELLER_ALLOWED_TRANSITIONS`
+- ✅ `/dashboard/listings`: convertido a client component con botón eliminar, "Continuar" para drafts, sin "Ver" en borradores
+
+### Anti-duplicados en Wizard
+- ✅ `handleStep1Next` consulta drafts existentes (mismo modelo + storage) antes de crear uno nuevo — reutiliza el draft si existe
+- ✅ DB limpiada: duplicados de alianexo (iPhone 11) y CJFARIASL (iPhone 12) borrados
+- ✅ Listing bugueado de Franku (iPhone 14 Pro `removed`) borrado
+- ✅ Draft iPhone 17 de Franku borrado manualmente
+
+### Dominio y CORS
+- ✅ `cambialo.app` + `www.cambialo.app` agregados a CORS `allowedOrigins` en `main.ts`
+- ✅ `metadataBase` actualizado a `https://cambialo.app` en layout
+
+---
+
 ## Pendientes — Sprint 7
 
 ### Variables de entorno pendientes (Railway / Vercel)
@@ -220,10 +252,12 @@
 ### Producto (beta launch)
 - RLS policies en Supabase (urgente antes de beta pública)
 - Sentry + Posthog
-- Dominio custom (`cambialo.app`)
+- Dominio `cambialo.app` activo ✅ — pendiente: actualizar Supabase Auth Site URL + Redirect URLs manualmente
 - k6 load testing
 - C1B: Magic link por dispositivo nuevo para vendedores verificados (`TrustedDevice` model + Resend)
 - Activar `LISTING_LIMITS_UI` en `MyListingsPanel` cuando se decida implementar límites
+- OG image `public/og-image.png` de 1200×630 (Figma/Canva) — sin esto las previews de redes sociales no tienen imagen
+- Enviar sitemap en Google Search Console → `https://cambialo.app/sitemap.xml`
 
 ---
 
