@@ -19,14 +19,29 @@ export default function Setup2FAPage() {
 
   useEffect(() => {
     const supabase = createClient()
-    void supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'Cambialo Admin' })
-      .then(({ data, error: err }) => {
-        if (err || !data) { setError('Error al generar el QR.'); setLoading(false); return }
-        setFactorId(data.id)
-        setQrCode(data.totp.qr_code)
-        setSecret(data.totp.secret)
-        setLoading(false)
+
+    const setup = async () => {
+      // Limpiar factores TOTP sin verificar antes de enrollar uno nuevo
+      const { data: existing } = await supabase.auth.mfa.listFactors()
+      const unverified = existing?.totp?.filter((f) => f.status !== 'verified') ?? []
+      await Promise.all(unverified.map((f) => supabase.auth.mfa.unenroll({ factorId: f.id })))
+
+      const { data, error: err } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+        friendlyName: 'Cambialo',
       })
+      if (err || !data) {
+        setError('No se pudo generar el código QR. Intenta recargar la página.')
+        setLoading(false)
+        return
+      }
+      setFactorId(data.id)
+      setQrCode(data.totp.qr_code)
+      setSecret(data.totp.secret)
+      setLoading(false)
+    }
+
+    void setup()
   }, [])
 
   const handleVerify = async () => {
@@ -93,7 +108,12 @@ export default function Setup2FAPage() {
         <input
           type="text"
           inputMode="numeric"
+          pattern="[0-9]*"
           maxLength={6}
+          autoComplete="one-time-code"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
           placeholder="000000"

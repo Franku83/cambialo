@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ShieldCheck, Loader2 } from 'lucide-react'
@@ -25,8 +25,8 @@ function Verify2FAPage() {
     })
   }, [])
 
-  const handleVerify = useCallback(async (verifyCode: string) => {
-    if (!factorId || verifyCode.length !== 6 || verifying) return
+  const handleVerify = async () => {
+    if (!factorId || code.length !== 6 || verifying) return
     setVerifying(true)
     setError(null)
 
@@ -41,7 +41,7 @@ function Verify2FAPage() {
     const { error: verifyErr } = await supabase.auth.mfa.verify({
       factorId,
       challengeId: challenge.id,
-      code: verifyCode,
+      code,
     })
 
     setVerifying(false)
@@ -54,14 +54,14 @@ function Verify2FAPage() {
         router.push('/login?error=too_many_attempts')
         return
       }
-      setError(`Código incorrecto. ${3 - newAttempts} intento(s) restante(s).`)
+      setError(`Código incorrecto. Espera al siguiente código (30s) e intenta de nuevo. ${3 - newAttempts} intento(s) restante(s).`)
       setCode('')
       return
     }
 
     router.push(next)
     router.refresh()
-  }, [factorId, verifying, attempts, next, router])
+  }
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -97,12 +97,12 @@ function Verify2FAPage() {
           inputMode="numeric"
           pattern="[0-9]*"
           maxLength={6}
+          autoComplete="one-time-code"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
           value={code}
-          onChange={(e) => {
-            const val = e.target.value.replace(/\D/g, '')
-            setCode(val)
-            if (val.length === 6) void handleVerify(val)
-          }}
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
           placeholder="000000"
           autoFocus
           disabled={verifying}
@@ -128,7 +128,7 @@ function Verify2FAPage() {
 
         {/* Verify button */}
         <button
-          onClick={() => void handleVerify(code)}
+          onClick={() => void handleVerify()}
           disabled={verifying || code.length !== 6}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
