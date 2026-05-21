@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   User,
   Shield,
@@ -416,12 +417,31 @@ function DangerZoneSection() {
 }
 
 export default function SettingsPage() {
-  const { user, session } = useAuthStore()
+  const { user: storeUser } = useAuthStore()
+  const [token, setToken] = useState<string | null>(null)
+  const [email, setEmail] = useState('')
+  const [userId, setUserId] = useState('')
+  const [ready, setReady] = useState(false)
+  const router = useRouter()
 
-  if (!session) {
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.push('/login?redirectTo=/settings')
+        return
+      }
+      setToken(session.access_token)
+      setEmail(session.user.email ?? storeUser?.email ?? '')
+      setUserId(session.user.id)
+      setReady(true)
+    })
+  }, [router, storeUser?.email])
+
+  if (!ready) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <p className="text-slate-500 text-center">Inicia sesión para ver tus ajustes.</p>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-7 w-7 animate-spin rounded-full border-2 border-green-600 border-t-transparent" />
       </div>
     )
   }
@@ -434,22 +454,22 @@ export default function SettingsPage() {
         <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
           <User className="w-5 h-5 text-slate-500" /> Cuenta
         </h2>
-        <ChangeEmailForm currentEmail={user?.email || ''} token={session.access_token} />
-        <ChangePasswordForm token={session.access_token} />
+        <ChangeEmailForm currentEmail={email} token={token!} />
+        <ChangePasswordForm token={token!} />
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
         <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
           <Shield className="w-5 h-5 text-slate-500" /> Seguridad
         </h2>
-        <TwoFactorSection token={session.access_token} userId={user?.id || ''} />
+        <TwoFactorSection token={token!} userId={userId} />
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
         <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
           <Bell className="w-5 h-5 text-slate-500" /> Notificaciones
         </h2>
-        <NotificationsSection token={session.access_token} />
+        <NotificationsSection token={token!} />
       </section>
 
       <section className="rounded-2xl border border-red-200 bg-white p-6 space-y-4">

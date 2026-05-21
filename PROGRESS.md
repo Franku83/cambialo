@@ -42,7 +42,7 @@
 | **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad + panel usuario admin + MarkSoldModal + PriceIndicator |
 | **Sprint 6.5** | ✅ | Listings permanentes — lifecycle completo, sin hard delete |
 | **Fixes post-6.5** | ✅ | SEO/indexación Google, bugs dashboard drafts, duplicados listings |
-| **Sprint 7** | 🔧 | RLS activo, 2FA en login, settings endpoints, Sentry, Posthog — pendiente env vars + /settings UI |
+| **Sprint 7** | ✅ | RLS, 2FA en login, /settings completa, Sentry, Posthog — pendiente: env vars Cloudinary/Sentry/Posthog |
 
 ---
 
@@ -242,7 +242,7 @@
 
 ---
 
-## Sprint 7 — En progreso (21 Mayo 2026)
+## Sprint 7 — Completado (21 Mayo 2026)
 
 ### Código completado ✅
 - ✅ RLS en 20 tablas con 40 políticas + helper `is_mod_or_above()`
@@ -252,9 +252,12 @@
 - ✅ `NotificationPreference` model en schema.prisma
 - ✅ Sentry: `@sentry/node` en API + `@sentry/nextjs` en web, `instrumentation.ts` + `sentry.client.config.ts` (condicionado a env var)
 - ✅ Posthog: `lib/posthog.ts` con eventos + `initPosthog()` llamado desde `Providers`
-- ✅ Header: opción "Ajustes" → `/settings` en dropdown de avatar (Agy)
-- ✅ `verify-2fa`: input grande, auto-submit al 6to dígito, "Usar otra cuenta" (Agy)
-- ✅ `ErrorBoundary.tsx` + `app/error.tsx` para crashes globales (Agy)
+- ✅ Header: opción "Ajustes" → `/settings` en dropdown de avatar
+- ✅ `/settings`: página completa — cambiar email, contraseña (con ojo), estado 2FA, toggles notificaciones, zona de peligro "ELIMINAR"
+- ✅ Fix: `/settings` obtiene sesión directamente de Supabase (`getSession()`) — evita el race condition con el store persistido
+- ✅ `verify-2fa`: input grande, auto-submit al 6to dígito, "Usar otra cuenta"
+- ✅ `ErrorBoundary.tsx` + `app/error.tsx` para crashes globales
+- ✅ Ramas limpiadas — solo queda `main`
 
 ### Variables de entorno pendientes — acción manual
 
@@ -277,8 +280,7 @@ VAPID_PRIVATE_KEY=...
 ```
 
 ### Pendiente de código
-- ❌ `/settings` page (Agy — A2): UI de ajustes con cambio de email, contraseña, 2FA y notificaciones. Los endpoints ya están listos.
-- ❌ `og-image.png`: dimensiones incorrectas (1024×1024 JPEG). Necesita ser 1200×630 PNG (Agy)
+- ❌ `og-image.png`: dimensiones incorrectas (1024×1024 JPEG). Necesita ser 1200×630 PNG
 - ⏳ `LISTING_LIMITS_UI`: activar en `MyListingsPanel` cuando se decida implementar
 - ⏳ k6 load testing
 - ⏳ C1B: Magic link por dispositivo nuevo (`TrustedDevice` model + Resend)
