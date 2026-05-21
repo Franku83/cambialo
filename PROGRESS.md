@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 20 Mayo 2026 (sesión 2)
+> Última actualización: 21 Mayo 2026
 
 ---
 
@@ -42,7 +42,7 @@
 | **Sprint 6.4** | ✅ | 2FA + admin avanzado + homepage + páginas info + seguridad + panel usuario admin + MarkSoldModal + PriceIndicator |
 | **Sprint 6.5** | ✅ | Listings permanentes — lifecycle completo, sin hard delete |
 | **Fixes post-6.5** | ✅ | SEO/indexación Google, bugs dashboard drafts, duplicados listings |
-| Sprint 7 | ⏳ | Beta launch: 50 usuarios, Sentry, Posthog, k6 load testing |
+| **Sprint 7** | 🔧 | RLS activo, 2FA en login, settings endpoints, Sentry, Posthog — pendiente env vars + /settings UI |
 
 ---
 
@@ -242,22 +242,65 @@
 
 ---
 
-## Pendientes — Sprint 7
+## Sprint 7 — En progreso (21 Mayo 2026)
 
-### Variables de entorno pendientes (Railway / Vercel)
-- `VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY` — push notifications
-- `CLOUDINARY_CLOUD_NAME` / `API_KEY` / `API_SECRET` — upload de fotos
+### Código completado ✅
+- ✅ RLS en 20 tablas con 40 políticas + helper `is_mod_or_above()`
+- ✅ `notification_preferences` table creada con RLS
+- ✅ 2FA obligatorio en login: verifica ban/suspensión, redirige a `/verify-2fa` o `/setup-2fa` para roles críticos
+- ✅ Settings endpoints: `POST /auth/settings/change-email|change-password`, `GET|DELETE /auth/settings/2fa-status|2fa/:factorId`, `GET|PUT /auth/settings/notifications`
+- ✅ `NotificationPreference` model en schema.prisma
+- ✅ Sentry: `@sentry/node` en API + `@sentry/nextjs` en web, `instrumentation.ts` + `sentry.client.config.ts` (condicionado a env var)
+- ✅ Posthog: `lib/posthog.ts` con eventos + `initPosthog()` llamado desde `Providers`
+- ✅ Header: opción "Ajustes" → `/settings` en dropdown de avatar (Agy)
+- ✅ `verify-2fa`: input grande, auto-submit al 6to dígito, "Usar otra cuenta" (Agy)
+- ✅ `ErrorBoundary.tsx` + `app/error.tsx` para crashes globales (Agy)
+
+### Variables de entorno pendientes — acción manual
+
+**Railway (API):**
+```
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+SENTRY_DSN=...
+```
+
+**Vercel (frontend):**
+```
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=...
+NEXT_PUBLIC_SENTRY_DSN=...
+SENTRY_AUTH_TOKEN=...
+NEXT_PUBLIC_POSTHOG_KEY=...
+VAPID_PUBLIC_KEY=...
+VAPID_PRIVATE_KEY=...
+```
+
+### Pendiente de código
+- ❌ `/settings` page (Agy — A2): UI de ajustes con cambio de email, contraseña, 2FA y notificaciones. Los endpoints ya están listos.
+- ❌ `og-image.png`: dimensiones incorrectas (1024×1024 JPEG). Necesita ser 1200×630 PNG (Agy)
+- ⏳ `LISTING_LIMITS_UI`: activar en `MyListingsPanel` cuando se decida implementar
+- ⏳ k6 load testing
+- ⏳ C1B: Magic link por dispositivo nuevo (`TrustedDevice` model + Resend)
+
+### Pasos manuales pendientes (tú)
+- Supabase Auth → URL Configuration: Site URL = `https://cambialo.app`, Redirect URLs: `https://cambialo.app/**`
+- Google Search Console → Sitemaps → enviar `https://cambialo.app/sitemap.xml`
+- Crear cuenta en Sentry, copiar DSN y setear env vars en Railway + Vercel
+- Crear cuenta en Posthog, copiar key y setear `NEXT_PUBLIC_POSTHOG_KEY` en Vercel
+- Cloudinary: copiar credenciales a Railway + `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` en Vercel
+
+### Notas importantes
+- El upload de fotos va **API → Cloudinary** (no desde el browser directo). Solo `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` se necesita en Vercel para construir URLs de thumbnails.
+- Sentry y Posthog no crashean si las env vars están ausentes — están condicionados.
+
+---
+
+## Pendientes técnicos menores
+
+### Variables de entorno legacy
+- `VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY` — push notifications (PWA)
 - `TYPESENSE_*` — search (desactivado sin crash por ahora)
-
-### Producto (beta launch)
-- RLS policies en Supabase (urgente antes de beta pública)
-- Sentry + Posthog
-- Dominio `cambialo.app` activo ✅ — pendiente: actualizar Supabase Auth Site URL + Redirect URLs manualmente
-- k6 load testing
-- C1B: Magic link por dispositivo nuevo para vendedores verificados (`TrustedDevice` model + Resend)
-- Activar `LISTING_LIMITS_UI` en `MyListingsPanel` cuando se decida implementar límites
-- OG image `public/og-image.png` de 1200×630 (Figma/Canva) — sin esto las previews de redes sociales no tienen imagen
-- Enviar sitemap en Google Search Console → `https://cambialo.app/sitemap.xml`
 
 ---
 

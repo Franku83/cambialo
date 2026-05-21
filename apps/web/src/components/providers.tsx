@@ -2,9 +2,12 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useState, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
+import { initPosthog } from '@/lib/posthog'
 
 export function Providers({ children }: { children: ReactNode }) {
+  useEffect(() => { initPosthog() }, [])
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
