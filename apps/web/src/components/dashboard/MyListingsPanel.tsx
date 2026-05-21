@@ -14,6 +14,7 @@ import {
   PlusCircle,
   ExternalLink,
   AlertTriangle,
+  Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/utils'
@@ -222,13 +223,23 @@ export default function MyListingsPanel({
 
                     <div className="space-y-1.5 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Link
-                          href={`/listings/${item.id}`}
-                          className="font-bold text-slate-900 hover:text-green-600 transition-colors truncate text-sm sm:text-base flex items-center gap-1"
-                        >
-                          {item.brand} {item.modelName} · {item.storageGb}GB
-                          <ExternalLink className="h-3 w-3 inline text-slate-400 shrink-0" />
-                        </Link>
+                        {item.status === 'draft' ? (
+                          <Link
+                            href={`/sell?draft=${item.id}`}
+                            className="font-bold text-slate-900 hover:text-green-600 transition-colors truncate text-sm sm:text-base flex items-center gap-1"
+                          >
+                            {item.brand} {item.modelName} · {item.storageGb}GB
+                            <ExternalLink className="h-3 w-3 inline text-slate-400 shrink-0" />
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/listings/${item.id}`}
+                            className="font-bold text-slate-900 hover:text-green-600 transition-colors truncate text-sm sm:text-base flex items-center gap-1"
+                          >
+                            {item.brand} {item.modelName} · {item.storageGb}GB
+                            <ExternalLink className="h-3 w-3 inline text-slate-400 shrink-0" />
+                          </Link>
+                        )}
                         
                         {/* Status Badge */}
                         <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border shrink-0 ${
@@ -423,6 +434,29 @@ export default function MyListingsPanel({
                             title="Próximamente"
                           >
                             Editar
+                          </button>
+                        </>
+                      )}
+
+                      {item.status === 'draft' && (
+                        <>
+                          <Link
+                            href={`/sell?draft=${item.id}`}
+                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 rounded-xl border border-green-200 bg-green-50 px-3.5 py-2 text-xs font-bold text-green-700 hover:bg-green-100 transition-colors"
+                          >
+                            Continuar
+                          </Link>
+                          <button
+                            onClick={() => {
+                              if (!confirm('¿Eliminar este borrador?')) return
+                              void handleUpdateStatus(item.id, 'removed')
+                            }}
+                            disabled={actioningId === item.id}
+                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-100 transition-colors disabled:opacity-40"
+                          >
+                            {actioningId === item.id
+                              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              : <Trash2 className="h-3.5 w-3.5" />}
                           </button>
                         </>
                       )}
