@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 21 Mayo 2026
+> Última actualización: 21 Mayo 2026 (sesión 3)
 
 ---
 
@@ -43,6 +43,7 @@
 | **Sprint 6.5** | ✅ | Listings permanentes — lifecycle completo, sin hard delete |
 | **Fixes post-6.5** | ✅ | SEO/indexación Google, bugs dashboard drafts, duplicados listings |
 | **Sprint 7** | ✅ | RLS, 2FA en login, /settings completa, Sentry, Posthog — pendiente: env vars Cloudinary/Sentry/Posthog |
+| **Fixes post-7** | ✅ | 2FA bugs móvil, 404 al publicar, eliminar drafts, continuar drafts, favicon SVG, og-image 1200×630 |
 
 ---
 
@@ -280,7 +281,6 @@ VAPID_PRIVATE_KEY=...
 ```
 
 ### Pendiente de código
-- ❌ `og-image.png`: dimensiones incorrectas (1024×1024 JPEG). Necesita ser 1200×630 PNG
 - ⏳ `LISTING_LIMITS_UI`: activar en `MyListingsPanel` cuando se decida implementar
 - ⏳ k6 load testing
 - ⏳ C1B: Magic link por dispositivo nuevo (`TrustedDevice` model + Resend)
@@ -295,6 +295,23 @@ VAPID_PRIVATE_KEY=...
 ### Notas importantes
 - El upload de fotos va **API → Cloudinary** (no desde el browser directo). Solo `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` se necesita en Vercel para construir URLs de thumbnails.
 - Sentry y Posthog no crashean si las env vars están ausentes — están condicionados.
+
+---
+
+## Fixes post-Sprint 7 — Completado (21 Mayo 2026, sesión 3)
+
+### Bugs resueltos
+- ✅ Fix: `setup-2fa` en móvil — unenroll de factores TOTP sin verificar antes de re-enrollar (evita conflicto)
+- ✅ Fix: `verify-2fa` código incorrecto en móvil — eliminado auto-submit en `onChange`; solo el botón dispara la verificación (soluciona rotación de código en conexión lenta)
+- ✅ Fix: 404 al terminar de publicar — wizard muestra pantalla de éxito interna en vez de redirigir a `/listings/:id` (que estaba en `pending_review`)
+- ✅ Fix: eliminar borrador falla para owner — transiciones de seller y moderador se combinan (union de sets) en vez de elegir exclusivamente la del moderador
+- ✅ Fix: "Continuar" en dashboard reinicia el wizard — `sell/page.tsx` ahora lee `?draft=:id`, restaura el store y salta al paso 4 (fotos)
+
+### Brand & SEO
+- ✅ `icon.svg` en `app/` — Next.js lo sirve automáticamente como favicon en todas las páginas
+- ✅ `favicon.svg` en `public/` para referencias directas (JSON-LD Organization logo)
+- ✅ `logo.svg` en `public/` — logo completo con texto disponible en `/logo.svg`
+- ✅ `og-image.png` — corregido a 1200×630 PNG (dimensiones OG correctas)
 
 ---
 
