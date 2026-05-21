@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ShieldCheck, Loader2 } from 'lucide-react'
@@ -25,8 +25,8 @@ function Verify2FAPage() {
     })
   }, [])
 
-  const handleVerify = async () => {
-    if (!factorId || code.length !== 6) return
+  const handleVerify = useCallback(async (verifyCode: string) => {
+    if (!factorId || verifyCode.length !== 6 || verifying) return
     setVerifying(true)
     setError(null)
 
@@ -41,7 +41,7 @@ function Verify2FAPage() {
     const { error: verifyErr } = await supabase.auth.mfa.verify({
       factorId,
       challengeId: challenge.id,
-      code,
+      code: verifyCode,
     })
 
     setVerifying(false)
@@ -61,6 +61,12 @@ function Verify2FAPage() {
 
     router.push(next)
     router.refresh()
+  }, [factorId, verifying, attempts, next, router])
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
   }
 
   if (loading) return (
@@ -70,34 +76,72 @@ function Verify2FAPage() {
   )
 
   return (
-    <div className="mx-auto max-w-sm px-4 py-16 space-y-6">
-      <div className="text-center space-y-2">
-        <ShieldCheck className="mx-auto h-10 w-10 text-green-600" />
-        <h1 className="text-xl font-bold text-slate-900">Verificación en dos pasos</h1>
-        <p className="text-sm text-slate-500">
-          Abre tu app de autenticación y escribe el código de 6 dígitos.
-        </p>
+    <div className="space-y-6">
+      {/* Icon + Title */}
+      <div className="text-center space-y-3">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50">
+          <ShieldCheck className="h-7 w-7 text-green-600" />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">Verificación en dos pasos</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Abre tu app de autenticación e ingresa el código de 6 dígitos.
+          </p>
+        </div>
       </div>
 
+      {/* Code input */}
       <div className="space-y-3">
         <input
           type="text"
           inputMode="numeric"
+          pattern="[0-9]*"
           maxLength={6}
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+          onChange={(e) => {
+            const val = e.target.value.replace(/\D/g, '')
+            setCode(val)
+            if (val.length === 6) void handleVerify(val)
+          }}
           placeholder="000000"
           autoFocus
-          className="w-full rounded-xl border border-slate-200 bg-white py-4 text-center text-3xl font-mono tracking-widest text-slate-900 focus:border-green-500 focus:outline-none focus:shadow-[0_0_0_3px_rgba(22,163,74,0.15)]"
+          disabled={verifying}
+          style={{
+            fontSize: '32px',
+            letterSpacing: '12px',
+            fontVariantNumeric: 'tabular-nums',
+          }}
+          className="w-full rounded-xl border-2 border-slate-200 bg-white py-4 text-center font-bold text-slate-900 transition-colors focus:border-green-500 focus:outline-none focus:shadow-[0_0_0_3px_rgba(22,163,74,0.15)] disabled:opacity-50"
         />
-        {error && <p className="text-center text-sm text-red-600">{error}</p>}
+
+        {/* Error */}
+        {error && (
+          <p className="text-center text-sm text-red-600 font-medium">{error}</p>
+        )}
+
+        {/* Last attempt warning */}
+        {attempts >= 2 && (
+          <p className="text-center text-xs text-amber-600 font-medium">
+            ⚠️ Último intento disponible. Si falla, tu sesión se cerrará.
+          </p>
+        )}
+
+        {/* Verify button */}
         <button
-          onClick={() => void handleVerify()}
+          onClick={() => void handleVerify(code)}
           disabled={verifying || code.length !== 6}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700 disabled:opacity-50 transition-colors"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {verifying && <Loader2 className="h-4 w-4 animate-spin" />}
-          {verifying ? 'Verificando...' : 'Confirmar'}
+          {verifying ? 'Verificando...' : 'Verificar'}
+        </button>
+
+        {/* Sign out link */}
+        <button
+          onClick={() => void handleSignOut()}
+          className="w-full py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+        >
+          Usar otra cuenta
         </button>
       </div>
     </div>

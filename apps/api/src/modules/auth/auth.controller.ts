@@ -2,14 +2,18 @@ import {
   Controller,
   Post,
   Get,
+  Put,
+  Delete,
   Body,
   Query,
+  Param,
   UseGuards,
   HttpCode,
   HttpStatus,
   Headers,
 } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
+import type { User } from '@supabase/supabase-js'
 import { AuthService } from './auth.service'
 import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
@@ -64,5 +68,62 @@ export class AuthController {
   async logout(@Headers('authorization') authHeader: string) {
     const token = authHeader?.split(' ')[1]
     return this.authService.logout(token ?? '')
+  }
+
+  // ─── Settings ─────────────────────────────────────────────────────────────
+
+  @Post('settings/change-email')
+  @UseGuards(SupabaseAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cambiar email' })
+  async changeEmail(@CurrentUser() user: User, @Body() body: { newEmail: string }) {
+    return this.authService.changeEmail(user.id, body.newEmail)
+  }
+
+  @Post('settings/change-password')
+  @UseGuards(SupabaseAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cambiar contraseña' })
+  async changePassword(
+    @CurrentUser() user: User,
+    @Body() body: { currentPassword: string; newPassword: string },
+  ) {
+    return this.authService.changePassword(user.id, body.currentPassword, body.newPassword)
+  }
+
+  @Get('settings/2fa-status')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Estado del 2FA' })
+  async get2FAStatus(@CurrentUser() user: User) {
+    return this.authService.get2FAStatus(user.id)
+  }
+
+  @Delete('settings/2fa/:factorId')
+  @UseGuards(SupabaseAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Desactivar 2FA' })
+  async disable2FA(@CurrentUser() user: User, @Param('factorId') factorId: string) {
+    return this.authService.disable2FA(user.id, factorId)
+  }
+
+  @Get('settings/notifications')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Preferencias de notificaciones' })
+  async getNotificationPreferences(@CurrentUser() user: User) {
+    return this.authService.getNotificationPreferences(user.id)
+  }
+
+  @Put('settings/notifications')
+  @UseGuards(SupabaseAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar preferencias de notificaciones' })
+  async updateNotificationPreferences(@CurrentUser() user: User, @Body() body: Record<string, boolean>) {
+    return this.authService.updateNotificationPreferences(user.id, body)
   }
 }

@@ -3,6 +3,17 @@ import { ValidationPipe, Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
+// Sentry — inicializar antes de todo lo demás
+if (process.env.SENTRY_DSN) {
+  void import('@sentry/node').then(({ init }) => {
+    init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.NODE_ENV ?? 'production',
+      tracesSampleRate: 0.1,
+    })
+  })
+}
+
 async function bootstrap() {
   const logger = new Logger('Bootstrap')
   const app = await NestFactory.create(AppModule, {

@@ -163,6 +163,7 @@ model User {
   fraudReportsReceived FraudReport[]        @relation("ReportedFraud")
   paymentEvents        PaymentEvent[]
   grantedRoles         UserRole_Assignment[] @relation("RoleGrantedBy")
+  notificationPrefs    NotificationPreference?
 
   @@map("users")
 }
@@ -543,4 +544,21 @@ model PlatformConfig {
   updatedBy String   @map("updated_by") @db.Uuid
 
   @@map("platform_config")
+}
+
+model NotificationPreference {
+  userId          String  @id @map("user_id") @db.Uuid
+  pushEnabled     Boolean @default(true) @map("push_enabled")
+  emailEnabled    Boolean @default(true) @map("email_enabled")
+  newOffer        Boolean @default(true) @map("new_offer")
+  listingVerified Boolean @default(true) @map("listing_verified")
+  listingRejected Boolean @default(true) @map("listing_rejected")
+  reviewRequest   Boolean @default(true) @map("review_request")
+  priceAlert      Boolean @default(true) @map("price_alert")
+  searchAlert     Boolean @default(true) @map("search_alert")
+  marketingEmails Boolean @default(false) @map("marketing_emails")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
 }
