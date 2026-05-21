@@ -765,10 +765,11 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
 // ─── Paso 5: Preview + Submit ────────────────────────────────────────────────
 
 function Step5({ onBack }: { onBack: () => void }) {
-  const { step1, step2, step3, listingId } = useSellStore()
+  const { step1, step2, step3, listingId, reset } = useSellStore()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [published, setPublished] = useState(false)
 
   const handlePublish = async () => {
     if (!listingId) return
@@ -785,7 +786,8 @@ function Step5({ onBack }: { onBack: () => void }) {
         const err = await res.json().catch(() => ({}))
         throw new Error((err as { message?: string }).message ?? 'Error al publicar')
       }
-      router.push(`/listings/${listingId}?published=1`)
+      setPublished(true)
+      reset()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error inesperado')
     } finally {
@@ -797,48 +799,84 @@ function Step5({ onBack }: { onBack: () => void }) {
     mint: 'Nuevo', good: 'Buen estado', fair: 'Regular', poor: 'Con detalles',
   }
 
+  if (published) {
+    return (
+      <div className="flex flex-col items-center text-center space-y-6 py-8">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-50">
+          <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold text-slate-900">¡Publicación enviada!</h2>
+          <p className="text-sm text-slate-500 max-w-xs">
+            Tu equipo está en revisión. Un moderador verificará tus fotos en las próximas 2 horas y recibirás una notificación cuando sea aprobado.
+          </p>
+        </div>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 text-left w-full">
+          <p className="font-semibold mb-1">⏳ Estado: Pendiente de revisión</p>
+          <p className="text-xs">Puedes seguir el estado desde tu dashboard en "Mis listings".</p>
+        </div>
+        <div className="flex gap-3 w-full">
+          <button
+            onClick={() => router.push('/dashboard/listings')}
+            className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700 transition-colors"
+          >
+            Ver mis listings
+          </button>
+          <button
+            onClick={() => router.push('/explore')}
+            className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Explorar feed
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-4">
-        <h3 className="font-semibold text-white">Resumen del listing</h3>
+        <h3 className="font-semibold text-slate-900">Resumen del listing</h3>
 
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-slate-400">Equipo</span>
-            <span className="text-slate-700">{step1.brand} {step1.modelName} {step1.storageGb}GB</span>
+            <span className="text-slate-500">Equipo</span>
+            <span className="font-medium text-slate-900">{step1.brand} {step1.modelName} {step1.storageGb}GB</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Condición</span>
-            <span className="text-slate-700">{conditionLabels[step2.condition ?? ''] ?? '–'}</span>
+            <span className="text-slate-500">Condición</span>
+            <span className="font-medium text-slate-900">{conditionLabels[step2.condition ?? ''] ?? '–'}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Batería</span>
-            <span className="text-slate-700">{step2.batteryHealth}%</span>
+            <span className="text-slate-500">Batería</span>
+            <span className="font-medium text-slate-900">{step2.batteryHealth}%</span>
           </div>
           <div className="flex justify-between border-t border-slate-200 pt-2">
-            <span className="text-slate-400">Precio</span>
-            <span className="text-xl font-bold text-white">{formatPrice(step3.priceUsd ?? 0)}</span>
+            <span className="text-slate-500">Precio</span>
+            <span className="text-xl font-bold text-green-600">{formatPrice(step3.priceUsd ?? 0)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Ciudad</span>
-            <span className="text-slate-700">{step3.city ?? '–'}</span>
+            <span className="text-slate-500">Ciudad</span>
+            <span className="font-medium text-slate-900">{step3.city ?? '–'}</span>
           </div>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-xs text-slate-400">
-        Tu listing quedará en estado <strong className="text-slate-900">Pendiente de verificación</strong>.
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-700">
+        Tu listing quedará en estado <strong>Pendiente de verificación</strong>.
         Un moderador revisará tus fotos en máx. 2 horas y recibirás una notificación.
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
           {error}
         </div>
       )}
 
       <div className="flex gap-3">
-        <button type="button" onClick={onBack} disabled={submitting} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 disabled:opacity-40 hover:text-white">
+        <button type="button" onClick={onBack} disabled={submitting} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-600 disabled:opacity-40 hover:bg-slate-50">
           Atrás
         </button>
         <button
