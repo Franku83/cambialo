@@ -406,6 +406,7 @@ export class ListingsService {
     }
 
     const SELLER_ALLOWED_TRANSITIONS: Record<string, string[]> = {
+      draft:          ['removed'],
       active:         ['paused', 'sold'],
       paused:         ['active', 'sold'],
       pending_review: ['paused'],

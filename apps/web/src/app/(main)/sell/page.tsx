@@ -879,6 +879,25 @@ export default function SellPage() {
         return
       }
 
+      // Anti-duplicado: si ya existe un draft para este modelo+storage, reutilizarlo
+      if (s1.deviceModelId && s1.storageGb) {
+        const { data: existingDrafts } = await supabase
+          .from('listings')
+          .select('id')
+          .eq('seller_id', session.user.id)
+          .eq('status', 'draft')
+          .eq('device_model_id', s1.deviceModelId)
+          .eq('storage_gb', s1.storageGb)
+          .order('created_at', { ascending: false })
+          .limit(1)
+
+        if (existingDrafts && existingDrafts.length > 0 && existingDrafts[0]) {
+          setListingId((existingDrafts[0] as { id: string }).id)
+          nextStep()
+          return
+        }
+      }
+
       const res = await fetch(`${API_URL}/api/v1/listings`, {
         method: 'POST',
         headers: {
