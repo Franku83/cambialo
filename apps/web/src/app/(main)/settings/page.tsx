@@ -183,7 +183,7 @@ function TwoFactorSection({ token, userId }: { token: string; userId: string }) 
         .select('role')
         .eq('user_id', userId)
 
-      const isCritical = roles?.some(r =>
+      const isCritical = (roles as { role: string }[] | null)?.some(r =>
         ['moderator', 'admin', 'owner'].includes(r.role)
       )
       setIsCriticalRole(!!isCritical)
