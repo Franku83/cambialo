@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -895,11 +895,84 @@ function Step5({ onBack }: { onBack: () => void }) {
 
 // ─── Page principal ──────────────────────────────────────────────────────────
 
-export default function SellPage() {
-  const { currentStep, nextStep, prevStep, listingId, setListingId, reset } =
+function SellPageInner() {
+  const { currentStep, nextStep, prevStep, listingId, setListingId, setStep, updateStep1, updateStep2, updateStep3, reset } =
     useSellStore()
+  const searchParams = useSearchParams()
   const [creatingDraft, setCreatingDraft] = useState(false)
   const [draftError, setDraftError] = useState<string | null>(null)
+
+  // Restaurar draft desde ?draft=:id
+  useEffect(() => {
+    const draftId = searchParams.get('draft')
+    if (!draftId || listingId === draftId) return
+
+    const restore = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+
+      const res = await fetch(`${API_URL}/api/v1/listings/${draftId}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      })
+      if (!res.ok) return
+
+      const listing = await res.json() as {
+        id: string
+        storageGb: number
+        priceUsd: string
+        batteryHealth: number
+        condition: string
+        hasRepairs: boolean
+        repairDetails: string | null
+        hasIcloudLock: boolean
+        hasGoogleLock: boolean
+        includesBox: boolean
+        includesCharger: boolean
+        includesEarphones: boolean
+        city: string | null
+        state: string | null
+        acceptsOffers: boolean
+        minOfferUsd: string | null
+        acceptsTradeIn: boolean
+        description: string | null
+        deviceModel: { id: string; brand: string; modelName: string }
+      }
+
+      reset()
+      setListingId(listing.id)
+      updateStep1({
+        deviceModelId: listing.deviceModel.id,
+        brand: listing.deviceModel.brand,
+        modelName: listing.deviceModel.modelName,
+        storageGb: listing.storageGb,
+      })
+      updateStep2({
+        condition: listing.condition as never,
+        batteryHealth: listing.batteryHealth,
+        hasRepairs: listing.hasRepairs,
+        repairDetails: listing.repairDetails ?? '',
+        hasIcloudLock: listing.hasIcloudLock,
+        hasGoogleLock: listing.hasGoogleLock,
+        includesBox: listing.includesBox,
+        includesCharger: listing.includesCharger,
+        includesEarphones: listing.includesEarphones,
+      })
+      updateStep3({
+        priceUsd: Number(listing.priceUsd) > 1 ? Number(listing.priceUsd) : 0,
+        city: listing.city ?? '',
+        state: listing.state ?? '',
+        acceptsOffers: listing.acceptsOffers,
+        minOfferUsd: Number(listing.minOfferUsd ?? 0),
+        acceptsTradeIn: listing.acceptsTradeIn,
+        description: listing.description ?? '',
+      })
+      setStep(4) // Ir directo a fotos
+    }
+
+    void restore()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   // Crear el draft al terminar el paso 1
   // Usa getState() para leer el store actualizado (evita closure stale de React)
@@ -1019,5 +1092,13 @@ export default function SellPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function SellPage() {
+  return (
+    <Suspense>
+      <SellPageInner />
+    </Suspense>
   )
 }

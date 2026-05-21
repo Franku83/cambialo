@@ -413,16 +413,17 @@ export class ListingsService {
     }
 
     const MODERATOR_ALLOWED_TRANSITIONS: Record<string, string[]> = {
+      draft:          ['removed'],
       pending_review: ['active', 'removed'],
       active:         ['removed'],
       paused:         ['removed'],
       sold:           ['removed'],
     }
 
-    // Validar transición permitida
-    const allowedTransitions = isModerator
-      ? MODERATOR_ALLOWED_TRANSITIONS[listing.status] ?? []
-      : SELLER_ALLOWED_TRANSITIONS[listing.status] ?? []
+    // Combinar transiciones: si es seller Y moderador, tiene ambos sets
+    const sellerTransitions = isSeller ? (SELLER_ALLOWED_TRANSITIONS[listing.status] ?? []) : []
+    const modTransitions = isModerator ? (MODERATOR_ALLOWED_TRANSITIONS[listing.status] ?? []) : []
+    const allowedTransitions = [...new Set([...sellerTransitions, ...modTransitions])]
 
     if (!allowedTransitions.includes(newStatus)) {
       throw new BadRequestException(
