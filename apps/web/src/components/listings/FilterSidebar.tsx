@@ -92,6 +92,7 @@ interface Filters {
   onlyVerified: boolean
   acceptsOffers: boolean
   includesBox: boolean
+  includesCharger: boolean
   rangeKm: number
   state?: string | undefined
   lat?: string | undefined
@@ -111,6 +112,7 @@ function parseFilters(params: URLSearchParams): Filters {
     onlyVerified: params.get('verified') === '1',
     acceptsOffers: params.get('offers') === '1',
     includesBox: params.get('box') === '1',
+    includesCharger: params.get('charger') === '1',
     rangeKm: Number(params.get('rangeKm') ?? 40),
     state: params.get('state') ?? undefined,
     lat: params.get('lat') ?? undefined,
@@ -131,6 +133,7 @@ function countActiveFilters(f: Filters) {
     (f.onlyVerified ? 1 : 0) +
     (f.acceptsOffers ? 1 : 0) +
     (f.includesBox ? 1 : 0) +
+    (f.includesCharger ? 1 : 0) +
     (f.state ? 1 : 0) +
     (f.paymentMethod ? 1 : 0) +
     (f.acceptsTradeIn ? 1 : 0)
@@ -320,6 +323,11 @@ function FiltersContent({
           label="Incluye caja"
         />
         <Toggle
+          checked={local.includesCharger}
+          onChange={(v) => setLocal((p) => ({ ...p, includesCharger: v }))}
+          label="🔌 Incluye cargador"
+        />
+        <Toggle
           checked={local.acceptsTradeIn ?? false}
           onChange={(v) => setLocal((p) => ({ ...p, acceptsTradeIn: v }))}
           label="💱 Acepta trade-in"
@@ -359,6 +367,7 @@ export function FilterSidebar() {
       if (f.onlyVerified) params.set('verified', '1')
       if (f.acceptsOffers) params.set('offers', '1')
       if (f.includesBox) params.set('box', '1')
+      if (f.includesCharger) params.set('charger', '1')
 
       // Location parameters
       if (f.state) params.set('state', f.state)

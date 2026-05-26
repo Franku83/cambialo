@@ -111,6 +111,12 @@ export class ListingFiltersDto {
   @IsOptional()
   acceptsTradeIn?: boolean
 
+  @ApiPropertyOptional({ description: 'Solo listings que incluyen cargador' })
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  @IsOptional()
+  includesCharger?: boolean
+
   @ApiPropertyOptional({ description: 'Cursor para paginación (ID del último listing)' })
   @IsString()
   @IsOptional()

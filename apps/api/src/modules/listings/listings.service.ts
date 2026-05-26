@@ -492,6 +492,9 @@ export class ListingsService {
     const tradeInClause = filters.acceptsTradeIn
       ? Prisma.sql`AND l.accepts_trade_in = true`
       : Prisma.empty
+    const chargerClause = filters.includesCharger
+      ? Prisma.sql`AND l.includes_charger = true`
+      : Prisma.empty
     const paymentMethodClause = filters.paymentMethod
       ? Prisma.sql`AND (u.payment_methods->>${filters.paymentMethod}->>'enabled')::boolean = true`
       : Prisma.empty
@@ -588,6 +591,7 @@ export class ListingsService {
         ${modelClause}
         ${stateClause}
         ${tradeInClause}
+        ${chargerClause}
         ${paymentMethodClause}
       ORDER BY
         l.is_bumped DESC,
@@ -675,6 +679,10 @@ export class ListingsService {
 
     if (filters.acceptsTradeIn) {
       where['acceptsTradeIn'] = true
+    }
+
+    if (filters.includesCharger) {
+      where['includesCharger'] = true
     }
 
     if (filters.state) {
