@@ -6,7 +6,6 @@ import { VENEZUELA_STATES, STATE_COORDS } from '@/lib/venezuela-states'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-// Helper component to pan/zoom map dynamically when state coordinates change
 function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }) {
   const map = useMap()
   useEffect(() => {
@@ -15,12 +14,23 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
   return null
 }
 
+function findNearestState(lat: number, lng: number): string {
+  let nearest = 'DC'
+  let minDist = Infinity
+  for (const [code, coords] of Object.entries(STATE_COORDS)) {
+    const d = Math.sqrt((coords.lat - lat) ** 2 + (coords.lng - lng) ** 2)
+    if (d < minDist) { minDist = d; nearest = code }
+  }
+  return nearest
+}
+
 interface LocationPickerProps {
   onLocationChange: (state: string, lat: number, lng: number, rangeKm: number) => void
   initialState?: string | undefined
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialRangeKm?: number | undefined
+  gpsCoords?: { lat: number; lng: number } | undefined
 }
 
 export function LocationPicker({
@@ -29,40 +39,50 @@ export function LocationPicker({
   initialLat,
   initialLng,
   initialRangeKm = 40,
+  gpsCoords,
 }: LocationPickerProps) {
   const [selectedState, setSelectedState] = useState(initialState)
   const [rangeKm, setRangeKm] = useState(initialRangeKm)
   const [useCustomRadius, setUseCustomRadius] = useState(initialRangeKm !== 40)
-  
-  // Base coordinates: Caracas (Venezuela center)
+  const [usingGps, setUsingGps] = useState(false)
+
   const [center, setCenter] = useState({
     lat: initialLat ?? 10.4806,
     lng: initialLng ?? -66.9036,
   })
 
-  // Ensure initial values are loaded if props change
+  // Sync initial props (e.g. when filter sidebar re-opens)
   useEffect(() => {
     if (initialState) setSelectedState(initialState)
-    if (initialLat && initialLng) {
-      setCenter({ lat: initialLat, lng: initialLng })
-    }
+    if (initialLat && initialLng) setCenter({ lat: initialLat, lng: initialLng })
     if (initialRangeKm) {
       setRangeKm(initialRangeKm)
       setUseCustomRadius(initialRangeKm !== 40)
     }
   }, [initialState, initialLat, initialLng, initialRangeKm])
 
+  // Auto-detect nearest state when GPS coords arrive
+  useEffect(() => {
+    if (!gpsCoords) return
+    const nearest = findNearestState(gpsCoords.lat, gpsCoords.lng)
+    setSelectedState(nearest)
+    setCenter({ lat: gpsCoords.lat, lng: gpsCoords.lng })
+    setUsingGps(true)
+    const finalRange = useCustomRadius ? rangeKm : 40
+    onLocationChange(nearest, gpsCoords.lat, gpsCoords.lng, finalRange)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gpsCoords?.lat, gpsCoords?.lng])
+
   const handleStateChange = (stateCode: string) => {
     setSelectedState(stateCode)
+    setUsingGps(false)
     if (!stateCode) {
-      // Clear filters/location
       onLocationChange('', 0, 0, 40)
       return
     }
     const coords = STATE_COORDS[stateCode]
     if (coords) {
       setCenter(coords)
-      // If we go back to suggested radius, force 40km
       const finalRange = useCustomRadius ? rangeKm : 40
       onLocationChange(stateCode, coords.lat, coords.lng, finalRange)
     }
@@ -113,6 +133,14 @@ export function LocationPicker({
           </option>
         ))}
       </select>
+
+      {/* GPS badge */}
+      {usingGps && (
+        <div className="flex items-center gap-1.5 rounded-lg bg-green-50 border border-green-200 px-3 py-1.5 text-xs font-medium text-green-700">
+          <span>📍</span>
+          <span>Usando tu ubicación GPS</span>
+        </div>
+      )}
 
       {/* Mapa y controles — solo si hay un estado seleccionado */}
       {selectedState && (

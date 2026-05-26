@@ -217,6 +217,7 @@ function FiltersContent({
           initialLat={local.lat ? Number(local.lat) : undefined}
           initialLng={local.lng ? Number(local.lng) : undefined}
           initialRangeKm={local.rangeKm}
+          gpsCoords={coords ?? undefined}
         />
       </div>
 
