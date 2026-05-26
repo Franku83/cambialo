@@ -126,4 +126,21 @@ export class AuthController {
   async updateNotificationPreferences(@CurrentUser() user: User, @Body() body: Record<string, boolean>) {
     return this.authService.updateNotificationPreferences(user.id, body)
   }
+
+  @Get('settings/payment-methods')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener métodos de pago' })
+  async getPaymentMethods(@CurrentUser() user: User) {
+    return this.authService.getPaymentMethods(user.id)
+  }
+
+  @Put('settings/payment-methods')
+  @UseGuards(SupabaseAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar métodos de pago' })
+  async updatePaymentMethods(@CurrentUser() user: User, @Body() body: Record<string, unknown>) {
+    return this.authService.updatePaymentMethods(user.id, body)
+  }
 }

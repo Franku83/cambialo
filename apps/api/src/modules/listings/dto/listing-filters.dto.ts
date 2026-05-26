@@ -95,6 +95,22 @@ export class ListingFiltersDto {
   @IsOptional()
   rangeKm?: number
 
+  @ApiPropertyOptional({ example: 'DC', description: 'Código del estado venezolano' })
+  @IsString()
+  @IsOptional()
+  state?: string
+
+  @ApiPropertyOptional({ description: 'Método de pago aceptado por el vendedor', example: 'zelle' })
+  @IsString()
+  @IsOptional()
+  paymentMethod?: string
+
+  @ApiPropertyOptional({ description: 'Solo listings que aceptan trade-in' })
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  @IsOptional()
+  acceptsTradeIn?: boolean
+
   @ApiPropertyOptional({ description: 'Cursor para paginación (ID del último listing)' })
   @IsString()
   @IsOptional()

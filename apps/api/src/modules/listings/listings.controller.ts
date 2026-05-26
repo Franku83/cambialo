@@ -128,4 +128,17 @@ export class ListingsController {
   async trackWhatsappClick(@Param('id') id: string) {
     return this.listingsService.trackWhatsappClick(id)
   }
+
+  @Patch(':id/cover-photo')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Cambiar foto de portada del listing' })
+  async setCoverPhoto(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+    @Body() body: { photoId: string },
+  ) {
+    return this.listingsService.setCoverPhoto(id, body.photoId, user.id)
+  }
 }

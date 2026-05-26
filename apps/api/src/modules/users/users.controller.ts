@@ -9,6 +9,8 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger'
@@ -45,6 +47,32 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
   ) {
     return this.usersService.updateProfile(user.id, dto)
+  }
+
+  @Get('me/payment-methods')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener métodos de pago propios' })
+  async getMyPaymentMethods(@CurrentUser() user: { id: string }) {
+    return this.usersService.getPaymentMethods(user.id)
+  }
+
+  @Put('me/payment-methods')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Actualizar métodos de pago propios' })
+  async updateMyPaymentMethods(
+    @CurrentUser() user: { id: string },
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.usersService.updatePaymentMethods(user.id, body)
+  }
+
+  @Get(':username/payment-methods')
+  @ApiOperation({ summary: 'Métodos de pago públicos de un vendedor' })
+  async getPublicPaymentMethods(@Param('username') username: string) {
+    return this.usersService.getPublicPaymentMethods(username)
   }
 
   @Post('me/identity-verification')

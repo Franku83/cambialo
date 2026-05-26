@@ -26,6 +26,7 @@ const PUBLIC_SELLER_SELECT = {
   locationCity: true,
   locationState: true,
   whatsappNumber: true,
+  paymentMethods: true,
 }
 
 @Injectable()
@@ -485,6 +486,15 @@ export class ListingsService {
     const modelClause = filters.model
       ? Prisma.sql`AND dm.model_name ILIKE ${'%' + filters.model + '%'}`
       : Prisma.empty
+    const stateClause = filters.state
+      ? Prisma.sql`AND l.state = ${filters.state}`
+      : Prisma.empty
+    const tradeInClause = filters.acceptsTradeIn
+      ? Prisma.sql`AND l.accepts_trade_in = true`
+      : Prisma.empty
+    const paymentMethodClause = filters.paymentMethod
+      ? Prisma.sql`AND (u.payment_methods->>${filters.paymentMethod}->>'enabled')::boolean = true`
+      : Prisma.empty
 
     type RawListing = {
       id: string
@@ -576,6 +586,9 @@ export class ListingsService {
         ${minBatteryClause}
         ${brandClause}
         ${modelClause}
+        ${stateClause}
+        ${tradeInClause}
+        ${paymentMethodClause}
       ORDER BY
         l.is_bumped DESC,
         l.verification_status DESC,
@@ -660,6 +673,45 @@ export class ListingsService {
       where['acceptsOffers'] = true
     }
 
+    if (filters.acceptsTradeIn) {
+      where['acceptsTradeIn'] = true
+    }
+
+    if (filters.state) {
+      where['state'] = filters.state
+    }
+
+    if (filters.paymentMethod) {
+      where['seller'] = {
+        paymentMethods: {
+          path: [filters.paymentMethod, 'enabled'],
+          equals: true,
+        },
+      }
+    }
+
     return where
   }
+
+  async setCoverPhoto(listingId: string, photoId: string, sellerId: string) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { sellerId: true },
+    })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+    if (listing.sellerId !== sellerId) throw new ForbiddenException()
+
+    await this.prisma.listingPhoto.updateMany({
+      where: { listingId },
+      data: { isCover: false },
+    })
+
+    await this.prisma.listingPhoto.update({
+      where: { id: photoId },
+      data: { isCover: true },
+    })
+
+    return { ok: true }
+  }
+
 }

@@ -10,6 +10,9 @@ import { Queue } from 'bullmq'
 import { PrismaService } from '../../common/database/prisma.service'
 import { NotificationsService } from '../notifications/notifications.service'
 
+// Cambiar a true cuando haya suficientes moderadores activos
+const VERIFICATION_CODE_REQUIRED = false
+
 function generateVerificationCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   let code = 'CAM-'
@@ -64,21 +67,23 @@ export class VerificationService {
     if (!listing) throw new NotFoundException('Listing no encontrado')
     if (listing.sellerId !== userId) throw new ForbiddenException()
 
-    if (listing.photos.length < 4) {
-      throw new BadRequestException('Se requieren al menos 4 fotos para verificar')
+    if (listing.photos.length < 1) {
+      throw new BadRequestException('Se requiere al menos 1 foto para publicar')
     }
 
-    const hasVerificationPhoto = listing.photos.some((p) => p.isVerificationPhoto)
-    if (!hasVerificationPhoto) {
-      throw new BadRequestException('Falta la foto de verificación con el código en papel')
-    }
+    if (VERIFICATION_CODE_REQUIRED) {
+      const hasVerificationPhoto = listing.photos.some((p) => p.isVerificationPhoto)
+      if (!hasVerificationPhoto) {
+        throw new BadRequestException('Falta la foto de verificación con el código en papel')
+      }
 
-    if (!listing.verificationCode || !listing.verificationExpiresAt) {
-      throw new BadRequestException('Genera el código de verificación primero')
-    }
+      if (!listing.verificationCode || !listing.verificationExpiresAt) {
+        throw new BadRequestException('Genera el código de verificación primero')
+      }
 
-    if (listing.verificationExpiresAt < new Date()) {
-      throw new BadRequestException('El código de verificación expiró. Genera uno nuevo.')
+      if (listing.verificationExpiresAt < new Date()) {
+        throw new BadRequestException('El código de verificación expiró. Genera uno nuevo.')
+      }
     }
 
     await this.prisma.listing.update({

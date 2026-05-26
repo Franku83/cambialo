@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import * as crypto from 'crypto'
 import { PrismaService } from '../../common/database/prisma.service'
+import { Prisma } from '@prisma/client'
 import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
@@ -132,6 +133,31 @@ export class UsersService {
         whatsappNumber: true,
       },
     })
+  }
+
+  async getPaymentMethods(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { paymentMethods: true },
+    })
+    return user?.paymentMethods ?? {}
+  }
+
+  async updatePaymentMethods(userId: string, methods: Record<string, unknown>) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { paymentMethods: methods as Prisma.InputJsonValue },
+    })
+    return { ok: true }
+  }
+
+  async getPublicPaymentMethods(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+      select: { paymentMethods: true },
+    })
+    if (!user) throw new NotFoundException(`Usuario @${username} no encontrado`)
+    return user.paymentMethods ?? {}
   }
 
   async startKycVerification(
