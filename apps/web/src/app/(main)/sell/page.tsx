@@ -655,6 +655,70 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
     }
   }
 
+  const handleSetCoverPhoto = async (photoId: string) => {
+    if (!listingId) return
+    try {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+
+      const targetPhoto = photos.find(p => p.id === photoId)
+      if (!targetPhoto || !targetPhoto.uploadedId) return
+
+      const res = await fetch(`${API_URL}/api/v1/listings/${listingId}/cover-photo`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ photoId: targetPhoto.uploadedId }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Error al establecer la foto de portada')
+      }
+
+      // Update Zustand store photos local states
+      photos.forEach((p) => {
+        if (!p.isVerification) {
+          updatePhoto(p.id, { isCover: p.id === photoId })
+        }
+      })
+    } catch (err) {
+      console.error(err)
+      alert('No se pudo establecer la foto de portada. Intenta de nuevo.')
+    }
+  }
+
+  const handleRemovePhoto = async (idOrUploadedId: string) => {
+    const photo = photos.find(p => p.id === idOrUploadedId || p.uploadedId === idOrUploadedId)
+    if (photo) {
+      removePhoto(photo.id)
+      
+      // If we removed the cover photo, automatically promote another standard photo to cover
+      if (photo.isCover) {
+        const remainingStandard = photos.filter(p => !p.isVerification && p.id !== photo.id && p.uploadedId)
+        if (remainingStandard.length > 0 && remainingStandard[0]) {
+          const nextCover = remainingStandard[0]
+          updatePhoto(nextCover.id, { isCover: true })
+          
+          const supabase = createClient()
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session) {
+            await fetch(`${API_URL}/api/v1/listings/${listingId}/cover-photo`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.access_token}`,
+              },
+              body: JSON.stringify({ photoId: nextCover.uploadedId }),
+            }).catch(err => console.error(err))
+          }
+        }
+      }
+    }
+  }
+
   const uploadedCount = photos.filter((p) => p.uploadedId && !p.error).length
   const hasVerificationPhoto = photos.some((p) => p.isVerification && p.uploadedId)
   const canContinue = uploadedCount >= 4 && hasVerificationPhoto
@@ -666,6 +730,8 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   ]
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+
+  const uploadedStandardPhotos = photos.filter((p) => !p.isVerification && p.uploadedId)
 
   return (
     <div className="space-y-6">
@@ -684,17 +750,61 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
               isVerification={false}
               onUploaded={(data) => {
                 const id = `photo-${i}-${Date.now()}`
-                addPhoto({ id, file: new File([], ''), preview: data.cloudinaryUrl, isVerification: false, uploadedId: data.id, cloudinaryUrl: data.cloudinaryUrl, uploading: false })
+                const hasCover = photos.some((p) => !p.isVerification && p.isCover)
+                addPhoto({
+                  id,
+                  file: new File([], ''),
+                  preview: data.cloudinaryUrl,
+                  isVerification: false,
+                  uploadedId: data.id,
+                  cloudinaryUrl: data.cloudinaryUrl,
+                  uploading: false,
+                  isCover: !hasCover,
+                })
               }}
-              onRemoved={(photoId) => removePhoto(photoId)}
+              onRemoved={handleRemovePhoto}
             />
           ))}
         </div>
       </div>
 
+      {/* Grid de fotos para seleccionar portada */}
+      {uploadedStandardPhotos.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-slate-600">Selecciona la foto de portada</p>
+          <div className="grid grid-cols-3 gap-3">
+            {uploadedStandardPhotos.map((photo, index) => (
+              <div
+                key={photo.id}
+                className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 bg-slate-100 transition-all ${
+                  photo.isCover ? 'photo-cover border-green-600 shadow-md shadow-green-100/50' : 'border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                <img src={photo.preview} alt={`Foto ${index + 1}`} className="h-full w-full object-cover" />
+
+                {photo.isCover ? (
+                  <div className="cover-badge font-bold">⭐ Portada</div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => void handleSetCoverPhoto(photo.id)}
+                    className="set-cover-btn font-semibold"
+                  >
+                    Usar como portada
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-slate-400">
+            Toca "Usar como portada" en la foto que quieres mostrar primero. La primera foto subida se usa por defecto.
+          </p>
+        </div>
+      )}
+
       {/* Código de verificación */}
       <div className="rounded-2xl border border-green-200 bg-green-50/50 p-5">
-        <h3 className="mb-1 font-semibold text-white">Foto de verificación</h3>
+        <h3 className="mb-1 font-semibold text-slate-900">Foto de verificación</h3>
         <p className="mb-4 text-sm text-slate-500">
           Escribe el código en un papel y fotografía el equipo junto al papel.
           Esto demuestra que el equipo está en tus manos.
@@ -740,7 +850,7 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
               const id = `verif-${Date.now()}`
               addPhoto({ id, file: new File([], ''), preview: data.cloudinaryUrl, isVerification: true, uploadedId: data.id, cloudinaryUrl: data.cloudinaryUrl, uploading: false })
             }}
-            onRemoved={(photoId) => removePhoto(photoId)}
+            onRemoved={handleRemovePhoto}
           />
         )}
       </div>
@@ -796,7 +906,7 @@ function Step5({ onBack }: { onBack: () => void }) {
   }
 
   const conditionLabels: Record<string, string> = {
-    mint: 'Nuevo', good: 'Buen estado', fair: 'Regular', poor: 'Con detalles',
+    mint: 'Nuevo / Como nuevo', good: 'Bueno', fair: 'Regular', poor: 'Malo',
   }
 
   if (published) {

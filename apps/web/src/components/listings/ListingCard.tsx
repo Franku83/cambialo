@@ -13,6 +13,7 @@ interface SellerInfo {
   username: string
   reputationScore?: number
   totalSales?: number
+  paymentMethods?: any
 }
 
 interface ListingCardProps {
@@ -36,10 +37,10 @@ interface ListingCardProps {
 }
 
 const CONDITION_MAP: Record<ListingCondition, { label: string; cls: string }> = {
-  mint: { label: 'Nuevo',    cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+  mint: { label: 'Nuevo / Como nuevo', cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
   good: { label: 'Bueno',   cls: 'bg-blue-50 text-blue-700 border border-blue-200' },
   fair: { label: 'Regular', cls: 'bg-amber-50 text-amber-700 border border-amber-200' },
-  poor: { label: 'Detalles',cls: 'bg-red-50 text-red-700 border border-red-200' },
+  poor: { label: 'Malo',    cls: 'bg-red-50 text-red-700 border border-red-200' },
 }
 
 function BatteryBar({ health }: { health: number }) {
@@ -200,6 +201,15 @@ export function ListingCard({
               </span>
             ) : null}
           </div>
+          {seller?.paymentMethods && (
+            <div className="payment-icons flex gap-1 mt-1 text-[11px]">
+              {seller.paymentMethods.zelle?.enabled && <span title="Zelle">🏦</span>}
+              {seller.paymentMethods.usdt?.enabled && <span title="USDT">₮</span>}
+              {seller.paymentMethods.pago_movil?.enabled && <span title="Pago Móvil">📱</span>}
+              {seller.paymentMethods.cash?.enabled && <span title="Efectivo $">💵</span>}
+              {seller.paymentMethods.bs?.enabled && <span title="Bolívares">🇻🇪</span>}
+            </div>
+          )}
           {acceptsOffers && (
             <p className="text-[11px] text-slate-400">Acepta ofertas</p>
           )}
@@ -316,6 +326,15 @@ export function ListingCard({
             </span>
           ) : null}
         </div>
+        {seller?.paymentMethods && (
+          <div className="payment-icons flex gap-1 text-[11px] mt-1">
+            {seller.paymentMethods.zelle?.enabled && <span title="Zelle">🏦</span>}
+            {seller.paymentMethods.usdt?.enabled && <span title="USDT">₮</span>}
+            {seller.paymentMethods.pago_movil?.enabled && <span title="Pago Móvil">📱</span>}
+            {seller.paymentMethods.cash?.enabled && <span title="Efectivo $">💵</span>}
+            {seller.paymentMethods.bs?.enabled && <span title="Bolívares">🇻🇪</span>}
+          </div>
+        )}
 
         {/* Vendedor */}
         {seller && (

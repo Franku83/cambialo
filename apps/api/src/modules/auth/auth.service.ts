@@ -9,6 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { PrismaService } from '../../common/database/prisma.service'
+import { Prisma } from '@prisma/client'
 import { UsernameValidatorService } from '../users/username-validator.service'
 import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
@@ -273,5 +274,21 @@ export class AuthService {
       create: { userId, ...dto },
       update: dto,
     })
+  }
+
+  async getPaymentMethods(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { paymentMethods: true },
+    })
+    return user?.paymentMethods ?? {}
+  }
+
+  async updatePaymentMethods(userId: string, methods: Record<string, unknown>) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { paymentMethods: methods as Prisma.InputJsonValue },
+    })
+    return { ok: true }
   }
 }

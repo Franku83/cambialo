@@ -12,6 +12,7 @@ export interface PendingPhoto {
   cloudinaryUrl?: string
   uploading: boolean
   error?: string
+  isCover?: boolean
 }
 
 export interface Step1Data {
