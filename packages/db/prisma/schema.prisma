@@ -143,6 +143,7 @@ model User {
   isSuspended          Boolean   @default(false) @map("is_suspended")
   suspendedUntil       DateTime? @map("suspended_until") @db.Timestamptz(6)
   suspendReason        String?   @map("suspend_reason")
+  paymentMethods       Json?     @map("payment_methods")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 

@@ -416,6 +416,244 @@ function DangerZoneSection() {
   )
 }
 
+interface PaymentMethodRowProps {
+  icon: string
+  label: string
+  enabled: boolean
+  onToggle: () => void
+  children?: React.ReactNode
+}
+
+function PaymentMethodRow({
+  icon,
+  label,
+  enabled,
+  onToggle,
+  children,
+}: PaymentMethodRowProps) {
+  return (
+    <div className="py-4 border-b border-slate-100 last:border-b-0">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-xl select-none">{icon}</span>
+          <span className="text-sm font-medium text-slate-800">{label}</span>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={enabled}
+          onClick={onToggle}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+            enabled ? 'bg-green-500' : 'bg-slate-200'
+          }`}
+        >
+          <span
+            aria-hidden="true"
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+              enabled ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+function PaymentMethodsSection({ token }: { token: string }) {
+  const [methods, setMethods] = useState<any>({
+    zelle: { enabled: false, handle: '' },
+    usdt: { enabled: false, network: 'TRC20 (Tron)', address: '' },
+    pago_movil: { enabled: false, bank: '', phone: '', idNumber: '' },
+    cash: { enabled: false },
+    bs: { enabled: false },
+  })
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    apiCall<any>('/api/v1/auth/settings/payment-methods', { token })
+      .then((res) => {
+        if (res) {
+          setMethods({
+            zelle: { enabled: !!res.zelle?.enabled, handle: res.zelle?.handle ?? '' },
+            usdt: { enabled: !!res.usdt?.enabled, network: res.usdt?.network ?? 'TRC20 (Tron)', address: res.usdt?.address ?? '' },
+            pago_movil: {
+              enabled: !!res.pago_movil?.enabled,
+              bank: res.pago_movil?.bank ?? '',
+              phone: res.pago_movil?.phone ?? '',
+              idNumber: res.pago_movil?.idNumber ?? res.pago_movil?.cedula ?? '',
+            },
+            cash: { enabled: !!res.cash?.enabled },
+            bs: { enabled: !!res.bs?.enabled },
+          })
+        }
+      })
+      .catch((e) => console.error('Error fetching payment methods', e))
+      .finally(() => setLoading(false))
+  }, [token])
+
+  const toggleMethod = (key: string) => {
+    setMethods((prev: any) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        enabled: !prev[key]?.enabled,
+      },
+    }))
+  }
+
+  const updateMethod = (methodKey: string, fieldKey: string, value: string) => {
+    setMethods((prev: any) => ({
+      ...prev,
+      [methodKey]: {
+        ...prev[methodKey],
+        [fieldKey]: value,
+      },
+    }))
+  }
+
+  const savePaymentMethods = async () => {
+    setSaving(true)
+    setError('')
+    setSuccess(false)
+    try {
+      await apiCall('/api/v1/auth/settings/payment-methods', {
+        method: 'PUT',
+        body: JSON.stringify(methods),
+        token,
+      })
+      setSuccess(true)
+    } catch (err: any) {
+      setError(err.message || 'Error al guardar métodos de pago')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) return <div className="text-sm text-slate-500">Cargando métodos de pago...</div>
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-slate-500">
+        Indica cómo prefieres recibir pagos. Esto aparecerá en tus listings.
+      </p>
+
+      <div className="divide-y divide-slate-100 border border-slate-100 rounded-xl p-4 bg-slate-50/50">
+        {/* Zelle */}
+        <PaymentMethodRow
+          icon="🏦"
+          label="Zelle"
+          enabled={methods.zelle?.enabled}
+          onToggle={() => toggleMethod('zelle')}
+        >
+          {methods.zelle?.enabled && (
+            <input
+              type="text"
+              placeholder="Correo o número de Zelle"
+              value={methods.zelle?.handle}
+              onChange={(e) => updateMethod('zelle', 'handle', e.target.value)}
+              className="w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+            />
+          )}
+        </PaymentMethodRow>
+
+        {/* USDT */}
+        <PaymentMethodRow
+          icon="₮"
+          label="USDT / Cripto"
+          enabled={methods.usdt?.enabled}
+          onToggle={() => toggleMethod('usdt')}
+        >
+          {methods.usdt?.enabled && (
+            <div className="space-y-2 mt-2">
+              <select
+                value={methods.usdt?.network}
+                onChange={(e) => updateMethod('usdt', 'network', e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+              >
+                <option value="TRC20 (Tron)">TRC20 (Tron)</option>
+                <option value="BEP20 (BSC)">BEP20 (BSC)</option>
+                <option value="Binance Pay">Binance Pay</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Dirección de wallet o ID de Binance"
+                value={methods.usdt?.address}
+                onChange={(e) => updateMethod('usdt', 'address', e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+              />
+            </div>
+          )}
+        </PaymentMethodRow>
+
+        {/* Pago Móvil */}
+        <PaymentMethodRow
+          icon="📱"
+          label="Pago Móvil"
+          enabled={methods.pago_movil?.enabled}
+          onToggle={() => toggleMethod('pago_movil')}
+        >
+          {methods.pago_movil?.enabled && (
+            <div className="space-y-2 mt-2">
+              <input
+                type="text"
+                placeholder="Banco (ej: Banesco, Mercantil...)"
+                value={methods.pago_movil?.bank}
+                onChange={(e) => updateMethod('pago_movil', 'bank', e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Teléfono (ej: 04121234567)"
+                value={methods.pago_movil?.phone}
+                onChange={(e) => updateMethod('pago_movil', 'phone', e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Cédula de identidad (ej: V-12345678)"
+                value={methods.pago_movil?.idNumber}
+                onChange={(e) => updateMethod('pago_movil', 'idNumber', e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
+              />
+            </div>
+          )}
+        </PaymentMethodRow>
+
+        {/* Cash USD */}
+        <PaymentMethodRow
+          icon="💵"
+          label="Efectivo USD"
+          enabled={methods.cash?.enabled}
+          onToggle={() => toggleMethod('cash')}
+        />
+
+        {/* Bs */}
+        <PaymentMethodRow
+          icon="🇻🇪"
+          label="Bolívares (efectivo)"
+          enabled={methods.bs?.enabled}
+          onToggle={() => toggleMethod('bs')}
+        />
+      </div>
+
+      <button
+        onClick={savePaymentMethods}
+        disabled={saving}
+        className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50 transition-colors"
+      >
+        {saving ? 'Guardando...' : 'Guardar métodos de pago'}
+      </button>
+
+      {success && <p className="text-sm text-green-600 flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> Métodos de pago actualizados con éxito.</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
+    </div>
+  )
+}
+
 export default function SettingsPage() {
   const { user: storeUser } = useAuthStore()
   const [token, setToken] = useState<string | null>(null)
@@ -470,6 +708,13 @@ export default function SettingsPage() {
           <Bell className="w-5 h-5 text-slate-500" /> Notificaciones
         </h2>
         <NotificationsSection token={token!} />
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+        <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+          <span className="text-xl">💳</span> Métodos de pago
+        </h2>
+        <PaymentMethodsSection token={token!} />
       </section>
 
       <section className="rounded-2xl border border-red-200 bg-white p-6 space-y-4">

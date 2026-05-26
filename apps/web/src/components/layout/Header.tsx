@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 const BRANDS = [
-  { label: 'Todos', value: '', href: '/' },
+  { label: 'Todos', value: '', href: '/explore' },
   { label: 'Apple', value: 'apple', href: '/apple' },
   { label: 'Samsung', value: 'samsung', href: '/samsung' },
 ]
@@ -302,29 +302,29 @@ export function Header() {
           </div>
         </div>
 
-        {/* Category nav — solo visible en home */}
-        {isHome && (
-          <div className="border-t border-slate-100">
-            <div className="mx-auto max-w-7xl px-4">
-              <div className="flex gap-0 overflow-x-auto scrollbar-hide">
-                {BRANDS.map((b) => (
-                  <Link
-                    key={b.value}
-                    href={b.href}
-                    className={cn(
-                      'shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
-                      (b.value === '' ? pathname === '/' : pathname.startsWith(`/${b.value}`))
-                        ? 'border-green-600 text-green-600'
-                        : 'border-transparent text-slate-600 hover:text-slate-900',
-                    )}
-                  >
-                    {b.label}
-                  </Link>
-                ))}
-              </div>
+        {/* Category nav — siempre visible */}
+        <div className="border-t border-slate-100">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex gap-0 overflow-x-auto scrollbar-hide">
+              {BRANDS.map((b) => (
+                <Link
+                  key={b.value}
+                  href={b.href}
+                  className={cn(
+                    'shrink-0 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
+                    (b.value === ''
+                      ? pathname === '/explore' || pathname === '/'
+                      : pathname.startsWith(`/${b.value}`))
+                      ? 'border-green-600 text-green-600'
+                      : 'border-transparent text-slate-600 hover:text-slate-900',
+                  )}
+                >
+                  {b.label}
+                </Link>
+              ))}
             </div>
           </div>
-        )}
+        </div>
       </header>
 
       {/* Mobile search overlay */}

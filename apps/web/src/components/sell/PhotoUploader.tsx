@@ -146,23 +146,23 @@ export function PhotoUploader({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-zinc-300">{label}</label>
+        <label className="text-sm font-medium text-slate-700">{label}</label>
         {status === 'done' && (
-          <span className="flex items-center gap-1 text-xs text-emerald-400">
+          <span className="flex items-center gap-1 text-xs text-emerald-600">
             <CheckCircle className="h-3.5 w-3.5" /> Subida
           </span>
         )}
       </div>
-      {hint && <p className="text-xs text-zinc-500">{hint}</p>}
+      {hint && <p className="text-xs text-slate-400">{hint}</p>}
 
       <div
         className={cn(
-          'relative rounded-xl border-2 transition-colors overflow-hidden',
+          'relative rounded-xl border-2 transition-colors overflow-hidden bg-white',
           status === 'done'
             ? 'border-emerald-600/40'
             : status === 'error'
             ? 'border-red-500/40'
-            : 'border-dashed border-zinc-700 hover:border-zinc-600',
+            : 'border-dashed border-slate-200 hover:border-slate-300 bg-slate-50/30',
         )}
       >
         {preview ? (
@@ -175,7 +175,7 @@ export function PhotoUploader({
                 <Loader2 className="h-8 w-8 animate-spin text-white" />
                 <div className="h-1.5 w-32 overflow-hidden rounded-full bg-zinc-700">
                   <div
-                    className="h-full bg-blue-500 transition-all duration-300"
+                    className="h-full bg-green-500 transition-all duration-300"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -200,11 +200,11 @@ export function PhotoUploader({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex w-full flex-col items-center justify-center gap-2 py-8 text-zinc-500 hover:text-zinc-400"
+            className="flex w-full flex-col items-center justify-center gap-2 py-8 text-slate-400 hover:text-slate-500"
           >
-            <Upload className="h-8 w-8" />
-            <span className="text-sm">Toca para subir</span>
-            <span className="text-xs text-zinc-600">JPG · PNG · máx. {MAX_SIZE_MB} MB</span>
+            <Upload className="h-8 w-8 text-slate-400" />
+            <span className="text-sm font-medium">Toca para subir</span>
+            <span className="text-xs text-slate-400">JPG · PNG · máx. {MAX_SIZE_MB} MB</span>
           </button>
         )}
       </div>
