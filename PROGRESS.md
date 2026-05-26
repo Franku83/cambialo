@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 21 Mayo 2026 (sesión 3)
+> Última actualización: 26 Mayo 2026
 
 ---
 
@@ -44,6 +44,7 @@
 | **Fixes post-6.5** | ✅ | SEO/indexación Google, bugs dashboard drafts, duplicados listings |
 | **Sprint 7** | ✅ | RLS, 2FA en login, /settings completa, Sentry, Posthog — pendiente: env vars Cloudinary/Sentry/Posthog |
 | **Fixes post-7** | ✅ | 2FA bugs móvil, 404 al publicar, eliminar drafts, continuar drafts, favicon SVG, og-image 1200×630 |
+| **Sprint 8** | ✅ | Métodos de pago, 23 estados VZ, mapa Leaflet, foto portada, sweep lenguaje, cargador, trade-in filter |
 
 ---
 
@@ -312,6 +313,34 @@ VAPID_PRIVATE_KEY=...
 - ✅ `favicon.svg` en `public/` para referencias directas (JSON-LD Organization logo)
 - ✅ `logo.svg` en `public/` — logo completo con texto disponible en `/logo.svg`
 - ✅ `og-image.png` — corregido a 1200×630 PNG (dimensiones OG correctas)
+
+---
+
+## Sprint 8 — Completado (26 Mayo 2026)
+
+### Claude — Lógica y Backend
+- ✅ `payment_methods JSONB` en tabla `users` (migración aplicada en Supabase)
+- ✅ `GET/PUT /users/me/payment-methods` + `GET /users/:username/payment-methods`
+- ✅ `GET/PUT /auth/settings/payment-methods` (para página /settings)
+- ✅ `paymentMethods` expuesto en `PUBLIC_SELLER_SELECT` — llega al feed y al detalle
+- ✅ Filtro `?paymentMethod=zelle|usdt|cash|pago_movil|bs` en feed (Prisma + raw SQL geo)
+- ✅ `constants/venezuela-states.ts` — 24 entidades + `STATE_COORDS` para el mapa
+- ✅ Filtro `?state=DC` en `ListingFiltersDto` → `buildWhereClause` + geo feed
+- ✅ Filtro `?acceptsTradeIn=true` en DTO + ambas rutas del feed
+- ✅ `VERIFICATION_CODE_REQUIRED = false` — listings pasan a `pending_review` sin foto de código físico (cambiar a `true` para reactivar)
+- ✅ `PATCH /listings/:id/cover-photo { photoId }` — cambia `isCover` en DB
+
+### Agy — UI y Visual
+- ✅ `/settings` — sección "Métodos de pago" con toggles + inputs por método, llama a `/auth/settings/payment-methods`
+- ✅ Listing detail — sección "💳 Acepta pagos con" antes del botón WhatsApp
+- ✅ `ListingCard` — iconos de métodos de pago (🏦₮📱💵🇻🇪) debajo de ciudad
+- ✅ `FilterSidebar` — filtro chips método de pago + toggle trade-in + `LocationPicker`
+- ✅ `LocationPicker.tsx` — mapa Leaflet con círculo de radio, dropdown 23 estados, radio sugerido/personalizado
+- ✅ Wizard Step 4 — "Usar como portada" en cada foto, llama a `PATCH /cover-photo`
+- ✅ Sweep de lenguaje — `ConditionGuide`: Mint→"Nuevo / Como nuevo", Good→"Bueno", Fair→"Regular", Poor→"Malo"
+- ✅ `AccessoriesChecklist` — cargador agregado (ícono Zap, label "Cargador original")
+- ✅ Modo oscuro eliminado del wizard — CSS clases `.payment-badge`, `.photo-cover`, `.cover-badge` en globals.css
+- ✅ Header — categorías (Todos / Apple / Samsung) siempre visibles en todas las rutas
 
 ---
 
