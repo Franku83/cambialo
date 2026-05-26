@@ -24,25 +24,25 @@ export default function AccessoriesChecklist({
   ]
 
   return (
-    <div className="rounded-2xl border border-zinc-800 overflow-hidden">
+    <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white">
       {items.map((item, i) => (
         <div
           key={item.label}
           className={cn(
             'flex items-center justify-between p-4',
-            i !== items.length - 1 && 'border-b border-zinc-800',
+            i !== items.length - 1 && 'border-b border-slate-200',
           )}
         >
           <div className="flex items-center gap-3">
             <div
               className={cn(
                 'w-9 h-9 rounded-lg flex items-center justify-center transition-colors',
-                item.value ? 'bg-blue-600/10 text-blue-400' : 'bg-zinc-800 text-zinc-500',
+                item.value ? 'bg-green-50 text-green-600' : 'bg-slate-100 text-slate-400',
               )}
             >
               <item.Icon className="w-4 h-4" />
             </div>
-            <span className={cn('text-sm font-medium', item.value ? 'text-white' : 'text-zinc-400')}>
+            <span className={cn('text-sm font-medium', item.value ? 'text-slate-900' : 'text-slate-400')}>
               {item.label}
             </span>
           </div>
@@ -51,8 +51,8 @@ export default function AccessoriesChecklist({
             type="button"
             onClick={() => item.onChange(!item.value)}
             className={cn(
-              'relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200',
-              item.value ? 'bg-blue-600' : 'bg-zinc-700',
+              'relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 cursor-pointer',
+              item.value ? 'bg-green-600' : 'bg-slate-200',
             )}
           >
             <span

@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { ListingCard, ListingCardSkeleton } from '@/components/listings/ListingCard'
 import type { ListingCondition, VerificationStatus } from '@cambialo/types'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Cambialo — Smartphones Verificados en Venezuela',
@@ -140,7 +141,11 @@ async function RecentListingsSection() {
   )
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const loggedIn = !!user
+
   return (
     <>
       {/* HERO */}
@@ -164,12 +169,21 @@ export default function HomePage() {
             >
               Explorar equipos
             </Link>
-            <Link
-              href="/sell"
-              className="w-full sm:w-auto rounded-xl border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 transition-colors hover:bg-slate-50"
-            >
-              Publicar el mío
-            </Link>
+            {loggedIn ? (
+              <Link
+                href="/sell"
+                className="w-full sm:w-auto rounded-xl border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                Publicar mi equipo
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="w-full sm:w-auto rounded-xl border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                Registrarme
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -250,12 +264,21 @@ export default function HomePage() {
                 >
                   Publicar gratis
                 </Link>
-                <Link
-                  href="/register"
-                  className="rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 transition-colors hover:bg-slate-50 text-center"
-                >
-                  Crear cuenta
-                </Link>
+                {loggedIn ? (
+                  <Link
+                    href="/explore"
+                    className="rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 transition-colors hover:bg-slate-50 text-center"
+                  >
+                    Explorar publicaciones
+                  </Link>
+                ) : (
+                  <Link
+                    href="/register"
+                    className="rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 transition-colors hover:bg-slate-50 text-center"
+                  >
+                    Crear cuenta
+                  </Link>
+                )}
               </div>
             </div>
             <div className="hidden md:flex flex-col gap-4 items-end">

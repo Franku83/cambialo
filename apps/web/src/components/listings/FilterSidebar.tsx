@@ -6,13 +6,23 @@ import { X, SlidersHorizontal } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useLocation } from '@/hooks/useLocation'
+import dynamic from 'next/dynamic'
+
+// Dynamically import LocationPicker to disable SSR (Leaflet relies on window)
+const LocationPicker = dynamic(
+  () => import('./LocationPicker').then((m) => m.LocationPicker),
+  {
+    ssr: false,
+    loading: () => <div className="h-10 w-full rounded-xl bg-slate-100 skeleton animate-pulse" />,
+  }
+)
 
 const BRANDS = ['Apple', 'Samsung']
 const CONDITIONS = [
-  { value: 'mint', label: 'Nuevo' },
+  { value: 'mint', label: 'Nuevo / Como nuevo' },
   { value: 'good', label: 'Bueno' },
   { value: 'fair', label: 'Regular' },
-  { value: 'poor', label: 'Detalles' },
+  { value: 'poor', label: 'Malo' },
 ]
 const STORAGE = ['64', '128', '256', '512']
 
@@ -28,6 +38,7 @@ function Chip({
   return (
     <button
       onClick={onClick}
+      type="button"
       className={cn(
         'rounded-full px-3 py-1 text-xs font-medium transition-colors',
         active
@@ -82,6 +93,11 @@ interface Filters {
   acceptsOffers: boolean
   includesBox: boolean
   rangeKm: number
+  state?: string | undefined
+  lat?: string | undefined
+  lng?: string | undefined
+  paymentMethod?: string | undefined
+  acceptsTradeIn?: boolean | undefined
 }
 
 function parseFilters(params: URLSearchParams): Filters {
@@ -96,6 +112,11 @@ function parseFilters(params: URLSearchParams): Filters {
     acceptsOffers: params.get('offers') === '1',
     includesBox: params.get('box') === '1',
     rangeKm: Number(params.get('rangeKm') ?? 40),
+    state: params.get('state') ?? undefined,
+    lat: params.get('lat') ?? undefined,
+    lng: params.get('lng') ?? undefined,
+    paymentMethod: params.get('paymentMethod') ?? undefined,
+    acceptsTradeIn: params.get('acceptsTradeIn') === '1',
   }
 }
 
@@ -109,7 +130,10 @@ function countActiveFilters(f: Filters) {
     (f.minBattery > 0 ? 1 : 0) +
     (f.onlyVerified ? 1 : 0) +
     (f.acceptsOffers ? 1 : 0) +
-    (f.includesBox ? 1 : 0)
+    (f.includesBox ? 1 : 0) +
+    (f.state ? 1 : 0) +
+    (f.paymentMethod ? 1 : 0) +
+    (f.acceptsTradeIn ? 1 : 0)
   )
 }
 
@@ -173,6 +197,26 @@ function FiltersContent({
         </div>
       </div>
 
+      {/* Ubicación Mapa con Radio + Estados */}
+      <div>
+        <p className="mb-2 text-xs font-medium text-slate-500 uppercase tracking-wide">📍 Ubicación</p>
+        <LocationPicker
+          onLocationChange={(state, lat, lng, rangeKm) => {
+            setLocal((prev) => ({
+              ...prev,
+              state: state || undefined,
+              lat: lat ? String(lat) : undefined,
+              lng: lng ? String(lng) : undefined,
+              rangeKm,
+            }))
+          }}
+          initialState={local.state}
+          initialLat={local.lat ? Number(local.lat) : undefined}
+          initialLng={local.lng ? Number(local.lng) : undefined}
+          initialRangeKm={local.rangeKm}
+        />
+      </div>
+
       {/* Precio */}
       <div>
         <p className="mb-2 text-xs font-medium text-slate-500 uppercase tracking-wide">Precio USD</p>
@@ -224,27 +268,42 @@ function FiltersContent({
         </div>
       </div>
 
-      {/* Geolocation Range Slider */}
-      {status === 'granted' && (
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Rango de distancia</p>
-            <span className="text-xs font-semibold text-green-600">{local.rangeKm} km</span>
-          </div>
-          <input
-            type="range"
-            min={10}
-            max={100}
-            step={5}
-            value={local.rangeKm}
-            onChange={(e) => setLocal((p) => ({ ...p, rangeKm: Number(e.target.value) }))}
-            className="w-full accent-green-600"
-          />
+      {/* Método de pago */}
+      <div>
+        <p className="mb-2 text-xs font-medium text-slate-500 uppercase tracking-wide">💳 Método de pago</p>
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            { value: 'zelle', label: 'Zelle', icon: '🏦' },
+            { value: 'usdt', label: 'USDT', icon: '₮' },
+            { value: 'pago_movil', label: 'Pago Móvil', icon: '📱' },
+            { value: 'cash', label: 'Efectivo $', icon: '💵' },
+            { value: 'bs', label: 'Bolívares', icon: '🇻🇪' },
+          ].map((method) => (
+            <button
+              key={method.value}
+              type="button"
+              onClick={() =>
+                setLocal((p) => ({
+                  ...p,
+                  paymentMethod: p.paymentMethod === method.value ? undefined : method.value,
+                }))
+              }
+              className={cn(
+                'rounded-full px-3 py-1.5 text-xs font-medium transition-all flex items-center gap-1',
+                local.paymentMethod === method.value
+                  ? 'bg-green-600 text-white shadow-sm'
+                  : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50',
+              )}
+            >
+              <span>{method.icon}</span>
+              <span>{method.label}</span>
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* Switches */}
-      <div className="space-y-1 border-t border-slate-100 pt-3">
+      <div className="space-y-1.5 border-t border-slate-100 pt-3">
         <Toggle
           checked={local.onlyVerified}
           onChange={(v) => setLocal((p) => ({ ...p, onlyVerified: v }))}
@@ -260,10 +319,16 @@ function FiltersContent({
           onChange={(v) => setLocal((p) => ({ ...p, includesBox: v }))}
           label="Incluye caja"
         />
+        <Toggle
+          checked={local.acceptsTradeIn ?? false}
+          onChange={(v) => setLocal((p) => ({ ...p, acceptsTradeIn: v }))}
+          label="💱 Acepta trade-in"
+        />
       </div>
 
       <button
         onClick={() => onApply(local)}
+        type="button"
         className="w-full rounded-xl bg-green-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700"
       >
         Aplicar filtros
@@ -295,12 +360,21 @@ export function FilterSidebar() {
       if (f.acceptsOffers) params.set('offers', '1')
       if (f.includesBox) params.set('box', '1')
 
-      // Si hay coords activas:
-      if (status === 'granted' && coords?.lat && coords?.lng) {
+      // Location parameters
+      if (f.state) params.set('state', f.state)
+      if (f.lat && f.lng) {
+        params.set('lat', f.lat)
+        params.set('lng', f.lng)
+        params.set('rangeKm', String(f.rangeKm))
+      } else if (status === 'granted' && coords?.lat && coords?.lng) {
         params.set('lat', String(coords.lat))
         params.set('lng', String(coords.lng))
         params.set('rangeKm', String(f.rangeKm))
       }
+
+      // New filters
+      if (f.paymentMethod) params.set('paymentMethod', f.paymentMethod)
+      if (f.acceptsTradeIn) params.set('acceptsTradeIn', '1')
 
       router.push(`${pathname}?${params.toString()}`)
       setMobileOpen(false)

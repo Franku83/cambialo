@@ -12,13 +12,13 @@ interface StepIndicatorProps {
 
 export default function StepIndicator({ currentStep, steps }: StepIndicatorProps) {
   return (
-    <div className="w-full py-4 mb-8">
+    <div className="w-full py-4 mb-6">
       <div className="flex items-center justify-between relative">
         {/* Background line */}
-        <div className="absolute top-5 left-0 w-full h-0.5 bg-zinc-800 -z-10" />
+        <div className="absolute top-5 left-0 w-full h-0.5 bg-slate-200 -z-10" />
         {/* Progress line */}
         <div
-          className="absolute top-5 left-0 h-0.5 bg-blue-600 transition-all duration-500 -z-10"
+          className="absolute top-5 left-0 h-0.5 bg-green-600 transition-all duration-500 -z-10"
           style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
         />
 
@@ -32,10 +32,10 @@ export default function StepIndicator({ currentStep, steps }: StepIndicatorProps
             <div key={step.label} className="flex flex-col items-center flex-1">
               <div
                 className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-zinc-950',
-                  isCompleted && 'bg-blue-600 border-blue-600 text-white',
-                  isActive && 'bg-blue-600 border-blue-600 text-white scale-110',
-                  isPending && 'border-zinc-800 text-zinc-500',
+                  'w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-white',
+                  isCompleted && 'bg-green-600 border-green-600 text-white',
+                  isActive && 'bg-green-600 border-green-600 text-white scale-110 shadow-sm shadow-green-100',
+                  isPending && 'border-slate-200 text-slate-400',
                 )}
               >
                 {isCompleted ? (
@@ -46,14 +46,14 @@ export default function StepIndicator({ currentStep, steps }: StepIndicatorProps
               </div>
               <span
                 className={cn(
-                  'mt-3 text-xs font-medium transition-colors whitespace-nowrap hidden md:block',
-                  isActive ? 'text-white' : 'text-zinc-500',
+                  'mt-3 text-xs font-semibold transition-colors whitespace-nowrap hidden md:block',
+                  isActive ? 'text-slate-900' : 'text-slate-400',
                 )}
               >
                 {step.label}
               </span>
               {isActive && (
-                <span className="mt-3 text-xs font-bold text-white md:hidden">{step.label}</span>
+                <span className="mt-3 text-[10px] font-bold text-slate-900 md:hidden">{step.label}</span>
               )}
             </div>
           )

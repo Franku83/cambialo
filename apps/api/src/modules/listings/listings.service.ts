@@ -713,5 +713,4 @@ export class ListingsService {
 
     return { ok: true }
   }
-
 }

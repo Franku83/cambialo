@@ -19,6 +19,7 @@ interface Seller {
   id: string; username: string; fullName: string; avatarUrl: string | null
   reputationScore: number; totalSales: number; isVerifiedSeller: boolean; idVerified: boolean
   whatsappNumber: string | null
+  paymentMethods?: any
 }
 interface DeviceModel { id: string; brand: string; modelName: string; modelNumber: string }
 interface ListingDetail {
@@ -90,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const CONDITION_LABEL: Record<ListingCondition, string> = {
-  mint: 'Nuevo', good: 'Buen estado', fair: 'Estado regular', poor: 'Con detalles'
+  mint: 'Nuevo / Como nuevo', good: 'Bueno', fair: 'Regular', poor: 'Malo'
 }
 const CONDITION_CLS: Record<ListingCondition, string> = {
   mint: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
@@ -117,6 +118,17 @@ function BatteryGauge({ health }: { health: number }) {
         <span className="text-[10px] text-slate-400">batería</span>
       </div>
     </div>
+  )
+}
+
+function hasAnyPaymentMethod(pm: any): boolean {
+  if (!pm) return false
+  return !!(
+    pm.zelle?.enabled ||
+    pm.usdt?.enabled ||
+    pm.pago_movil?.enabled ||
+    pm.cash?.enabled ||
+    pm.bs?.enabled
   )
 }
 
@@ -259,6 +271,43 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
             <p className="text-xs text-slate-400">{listing.viewsCount} vistas</p>
           </div>
+          {listing.seller.paymentMethods && hasAnyPaymentMethod(listing.seller.paymentMethods) && (
+            <div className="payment-methods-section">
+              <h3 className="payment-methods-title">💳 Acepta pagos con</h3>
+              <div className="payment-methods-grid">
+                {listing.seller.paymentMethods.zelle?.enabled && (
+                  <div className="payment-badge">
+                    <span className="payment-icon">🏦</span>
+                    <span>Zelle</span>
+                  </div>
+                )}
+                {listing.seller.paymentMethods.usdt?.enabled && (
+                  <div className="payment-badge">
+                    <span className="payment-icon">₮</span>
+                    <span>USDT</span>
+                  </div>
+                )}
+                {listing.seller.paymentMethods.pago_movil?.enabled && (
+                  <div className="payment-badge">
+                    <span className="payment-icon">📱</span>
+                    <span>Pago Móvil</span>
+                  </div>
+                )}
+                {listing.seller.paymentMethods.cash?.enabled && (
+                  <div className="payment-badge">
+                    <span className="payment-icon">💵</span>
+                    <span>Efectivo $</span>
+                  </div>
+                )}
+                {listing.seller.paymentMethods.bs?.enabled && (
+                  <div className="payment-badge">
+                    <span className="payment-icon">🇻🇪</span>
+                    <span>Bolívares</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           {isInactive ? (
             <div className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-3 text-sm font-bold text-slate-500 cursor-not-allowed">
               Contacto deshabilitado
