@@ -131,26 +131,13 @@ const sections = [
     ),
   },
   {
-    title: '9. Servicios de pago opcionales',
-    content: (
-      <>
-        <p className="mb-3">Cambialo ofrece servicios opcionales de pago:</p>
-        <ul className="list-disc pl-5 space-y-1 mb-3">
-          <li><strong>Destacar publicación (Bump):</strong> sube tu publicación al tope del feed por 24 horas.</li>
-          <li><strong>Suscripción Vendedor Verificado:</strong> mayor visibilidad y límite de publicaciones.</li>
-        </ul>
-        <p>Estos pagos son procesados directamente entre el usuario y Cambialo mediante los métodos disponibles (Zelle, USDT, Pago Móvil u otros). Los pagos por servicios de la plataforma no son reembolsables una vez activado el servicio.</p>
-      </>
-    ),
-  },
-  {
-    title: '10. Propiedad intelectual',
+    title: '9. Propiedad intelectual',
     content: (
       <p>El nombre Cambialo, el logo, el diseño de la plataforma y todo el contenido creado por Cambialo son propiedad del proyecto. No puedes usar, copiar, modificar ni distribuir ninguno de estos elementos sin autorización expresa. El contenido que tú publicas (fotos, descripciones) sigue siendo tuyo. Al publicarlo en Cambialo nos otorgas una licencia no exclusiva para mostrarlo en la plataforma y en materiales promocionales de Cambialo.</p>
     ),
   },
   {
-    title: '11. Limitación de responsabilidad',
+    title: '10. Limitación de responsabilidad',
     content: (
       <>
         <p className="mb-3">Cambialo no es responsable por:</p>
@@ -166,13 +153,13 @@ const sections = [
     ),
   },
   {
-    title: '12. Modificaciones al servicio',
+    title: '11. Modificaciones al servicio',
     content: (
       <p>Cambialo se reserva el derecho de modificar, suspender o discontinuar cualquier parte del servicio en cualquier momento. También podemos modificar estos Términos y Condiciones. Los cambios significativos serán comunicados por correo electrónico con al menos 7 días de anticipación.</p>
     ),
   },
   {
-    title: '13. Contacto',
+    title: '12. Contacto',
     content: (
       <p>Para cualquier consulta sobre estos términos: <a href="mailto:soporte@cambialo.app" className="text-green-600 underline hover:text-green-700">soporte@cambialo.app</a></p>
     ),
