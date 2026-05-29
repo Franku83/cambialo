@@ -41,6 +41,7 @@ export class UsersService {
         isVerifiedSeller: true,
         locationCity: true,
         locationState: true,
+        paymentMethods: true,
         createdAt: true,
         reviewsReceived: {
           take: 5,

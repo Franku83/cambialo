@@ -1,0 +1,2 @@
+export const VERIFICATION_CODE_ENABLED =
+  process.env.NEXT_PUBLIC_VERIFICATION_CODE_ENABLED === 'true'

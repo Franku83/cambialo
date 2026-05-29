@@ -14,7 +14,14 @@ import ConditionGuide from '@/components/sell/ConditionGuide'
 import AccessoriesChecklist from '@/components/sell/AccessoriesChecklist'
 import { PhotoUploader } from '@/components/sell/PhotoUploader'
 import { cn, formatPrice } from '@/lib/utils'
+import { VERIFICATION_CODE_ENABLED } from '@/lib/config'
+import dynamic from 'next/dynamic'
 import type { ListingCondition } from '@cambialo/types'
+
+const LocationPicker = dynamic(
+  () => import('@/components/listings/LocationPicker').then((m) => m.LocationPicker),
+  { ssr: false, loading: () => <div className="h-48 w-full rounded-xl bg-slate-100 animate-pulse" /> },
+)
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 
@@ -415,19 +422,7 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
     })()
   }, [step1.deviceModelId, step1.storageGb])
 
-  useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          useSellStore.getState().updateStep3({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          })
-        },
-        () => {} // silencioso si rechaza
-      )
-    }
-  }, [])
+  // GPS capturado por LocationPicker directamente
 
   const {
     register,
@@ -449,7 +444,35 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const acceptsTradeIn = step3.acceptsTradeIn ?? false
 
   const onSubmit: (data: Step3Form) => Promise<void> = async (data) => {
-    updateStep3({ ...data, acceptsOffers, meetAtMall, acceptsTradeIn })
+    const s3 = { ...data, acceptsOffers, meetAtMall, acceptsTradeIn }
+    updateStep3(s3)
+
+    const listingId = useSellStore.getState().listingId
+    if (listingId) {
+      try {
+        const supabase = createClient()
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          await fetch(`${API_URL}/api/v1/listings/${listingId}/details`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+            body: JSON.stringify({
+              priceUsd: s3.priceUsd,
+              city: s3.city || null,
+              state: step3.state || null,
+              acceptsOffers: s3.acceptsOffers,
+              minOfferUsd: s3.acceptsOffers && (step3.minOfferUsd ?? 0) > 0 ? step3.minOfferUsd : null,
+              meetAtMall: s3.meetAtMall,
+              acceptsTradeIn: s3.acceptsTradeIn,
+              description: step3.description || null,
+              latitude: step3.latitude ?? null,
+              longitude: step3.longitude ?? null,
+            }),
+          }).catch(() => null)
+        }
+      } catch { /* silencioso — el precio se guardará al publicar */ }
+    }
+
     onNext()
   }
 
@@ -526,7 +549,10 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           <p className="text-sm font-medium text-slate-700">Acepta ofertas</p>
           <button
             type="button"
-            onClick={() => updateStep3({ acceptsOffers: !acceptsOffers })}
+            onClick={() => {
+              const next = !acceptsOffers
+              updateStep3({ acceptsOffers: next, ...(!next && { minOfferUsd: 0 }) })
+            }}
             className={cn(
               'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
               acceptsOffers ? 'bg-blue-600' : 'bg-slate-200',
@@ -549,19 +575,23 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         )}
       </div>
 
-      {/* Ciudad */}
+      {/* Ubicación */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-slate-600">
-          Ciudad <span className="text-red-400">*</span>
-        </label>
-        <input
-          {...register('city')}
-          placeholder="Ej: Caracas"
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm text-slate-900 outline-none focus:border-green-500"
+        <p className="mb-2 text-sm font-medium text-slate-600">📍 ¿Dónde estás ubicado?</p>
+        <LocationPicker
+          showRadiusPicker={false}
+          onLocationChange={(state, lat, lng) => {
+            const { VENEZUELA_STATES } = require('@/lib/venezuela-states') as typeof import('@/lib/venezuela-states')
+            const capital = (VENEZUELA_STATES as { code: string; capital: string }[]).find((s) => s.code === state)?.capital ?? ''
+            const update: Parameters<typeof updateStep3>[0] = { state, city: capital }
+            if (lat) update.latitude = lat
+            if (lng) update.longitude = lng
+            updateStep3(update)
+            if (capital) setValue('city', capital)
+          }}
+          initialState={step3.state}
         />
-        {errors.city && (
-          <p className="mt-1 text-xs text-red-400">{errors.city.message}</p>
-        )}
+        <input {...register('city')} type="hidden" />
       </div>
 
       {/* Encuentro en CC */}
@@ -719,9 +749,11 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
     }
   }
 
-  const uploadedCount = photos.filter((p) => p.uploadedId && !p.error).length
+  const uploadedCount = photos.filter((p) => !p.isVerification && p.uploadedId && !p.error).length
   const hasVerificationPhoto = photos.some((p) => p.isVerification && p.uploadedId)
-  const canContinue = uploadedCount >= 4 && hasVerificationPhoto
+  const canContinue = VERIFICATION_CODE_ENABLED
+    ? uploadedCount >= 3 && hasVerificationPhoto
+    : uploadedCount >= 1
 
   const requiredPhotos = [
     { label: 'Parte delantera', hint: 'Pantalla apagada, bien iluminada' },
@@ -802,8 +834,8 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         </div>
       )}
 
-      {/* Código de verificación */}
-      <div className="rounded-2xl border border-green-200 bg-green-50/50 p-5">
+      {/* Código de verificación — solo si está habilitado */}
+      {VERIFICATION_CODE_ENABLED && <div className="rounded-2xl border border-green-200 bg-green-50/50 p-5">
         <h3 className="mb-1 font-semibold text-slate-900">Foto de verificación</h3>
         <p className="mb-4 text-sm text-slate-500">
           Escribe el código en un papel y fotografía el equipo junto al papel.
@@ -853,7 +885,7 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
             onRemoved={handleRemovePhoto}
           />
         )}
-      </div>
+      </div>}
 
       <div className="flex gap-3">
         <button type="button" onClick={onBack} className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:text-white">
@@ -865,7 +897,7 @@ function Step4({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
           disabled={!canContinue}
           className="flex-1 rounded-xl bg-green-600 py-3 font-semibold text-white disabled:opacity-40 hover:bg-green-700"
         >
-          Continuar {!canContinue && `(${uploadedCount}/3 fotos)`}
+          Continuar {!canContinue && `(${uploadedCount}/${VERIFICATION_CODE_ENABLED ? 3 : 1} foto${VERIFICATION_CODE_ENABLED ? 's' : ''})`}
         </button>
       </div>
     </div>

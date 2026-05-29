@@ -31,6 +31,7 @@ interface LocationPickerProps {
   initialLng?: number | undefined
   initialRangeKm?: number | undefined
   gpsCoords?: { lat: number; lng: number } | undefined
+  showRadiusPicker?: boolean
 }
 
 export function LocationPicker({
@@ -40,6 +41,7 @@ export function LocationPicker({
   initialLng,
   initialRangeKm = 40,
   gpsCoords,
+  showRadiusPicker = true,
 }: LocationPickerProps) {
   const [selectedState, setSelectedState] = useState(initialState)
   const [rangeKm, setRangeKm] = useState(initialRangeKm)
@@ -146,7 +148,7 @@ export function LocationPicker({
       {selectedState && (
         <div className="space-y-3">
           {/* Opciones de radio */}
-          <div className="grid grid-cols-2 gap-2">
+          {showRadiusPicker && <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => handleRadiusTypeChange(false)}
@@ -176,10 +178,10 @@ export function LocationPicker({
                 Filtrar equipos dentro de una distancia específica.
               </span>
             </button>
-          </div>
+          </div>}
 
           {/* Slider de radio personalizado */}
-          {useCustomRadius && (
+          {showRadiusPicker && useCustomRadius && (
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3.5 space-y-2">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
                 <span>Rango seleccionado:</span>

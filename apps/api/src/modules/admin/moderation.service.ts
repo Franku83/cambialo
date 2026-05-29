@@ -17,7 +17,7 @@ export class ModerationService {
     await this.assertModerator(moderatorId)
 
     return this.prisma.listing.findMany({
-      where: { verificationStatus: 'pending' },
+      where: { status: 'pending_review', verificationStatus: 'pending' },
       orderBy: { updatedAt: 'asc' }, // los más antiguos primero
       include: {
         deviceModel: { select: { brand: true, modelName: true, modelNumber: true } },

@@ -136,19 +136,19 @@ export class ListingsService {
 
     if (!listing) throw new NotFoundException('Listing no encontrado')
 
-    // Si es draft o pending_review, solo el propio vendedor o moderadores/admins/owner pueden verlo
-    if (['draft', 'pending_review'].includes(listing.status)) {
-      if (!userId) {
-        throw new ForbiddenException('No tienes permiso para ver este listing')
-      }
+    // Listings no activos/verificados: solo dueño o moderador puede verlos
+    const isPublic = listing.status === 'active' && listing.verificationStatus === 'verified'
+    if (!isPublic) {
       const isSeller = listing.sellerId === userId
-      const userRoles = await this.prisma.userRole_Assignment.findMany({
-        where: { userId },
-        select: { role: true }
-      })
-      const isModerator = userRoles.some(r => ['moderator', 'admin', 'owner'].includes(r.role))
-      if (!isSeller && !isModerator) {
-        throw new ForbiddenException('No tienes permiso para ver este listing')
+      if (!isSeller) {
+        if (userId) {
+          const roleRecord = await this.prisma.userRole_Assignment.findFirst({
+            where: { userId, role: { in: ['moderator', 'admin', 'owner'] } },
+          })
+          if (!roleRecord) throw new NotFoundException('Listing no encontrado')
+        } else {
+          throw new NotFoundException('Listing no encontrado')
+        }
       }
     }
 
@@ -407,7 +407,6 @@ export class ListingsService {
     }
 
     const SELLER_ALLOWED_TRANSITIONS: Record<string, string[]> = {
-      draft:          ['removed'],
       active:         ['paused', 'sold'],
       paused:         ['active', 'sold'],
       pending_review: ['paused'],
@@ -441,6 +440,65 @@ export class ListingsService {
     })
 
     return { status: newStatus }
+  }
+
+  async deleteDraft(listingId: string, sellerId: string) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { sellerId: true, status: true },
+    })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+    if (listing.sellerId !== sellerId) throw new ForbiddenException()
+    if (listing.status !== 'draft') {
+      throw new BadRequestException(
+        'Solo los borradores pueden eliminarse. Los listings publicados se pausan o marcan como vendidos.',
+      )
+    }
+    await this.prisma.listing.delete({ where: { id: listingId } })
+    return { deleted: true }
+  }
+
+  async updateDraftDetails(
+    listingId: string,
+    sellerId: string,
+    data: {
+      priceUsd?: number
+      city?: string
+      state?: string
+      acceptsOffers?: boolean
+      minOfferUsd?: number | null
+      meetAtMall?: boolean
+      acceptsTradeIn?: boolean
+      description?: string
+      latitude?: number
+      longitude?: number
+    },
+  ) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { sellerId: true, status: true },
+    })
+    if (!listing) throw new NotFoundException('Listing no encontrado')
+    if (listing.sellerId !== sellerId) throw new ForbiddenException()
+    if (!['draft', 'pending_review'].includes(listing.status)) {
+      throw new BadRequestException('Solo se pueden editar borradores')
+    }
+
+    return this.prisma.listing.update({
+      where: { id: listingId },
+      data: {
+        ...(data.priceUsd !== undefined && { priceUsd: data.priceUsd }),
+        ...(data.city !== undefined && { city: data.city }),
+        ...(data.state !== undefined && { state: data.state }),
+        ...(data.acceptsOffers !== undefined && { acceptsOffers: data.acceptsOffers }),
+        minOfferUsd: data.minOfferUsd ?? null,
+        ...(data.meetAtMall !== undefined && { meetAtMall: data.meetAtMall }),
+        ...(data.acceptsTradeIn !== undefined && { acceptsTradeIn: data.acceptsTradeIn }),
+        ...(data.description !== undefined && { description: data.description }),
+        ...(data.latitude !== undefined && { latitude: data.latitude }),
+        ...(data.longitude !== undefined && { longitude: data.longitude }),
+      },
+    })
   }
 
   async trackWhatsappClick(listingId: string) {

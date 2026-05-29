@@ -56,9 +56,9 @@ export class ListingsController {
   @ApiOperation({ summary: 'Detalle de un listing' })
   async getById(
     @Param('id') id: string,
-    @Query('userId') userId?: string,
+    @CurrentUser() user?: { id: string },
   ) {
-    return this.listingsService.getById(id, userId)
+    return this.listingsService.getById(id, user?.id)
   }
 
   @Post()
@@ -120,6 +120,42 @@ export class ListingsController {
     @Body() body: UpdateListingStatusDto,
   ) {
     return this.listingsService.updateStatus(id, user.id, body.status)
+  }
+
+  @Delete(':id/draft')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Eliminar borrador (hard delete — solo drafts)' })
+  async deleteDraft(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+  ) {
+    return this.listingsService.deleteDraft(id, user.id)
+  }
+
+  @Patch(':id/details')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Actualizar detalles de un draft (precio, ciudad, ofertas, etc.)' })
+  async updateDraftDetails(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+    @Body() body: {
+      priceUsd?: number
+      city?: string
+      state?: string
+      acceptsOffers?: boolean
+      minOfferUsd?: number | null
+      meetAtMall?: boolean
+      acceptsTradeIn?: boolean
+      description?: string
+      latitude?: number
+      longitude?: number
+    },
+  ) {
+    return this.listingsService.updateDraftDetails(id, user.id, body)
   }
 
   @Post(':id/whatsapp-click')
