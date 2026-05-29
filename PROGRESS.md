@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 26 Mayo 2026
+> Última actualización: 29 Mayo 2026
 
 ---
 
@@ -45,6 +45,8 @@
 | **Sprint 7** | ✅ | RLS, 2FA en login, /settings completa, Sentry, Posthog — pendiente: env vars Cloudinary/Sentry/Posthog |
 | **Fixes post-7** | ✅ | 2FA bugs móvil, 404 al publicar, eliminar drafts, continuar drafts, favicon SVG, og-image 1200×630 |
 | **Sprint 8** | ✅ | Métodos de pago, 23 estados VZ, mapa Leaflet, foto portada, sweep lenguaje, cargador, trade-in filter |
+| **Sprint 8.1** | ✅ | 8 bugfixes: 404 pending_review, drafts en cola, precio $1, hard delete drafts, código verificación, minOfferUsd, ubicación en wizard, paymentMethods |
+| **Sprint 8.2** | ✅ | Política de Privacidad + Términos y Condiciones, Footer compartido en todas las páginas |
 
 ---
 
@@ -341,6 +343,37 @@ VAPID_PRIVATE_KEY=...
 - ✅ `AccessoriesChecklist` — cargador agregado (ícono Zap, label "Cargador original")
 - ✅ Modo oscuro eliminado del wizard — CSS clases `.payment-badge`, `.photo-cover`, `.cover-badge` en globals.css
 - ✅ Header — categorías (Todos / Apple / Samsung) siempre visibles en todas las rutas
+
+---
+
+## Sprint 8.1 — Completado (29 Mayo 2026)
+
+### 8 bugfixes de lógica y backend
+
+- ✅ **Bug 1** — `paymentMethods` agregado al select de `findPublicProfile` en `users.service.ts`
+- ✅ **Bug 2** — `VERIFICATION_CODE_ENABLED` flag en `lib/config.ts` oculta el step de código físico en el wizard (`NEXT_PUBLIC_VERIFICATION_CODE_ENABLED=false` en Vercel)
+- ✅ **Bug 3** — Step3 del wizard llama `PATCH /listings/:id/details` al avanzar → precio real guardado en DB (no el placeholder `1`)
+- ✅ **Bug 4** — `getById` ahora lanza `NotFoundException` (no `ForbiddenException`) para no-owners — viewer leído del JWT, no de query param
+- ✅ **Bug 5** — Cola de moderación filtra `status: 'pending_review'` — drafts ya no aparecen
+- ✅ **Bug 6** — `deleteDraft` + endpoint `DELETE /listings/:id/draft` para hard delete de borradores; `draft→removed` eliminado de `SELLER_ALLOWED_TRANSITIONS`
+- ✅ **Bug 7** — `minOfferUsd` limpiado al desactivar "acepta ofertas"; enviado como `null` si ≤ 0
+- ✅ **Bug 8** — `LocationPicker` integrado en Step3 del wizard con prop `showRadiusPicker={false}` (sin slider de radio)
+- ✅ Nuevo endpoint `PATCH /listings/:id/details` para actualizar detalles de un draft (precio, ciudad, estado, ofertas, trade-in, descripción, coords)
+
+---
+
+## Sprint 8.2 — Completado (29 Mayo 2026)
+
+### Legal — obligatorio antes del beta launch
+
+- ✅ `/privacy` — Política de Privacidad (9 secciones, mismo estilo que /about)
+- ✅ `/terms` — Términos y Condiciones (12 secciones)
+- ✅ `Footer` component compartido en `components/layout/Footer.tsx` — visible en **todas** las páginas (main + info layouts)
+- ✅ Footer viejo hardcodeado en `homepage (page.tsx)` eliminado — sin duplicado
+- ✅ Zonas seguras removido del footer (feature desactivada por ahora)
+- ✅ Texto de consentimiento en `/register` antes del botón de submit
+- ✅ Ambas páginas en `sitemap.ts` (priority 0.4, changeFrequency: yearly)
+- ✅ Links: Explorar · Publicar · Quiénes somos · FAQ · Roadmap · Privacidad · Términos
 
 ---
 
