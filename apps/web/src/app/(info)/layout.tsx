@@ -22,6 +22,8 @@ export default function InfoLayout({ children }: { children: React.ReactNode }) 
               <Link href="/about" className="hover:text-slate-700">Quiénes somos</Link>
               <Link href="/faq" className="hover:text-slate-700">FAQ</Link>
               <Link href="/roadmap" className="hover:text-slate-700">Roadmap</Link>
+              <Link href="/privacy" className="hover:text-slate-700">Privacidad</Link>
+              <Link href="/terms" className="hover:text-slate-700">Términos</Link>
             </div>
             <p className="text-xs text-slate-400">© 2026 Cambialo</p>
           </div>

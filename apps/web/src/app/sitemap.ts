@@ -38,6 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${APP_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/roadmap`, lastModified: now, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${APP_URL}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.4 },
+    { url: `${APP_URL}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.4 },
     { url: `${APP_URL}/safe-zones`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
   ]
 

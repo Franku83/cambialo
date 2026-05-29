@@ -185,6 +185,13 @@ export default function RegisterPage() {
         Google
       </button>
 
+      <p className="text-center text-xs text-slate-500 px-4">
+        Al crear tu cuenta aceptas nuestros{' '}
+        <Link href="/terms" className="text-green-600 underline hover:text-green-700">Términos y Condiciones</Link>
+        {' '}y confirmas haber leído nuestra{' '}
+        <Link href="/privacy" className="text-green-600 underline hover:text-green-700">Política de Privacidad</Link>.
+      </p>
+
       <p className="text-center text-sm text-slate-500">
         ¿Ya tienes una cuenta?{' '}
         <Link href="/login" className="font-medium text-green-600 hover:text-green-700">
