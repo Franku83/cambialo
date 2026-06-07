@@ -165,6 +165,7 @@ model User {
   paymentEvents        PaymentEvent[]
   grantedRoles         UserRole_Assignment[] @relation("RoleGrantedBy")
   notificationPrefs    NotificationPreference?
+  whatsappClicks       WhatsappClick[]
 
   @@map("users")
 }
@@ -214,10 +215,11 @@ model Listing {
   batteryHealth   Int                @map("battery_health")               // 0-100
   condition       ListingCondition
   imeiLast4       String             @map("imei_last4")
+  imei            String?            // IMEI completo — solo visible para mods/dueño según imeiVisibility
+  imeiVisibility  String             @default("last4") @map("imei_visibility")
+  // Valores: "last4" | "full" | "hidden" — Samsung siempre se guarda como "full"
 
   // Estado del equipo
-  hasIcloudLock   Boolean            @default(false) @map("has_icloud_lock")
-  hasGoogleLock   Boolean            @default(false) @map("has_google_lock")
   hasRepairs      Boolean            @default(false) @map("has_repairs")
   repairDetails   String?            @map("repair_details")
   includesBox     Boolean            @default(false) @map("includes_box")
@@ -269,6 +271,7 @@ model Listing {
   fraudReports    FraudReport[]
   paymentEvents   PaymentEvent[]
   imeiReports     ImeiReport[]
+  whatsappClickEvents WhatsappClick[]
 
   @@index([status])
   @@index([deviceModelId])
@@ -283,6 +286,20 @@ model Listing {
   @@index([deviceModelId, status])
   @@index([status, batteryHealth])
   @@map("listings")
+}
+
+model WhatsappClick {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  listingId String   @map("listing_id") @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([listingId])
+  @@index([userId])
+  @@map("whatsapp_clicks")
 }
 
 model ListingPhoto {

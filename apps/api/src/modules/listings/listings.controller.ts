@@ -153,6 +153,15 @@ export class ListingsController {
       description?: string
       latitude?: number
       longitude?: number
+      condition?: 'mint' | 'good' | 'fair' | 'poor'
+      batteryHealth?: number
+      hasRepairs?: boolean
+      repairDetails?: string | null
+      includesBox?: boolean
+      includesCharger?: boolean
+      includesEarphones?: boolean
+      imei?: string | null
+      imeiVisibility?: 'last4' | 'full' | 'hidden' | null
     },
   ) {
     return this.listingsService.updateDraftDetails(id, user.id, body)

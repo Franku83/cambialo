@@ -1,0 +1,1 @@
+{"nodes": [{"id": "auth_dto_magic_link_dto_magiclinkdto", "label": "MagicLinkDto", "file_type": "code", "source_file": "apps/api/src/modules/auth/dto/magic-link.dto.ts", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

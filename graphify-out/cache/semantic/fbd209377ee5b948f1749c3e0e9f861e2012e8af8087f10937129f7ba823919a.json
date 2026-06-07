@@ -1,0 +1,1 @@
+{"nodes": [{"id": "device_models_devicemodelsservice_devicemodelsservice", "label": "DeviceModelsService", "file_type": "code", "source_file": "apps/api/src/modules/device-models/device-models.service.ts", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

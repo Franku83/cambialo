@@ -4,6 +4,7 @@ const LINKS = [
   { href: '/explore', label: 'Explorar' },
   { href: '/sell', label: 'Publicar' },
   { href: '/about', label: 'Quiénes somos' },
+  { href: '/verificar', label: 'Cómo verificar' },
   { href: '/faq', label: 'FAQ' },
   { href: '/roadmap', label: 'Roadmap' },
   { href: '/privacy', label: 'Privacidad' },

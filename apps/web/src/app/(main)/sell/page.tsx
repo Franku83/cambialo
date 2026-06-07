@@ -229,45 +229,59 @@ function Step1({ onNext }: { onNext: () => void }) {
 // ─── Paso 2: Condición ──────────────────────────────────────────────────────
 
 function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
-  const { step2, updateStep2 } = useSellStore()
+  const { step1, step2, updateStep2 } = useSellStore()
+  const brand = step1.brand
   const [condition, setCondition] = useState<ListingCondition | null>(
     (step2.condition as ListingCondition) ?? null,
   )
   const [battery, setBattery] = useState(step2.batteryHealth ?? 85)
   const [hasRepairs, setHasRepairs] = useState(step2.hasRepairs ?? false)
   const [repairDetails, setRepairDetails] = useState(step2.repairDetails ?? '')
-  const [hasIcloud, setHasIcloud] = useState(step2.hasIcloudLock ?? false)
-  const [hasGoogle, setHasGoogle] = useState(step2.hasGoogleLock ?? false)
+  const [imei, setImei] = useState(step2.imei ?? '')
+  const [imeiVisibility, setImeiVisibility] = useState(step2.imeiVisibility ?? 'last4')
   const [error, setError] = useState<string | null>(null)
 
   const handleNext = () => {
     if (!condition) return setError('Selecciona la condición del equipo')
     if (battery < 0 || battery > 100) return setError('La batería debe estar entre 0 y 100')
+    
+    // Validaciones de IMEI
+    if (brand === 'Samsung') {
+      if (!imei) return setError('El IMEI es obligatorio para equipos Samsung')
+      if (imei.length !== 15) return setError('El IMEI debe tener exactamente 15 dígitos')
+    }
+    if (brand === 'Apple' && imei && imei.length !== 15) {
+      return setError('El IMEI debe tener exactamente 15 dígitos')
+    }
+
     setError(null)
     updateStep2({
       condition,
       batteryHealth: battery,
       hasRepairs,
       repairDetails,
-      hasIcloudLock: hasIcloud,
-      hasGoogleLock: hasGoogle,
       includesBox: step2.includesBox ?? false,
       includesCharger: step2.includesCharger ?? false,
       includesEarphones: step2.includesEarphones ?? false,
+      imei,
+      imeiVisibility: brand === 'Samsung' ? 'full' : imeiVisibility,
     })
     onNext()
   }
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {error}
+        </div>
+      )}
+
       <div>
         <p className="mb-3 text-sm font-medium text-slate-600">
           Condición del equipo <span className="text-red-400">*</span>
         </p>
         <ConditionGuide value={condition} onChange={setCondition} />
-        {error && !condition && (
-          <p className="mt-2 text-xs text-red-400">{error}</p>
-        )}
       </div>
 
       {/* Batería */}
@@ -325,30 +339,119 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         )}
       </div>
 
-      {/* Locks */}
-      <div className="space-y-3">
-        <p className="text-sm font-medium text-slate-600">Estado de bloqueos</p>
-        {[
-          { label: 'iCloud Lock activo', hint: 'El equipo solicita Apple ID al encender', val: hasIcloud, set: setHasIcloud },
-          { label: 'Google/FRP Lock activo', hint: 'El equipo solicita cuenta Google al restablecer', val: hasGoogle, set: setHasGoogle },
-        ].map(({ label, hint, val, set }) => (
-          <div key={label} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3">
-            <div>
-              <p className="text-sm text-slate-700">{label}</p>
-              <p className="text-xs text-slate-400">{hint}</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => set(!val)}
-              className={cn(
-                'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-                val ? 'bg-red-500' : 'bg-slate-200',
-              )}
-            >
-              <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200', val ? 'translate-x-4' : 'translate-x-0')} />
-            </button>
+      {/* IMEI para Samsung */}
+      {brand === 'Samsung' && (
+        <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <label className="block text-sm font-medium text-slate-700">
+            IMEI completo <span className="text-red-400">*</span>
+          </label>
+          <input
+            type="text"
+            maxLength={15}
+            value={imei}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, '')
+              setImei(val)
+            }}
+            placeholder="15 dígitos — *#06# para encontrarlo"
+            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 px-4 font-mono text-sm text-slate-900 outline-none focus:border-green-500"
+          />
+          <p className="text-xs text-slate-400 leading-relaxed">
+            📋 El IMEI es obligatorio para equipos Samsung. Permite verificar
+            que el equipo no tiene deudas con operadoras. Solo lo verán
+            nuestros moderadores durante la revisión.
+          </p>
+        </div>
+      )}
+
+      {/* IMEI para Apple */}
+      {brand === 'Apple' && (
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-700">IMEI</label>
+            <input
+              type="text"
+              maxLength={15}
+              value={imei}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, '')
+                setImei(val)
+              }}
+              placeholder="15 dígitos — *#06# para encontrarlo"
+              className="w-full rounded-xl border border-slate-200 bg-white py-2.5 px-4 font-mono text-sm text-slate-900 outline-none focus:border-green-500"
+            />
           </div>
-        ))}
+
+          <div className="space-y-2">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              ¿Qué mostrar públicamente?
+            </label>
+            <div className="grid gap-2">
+              <label className={cn(
+                "flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors",
+                imeiVisibility === 'last4' ? "border-green-500 bg-green-50/50" : "border-slate-200 bg-white hover:border-slate-300"
+              )}>
+                <input
+                  type="radio"
+                  name="imeiVisibility"
+                  value="last4"
+                  checked={imeiVisibility === 'last4'}
+                  onChange={() => setImeiVisibility('last4')}
+                  className="mt-1 accent-green-600"
+                />
+                <div>
+                  <span className="block text-sm font-medium text-slate-900">Últimos 4 dígitos</span>
+                  <span className="block text-xs text-slate-500">Recomendado — suficiente para verificar</span>
+                </div>
+              </label>
+
+              <label className={cn(
+                "flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors",
+                imeiVisibility === 'full' ? "border-green-500 bg-green-50/50" : "border-slate-200 bg-white hover:border-slate-300"
+              )}>
+                <input
+                  type="radio"
+                  name="imeiVisibility"
+                  value="full"
+                  checked={imeiVisibility === 'full'}
+                  onChange={() => setImeiVisibility('full')}
+                  className="mt-1 accent-green-600"
+                />
+                <div>
+                  <span className="block text-sm font-medium text-slate-900">IMEI completo</span>
+                  <span className="block text-xs text-slate-500">Máxima transparencia con el comprador</span>
+                </div>
+              </label>
+
+              <label className={cn(
+                "flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors",
+                imeiVisibility === 'hidden' ? "border-green-500 bg-green-50/50" : "border-slate-200 bg-white hover:border-slate-300"
+              )}>
+                <input
+                  type="radio"
+                  name="imeiVisibility"
+                  value="hidden"
+                  checked={imeiVisibility === 'hidden'}
+                  onChange={() => setImeiVisibility('hidden')}
+                  className="mt-1 accent-green-600"
+                />
+                <div>
+                  <span className="block text-sm font-medium text-slate-900">No mostrar</span>
+                  <span className="block text-xs text-slate-500">Solo lo verán nuestros moderadores</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Nota visual donde estaban iCloud Lock y FRP Lock */}
+      <div className="info-note bg-blue-50 border border-blue-100 rounded-xl p-4">
+        <p className="text-sm text-blue-800">
+          ℹ️ <strong>Equipos desbloqueados únicamente.</strong> No se permiten
+          equipos con bloqueo de iCloud, FRP u otras restricciones de cuenta.
+          Los equipos bloqueados serán rechazados en moderación.
+        </p>
       </div>
 
       {/* Accesorios */}
@@ -453,6 +556,7 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         const supabase = createClient()
         const { data: { session } } = await supabase.auth.getSession()
         if (session) {
+          const s2 = useSellStore.getState().step2
           await fetch(`${API_URL}/api/v1/listings/${listingId}/details`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
@@ -467,6 +571,15 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
               description: step3.description || null,
               latitude: step3.latitude ?? null,
               longitude: step3.longitude ?? null,
+              condition: s2.condition,
+              batteryHealth: s2.batteryHealth,
+              hasRepairs: s2.hasRepairs,
+              repairDetails: s2.repairDetails || null,
+              includesBox: s2.includesBox,
+              includesCharger: s2.includesCharger,
+              includesEarphones: s2.includesEarphones,
+              imei: s2.imei || null,
+              imeiVisibility: s2.imeiVisibility || null,
             }),
           }).catch(() => null)
         }
@@ -1067,8 +1180,8 @@ function SellPageInner() {
         condition: string
         hasRepairs: boolean
         repairDetails: string | null
-        hasIcloudLock: boolean
-        hasGoogleLock: boolean
+        imei: string | null
+        imeiVisibility: string | null
         includesBox: boolean
         includesCharger: boolean
         includesEarphones: boolean
@@ -1094,11 +1207,11 @@ function SellPageInner() {
         batteryHealth: listing.batteryHealth,
         hasRepairs: listing.hasRepairs,
         repairDetails: listing.repairDetails ?? '',
-        hasIcloudLock: listing.hasIcloudLock,
-        hasGoogleLock: listing.hasGoogleLock,
         includesBox: listing.includesBox,
         includesCharger: listing.includesCharger,
         includesEarphones: listing.includesEarphones,
+        imei: listing.imei ?? '',
+        imeiVisibility: listing.imeiVisibility ?? 'last4',
       })
       updateStep3({
         priceUsd: Number(listing.priceUsd) > 1 ? Number(listing.priceUsd) : 0,

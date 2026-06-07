@@ -28,11 +28,11 @@ export interface Step2Data {
   batteryHealth: number
   hasRepairs: boolean
   repairDetails: string
-  hasIcloudLock: boolean
-  hasGoogleLock: boolean
   includesBox: boolean
   includesCharger: boolean
   includesEarphones: boolean
+  imei: string
+  imeiVisibility: string
 }
 
 export interface Step3Data {
@@ -78,13 +78,13 @@ interface SellState {
 }
 
 const defaultStep2: Partial<Step2Data> = {
-  hasIcloudLock: false,
-  hasGoogleLock: false,
   hasRepairs: false,
   repairDetails: '',
   includesBox: false,
   includesCharger: false,
   includesEarphones: false,
+  imei: '',
+  imeiVisibility: 'last4',
 }
 
 const defaultStep3: Partial<Step3Data> = {

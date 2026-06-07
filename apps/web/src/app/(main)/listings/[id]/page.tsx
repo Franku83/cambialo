@@ -25,7 +25,8 @@ interface DeviceModel { id: string; brand: string; modelName: string; modelNumbe
 interface ListingDetail {
   id: string; priceUsd: string; storageGb: number; color: string; batteryHealth: number
   condition: ListingCondition; verificationStatus: VerificationStatus; status: string
-  hasIcloudLock: boolean; hasGoogleLock: boolean; hasRepairs: boolean; repairDetails: string | null
+  hasRepairs: boolean; repairDetails: string | null
+  imei?: string | null; imeiVisibility?: string | null; imeiLast4?: string | null
   includesBox: boolean; includesCharger: boolean; includesEarphones: boolean
   description: string | null; acceptsOffers: boolean; minOfferUsd: string | null
   acceptsTradeIn: boolean
@@ -349,14 +350,6 @@ export default async function ListingDetailPage({ params }: Props) {
           <h2 className="font-semibold text-slate-900">Detalles del equipo</h2>
           <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-500">iCloud Lock</span>
-              <span className={listing.hasIcloudLock ? 'text-red-600 font-medium' : 'text-slate-600'}>{listing.hasIcloudLock ? '⚠ Sí' : 'No'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Google Lock</span>
-              <span className={listing.hasGoogleLock ? 'text-red-600 font-medium' : 'text-slate-600'}>{listing.hasGoogleLock ? '⚠ Sí' : 'No'}</span>
-            </div>
-            <div className="flex justify-between">
               <span className="text-slate-500">Reparaciones</span>
               <span className={listing.hasRepairs ? 'text-amber-600 font-medium' : 'text-slate-600'}>{listing.hasRepairs ? 'Sí' : 'No'}</span>
             </div>
@@ -364,7 +357,30 @@ export default async function ListingDetailPage({ params }: Props) {
               <span className="text-slate-500">Acepta ofertas</span>
               <span className="text-slate-600">{listing.acceptsOffers ? 'Sí' : 'No'}</span>
             </div>
+            <div className="flex justify-between col-span-2 sm:col-span-1">
+              <span className="text-slate-500">IMEI</span>
+              {listing.imeiVisibility === 'hidden' ? (
+                <span className="text-slate-400 text-sm">No mostrado por el vendedor</span>
+              ) : listing.imeiVisibility === 'last4' ? (
+                <span className="font-mono">···· ···· ···· {listing.imeiLast4}</span>
+              ) : (
+                <span className="font-mono">{listing.imei || '—'}</span>
+              )}
+            </div>
           </div>
+          
+          {/* Para Samsung — nota de verificación */}
+          {listing.deviceModel.brand === 'Samsung' && (
+            <div className="samsung-imei-note mt-3 bg-slate-50 border border-slate-100 rounded-xl p-3">
+              <p className="text-xs text-slate-500">
+                💡 Verifica este IMEI en{' '}
+                <a href="https://www.imei.info" target="_blank" rel="noopener noreferrer" className="text-green-600 underline font-semibold">
+                  imei.info
+                </a>
+                {' '}antes de comprar para confirmar que el equipo no tiene deudas.
+              </p>
+            </div>
+          )}
           {listing.hasRepairs && listing.repairDetails && (
             <p className="text-sm text-slate-600 border-t border-slate-100 pt-3">{listing.repairDetails}</p>
           )}

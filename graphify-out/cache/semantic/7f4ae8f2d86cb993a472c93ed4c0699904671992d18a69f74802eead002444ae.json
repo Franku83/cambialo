@@ -1,0 +1,1 @@
+{"nodes": [{"id": "database_prismaservice_prismaservice", "label": "PrismaService", "file_type": "code", "source_file": "apps/api/src/common/database/prisma.service.ts", "source_location": "PrismaService", "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

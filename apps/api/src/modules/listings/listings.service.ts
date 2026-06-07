@@ -136,20 +136,19 @@ export class ListingsService {
 
     if (!listing) throw new NotFoundException('Listing no encontrado')
 
+    const isSeller = listing.sellerId === userId
+    let isModerator = false
+    if (userId && !isSeller) {
+      const roleRecord = await this.prisma.userRole_Assignment.findFirst({
+        where: { userId, role: { in: ['moderator', 'admin', 'owner'] } },
+      })
+      isModerator = !!roleRecord
+    }
+
     // Listings no activos/verificados: solo dueño o moderador puede verlos
     const isPublic = listing.status === 'active' && listing.verificationStatus === 'verified'
-    if (!isPublic) {
-      const isSeller = listing.sellerId === userId
-      if (!isSeller) {
-        if (userId) {
-          const roleRecord = await this.prisma.userRole_Assignment.findFirst({
-            where: { userId, role: { in: ['moderator', 'admin', 'owner'] } },
-          })
-          if (!roleRecord) throw new NotFoundException('Listing no encontrado')
-        } else {
-          throw new NotFoundException('Listing no encontrado')
-        }
-      }
+    if (!isPublic && !isSeller && !isModerator) {
+      throw new NotFoundException('Listing no encontrado')
     }
 
     // Incrementar views de forma async (fire and forget)
@@ -166,7 +165,7 @@ export class ListingsService {
       isSaved = !!saved
     }
 
-    return { ...listing, isSaved }
+    return { ...this.sanitizeIMEI(listing, userId, isModerator), isSaved }
   }
 
   async getSimilar(listingId: string) {
@@ -240,8 +239,6 @@ export class ListingsService {
         batteryHealth: dto.batteryHealth,
         condition: dto.condition,
         imeiLast4: dto.imeiLast4,
-        hasIcloudLock: dto.hasIcloudLock ?? false,
-        hasGoogleLock: dto.hasGoogleLock ?? false,
         hasRepairs: dto.hasRepairs ?? false,
         ...(dto.repairDetails && { repairDetails: dto.repairDetails }),
         includesBox: dto.includesBox ?? false,
@@ -472,17 +469,30 @@ export class ListingsService {
       description?: string
       latitude?: number
       longitude?: number
+      condition?: 'mint' | 'good' | 'fair' | 'poor'
+      batteryHealth?: number
+      hasRepairs?: boolean
+      repairDetails?: string | null
+      includesBox?: boolean
+      includesCharger?: boolean
+      includesEarphones?: boolean
+      imei?: string | null
+      imeiVisibility?: 'last4' | 'full' | 'hidden' | null
     },
   ) {
     const listing = await this.prisma.listing.findUnique({
       where: { id: listingId },
-      select: { sellerId: true, status: true },
+      select: { sellerId: true, status: true, deviceModel: { select: { brand: true } } },
     })
     if (!listing) throw new NotFoundException('Listing no encontrado')
     if (listing.sellerId !== sellerId) throw new ForbiddenException()
     if (!['draft', 'pending_review'].includes(listing.status)) {
       throw new BadRequestException('Solo se pueden editar borradores')
     }
+
+    const imeiData = data.imei
+      ? this.processIMEI(data.imei, listing.deviceModel.brand, data.imeiVisibility ?? 'last4')
+      : {}
 
     return this.prisma.listing.update({
       where: { id: listingId },
@@ -497,8 +507,46 @@ export class ListingsService {
         ...(data.description !== undefined && { description: data.description }),
         ...(data.latitude !== undefined && { latitude: data.latitude }),
         ...(data.longitude !== undefined && { longitude: data.longitude }),
+        ...(data.condition !== undefined && { condition: data.condition }),
+        ...(data.batteryHealth !== undefined && { batteryHealth: data.batteryHealth }),
+        ...(data.hasRepairs !== undefined && { hasRepairs: data.hasRepairs }),
+        ...(data.repairDetails !== undefined && { repairDetails: data.repairDetails }),
+        ...(data.includesBox !== undefined && { includesBox: data.includesBox }),
+        ...(data.includesCharger !== undefined && { includesCharger: data.includesCharger }),
+        ...(data.includesEarphones !== undefined && { includesEarphones: data.includesEarphones }),
+        ...imeiData,
       },
     })
+  }
+
+  /** Samsung: IMEI completo siempre forzado a visibilidad 'full'. Apple: respeta elección del vendedor. */
+  private processIMEI(imei: string, brand: string, visibility: 'last4' | 'full' | 'hidden') {
+    const imeiLast4 = imei.slice(-4)
+    return {
+      imei,
+      imeiLast4,
+      imeiVisibility: brand === 'Samsung' ? 'full' : visibility,
+    }
+  }
+
+  /** Mods y dueño siempre ven el IMEI completo; el resto según imeiVisibility del listing. */
+  private sanitizeIMEI<T extends { imei: string | null; imeiLast4: string; imeiVisibility: string; sellerId: string }>(
+    listing: T,
+    viewerId: string | undefined,
+    isModerator: boolean,
+  ): T {
+    const isOwner = listing.sellerId === viewerId
+    if (isModerator || isOwner) return listing
+
+    switch (listing.imeiVisibility) {
+      case 'full':
+        return listing
+      case 'last4':
+        return { ...listing, imei: null }
+      case 'hidden':
+      default:
+        return { ...listing, imei: null, imeiLast4: '' }
+    }
   }
 
   async trackWhatsappClick(listingId: string) {

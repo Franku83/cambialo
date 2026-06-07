@@ -61,16 +61,6 @@ export class CreateListingDto {
   @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional()
-  hasIcloudLock?: boolean
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
-  hasGoogleLock?: boolean
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
   hasRepairs?: boolean
 
   @ApiPropertyOptional()

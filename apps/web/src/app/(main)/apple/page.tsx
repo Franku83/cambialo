@@ -18,6 +18,9 @@ interface DeviceModel {
   releaseYear: number | null
   originalStorageOptions: number[]
   imageUrl: string | null
+  minPrice?: number | null
+  avgRating?: number | null
+  activeListings?: number
 }
 
 async function getAppleModels(): Promise<DeviceModel[]> {
@@ -74,6 +77,27 @@ export default async function ApplePage() {
                 <p className="mt-0.5 text-xs text-slate-400">
                   {model.originalStorageOptions.join(' · ')}GB
                 </p>
+
+                {/* NUEVO — precio mínimo */}
+                {model.minPrice ? (
+                  <div className="model-pricing w-full mt-2 flex justify-between items-center text-xs">
+                    <span className="model-rating text-slate-500">
+                      ⭐ {model.avgRating ? model.avgRating.toFixed(1) : '—'}
+                    </span>
+                    <span className="model-price text-slate-600">
+                      Desde <strong className="text-green-600 text-sm font-bold">${model.minPrice}</strong>
+                    </span>
+                  </div>
+                ) : (
+                  <span className="model-no-listings mt-2 text-[11px] text-slate-400 block">Sin disponibles</span>
+                )}
+
+                {/* Contador de listings activos */}
+                {model.activeListings && model.activeListings > 0 ? (
+                  <span className="model-count mt-1 text-[11px] text-green-600 font-semibold block">
+                    {model.activeListings} disponible{model.activeListings !== 1 ? 's' : ''}
+                  </span>
+                ) : null}
               </Link>
             ))}
           </div>
