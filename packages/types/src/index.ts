@@ -53,8 +53,8 @@ export type Database = {
         Row: {
           id: string; seller_id: string; device_model_id: string; price_usd: number
           storage_gb: number; color: string; battery_health: number
-          condition: ListingCondition; imei_last4: string; has_icloud_lock: boolean
-          has_google_lock: boolean; has_repairs: boolean; repair_details: string | null
+          condition: ListingCondition; imei_last4: string; imei: string | null
+          imei_visibility: string; has_repairs: boolean; repair_details: string | null
           includes_box: boolean; includes_charger: boolean; includes_earphones: boolean
           description: string | null; verification_status: VerificationStatus
           verification_code: string | null; verification_expires_at: string | null
@@ -67,8 +67,8 @@ export type Database = {
         Insert: {
           id?: string; seller_id: string; device_model_id: string; price_usd: number
           storage_gb: number; color: string; battery_health: number
-          condition: ListingCondition; imei_last4: string; has_icloud_lock?: boolean
-          has_google_lock?: boolean; has_repairs?: boolean; repair_details?: string | null
+          condition: ListingCondition; imei_last4: string; imei?: string | null
+          imei_visibility?: string; has_repairs?: boolean; repair_details?: string | null
           includes_box?: boolean; includes_charger?: boolean; includes_earphones?: boolean
           description?: string | null; verification_status?: VerificationStatus
           status?: ListingStatus; is_bumped?: boolean; views_count?: number

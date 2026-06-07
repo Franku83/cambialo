@@ -549,11 +549,38 @@ export class ListingsService {
     }
   }
 
-  async trackWhatsappClick(listingId: string) {
+  async trackWhatsappClick(listingId: string, userId?: string) {
+    await this.prisma.whatsappClick
+      .create({ data: { listingId, userId: userId ?? null } })
+      .catch(() => null)
+
     await this.prisma.listing
       .update({ where: { id: listingId }, data: { whatsappClicks: { increment: 1 } } })
       .catch(() => null)
+
     return { ok: true }
+  }
+
+  async getPotentialBuyers(listingId: string, sellerId: string) {
+    const listing = await this.prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { sellerId: true },
+    })
+    if (!listing || listing.sellerId !== sellerId) throw new ForbiddenException()
+
+    const clicks = await this.prisma.whatsappClick.findMany({
+      where: { listingId, userId: { not: null } },
+      include: {
+        user: {
+          select: { id: true, username: true, avatarUrl: true, reputationScore: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      distinct: ['userId'],
+      take: 5,
+    })
+
+    return clicks.map((c) => c.user).filter((u): u is NonNullable<typeof u> => u !== null)
   }
 
   async getSafeZonesByCity(city: string) {

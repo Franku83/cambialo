@@ -17,6 +17,7 @@ import { CreateListingDto } from './dto/create-listing.dto'
 import { ListingFiltersDto } from './dto/listing-filters.dto'
 import { UpdateListingStatusDto } from './dto/update-listing-status.dto'
 import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard'
+import { OptionalAuthGuard } from '../../common/guards/optional-auth.guard'
 import { CurrentUser } from '../../common/decorators/current-user.decorator'
 
 @ApiTags('Listings')
@@ -53,6 +54,7 @@ export class ListingsController {
   }
 
   @Get(':id')
+  @UseGuards(OptionalAuthGuard)
   @ApiOperation({ summary: 'Detalle de un listing' })
   async getById(
     @Param('id') id: string,
@@ -168,10 +170,25 @@ export class ListingsController {
   }
 
   @Post(':id/whatsapp-click')
+  @UseGuards(OptionalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Registrar click en botón WhatsApp (fire-and-forget)' })
-  async trackWhatsappClick(@Param('id') id: string) {
-    return this.listingsService.trackWhatsappClick(id)
+  @ApiOperation({ summary: 'Registrar click en botón WhatsApp (fire-and-forget) — guarda userId si hay sesión' })
+  async trackWhatsappClick(
+    @Param('id') id: string,
+    @CurrentUser() user?: { id: string },
+  ) {
+    return this.listingsService.trackWhatsappClick(id, user?.id)
+  }
+
+  @Get(':id/potential-buyers')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Usuarios registrados que contactaron por WhatsApp (para sugerir al marcar vendido)' })
+  async getPotentialBuyers(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+  ) {
+    return this.listingsService.getPotentialBuyers(id, user.id)
   }
 
   @Patch(':id/cover-photo')

@@ -1368,7 +1368,7 @@
       "source_file": "apps/api/src/common/database/prisma.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_common_database_prisma_service_ts",
-      "community": 16,
+      "community": 22,
       "norm_label": "prisma.service.ts"
     },
     {
@@ -1498,6 +1498,42 @@
       "norm_label": ".extracttokenfromheader()"
     },
     {
+      "label": "optional-auth.guard.ts",
+      "file_type": "code",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L1",
+      "id": "apps_api_src_common_guards_optional_auth_guard_ts",
+      "community": 124,
+      "norm_label": "optional-auth.guard.ts"
+    },
+    {
+      "label": "OptionalAuthGuard",
+      "file_type": "code",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L12",
+      "id": "guards_optional_auth_guard_optionalauthguard",
+      "community": 124,
+      "norm_label": "optionalauthguard"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L13",
+      "id": "guards_optional_auth_guard_optionalauthguard_constructor",
+      "community": 124,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".canActivate()",
+      "file_type": "code",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L15",
+      "id": "guards_optional_auth_guard_optionalauthguard_canactivate",
+      "community": 124,
+      "norm_label": ".canactivate()"
+    },
+    {
       "label": "user-levels.ts",
       "file_type": "code",
       "source_file": "apps/api/src/common/constants/user-levels.ts",
@@ -1620,7 +1656,7 @@
       "source_file": "apps/api/src/modules/admin/moderation-queue.controller.ts",
       "source_location": "L12",
       "id": "admin_moderation_queue_controller_moderationqueuecontroller",
-      "community": 26,
+      "community": 18,
       "norm_label": "moderationqueuecontroller"
     },
     {
@@ -1638,7 +1674,7 @@
       "source_file": "apps/api/src/modules/admin/moderation-queue.controller.ts",
       "source_location": "L17",
       "id": "admin_moderation_queue_controller_moderationqueuecontroller_getqueue",
-      "community": 26,
+      "community": 18,
       "norm_label": ".getqueue()"
     },
     {
@@ -1647,7 +1683,7 @@
       "source_file": "apps/api/src/modules/admin/moderation-queue.controller.ts",
       "source_location": "L23",
       "id": "admin_moderation_queue_controller_moderationqueuecontroller_approve",
-      "community": 26,
+      "community": 18,
       "norm_label": ".approve()"
     },
     {
@@ -1656,7 +1692,7 @@
       "source_file": "apps/api/src/modules/admin/moderation-queue.controller.ts",
       "source_location": "L29",
       "id": "admin_moderation_queue_controller_moderationqueuecontroller_reject",
-      "community": 26,
+      "community": 18,
       "norm_label": ".reject()"
     },
     {
@@ -1710,7 +1746,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L19",
       "id": "admin_auto_moderation_service_automoderationservice",
-      "community": 22,
+      "community": 15,
       "norm_label": "automoderationservice"
     },
     {
@@ -1719,7 +1755,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L20",
       "id": "admin_auto_moderation_service_automoderationservice_constructor",
-      "community": 22,
+      "community": 15,
       "norm_label": ".constructor()"
     },
     {
@@ -1728,7 +1764,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L22",
       "id": "admin_auto_moderation_service_automoderationservice_checklisting",
-      "community": 22,
+      "community": 15,
       "norm_label": ".checklisting()"
     },
     {
@@ -1737,7 +1773,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L46",
       "id": "admin_auto_moderation_service_automoderationservice_checkimeiduplicate",
-      "community": 22,
+      "community": 15,
       "norm_label": ".checkimeiduplicate()"
     },
     {
@@ -1746,7 +1782,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L63",
       "id": "admin_auto_moderation_service_automoderationservice_checkpricerange",
-      "community": 22,
+      "community": 15,
       "norm_label": ".checkpricerange()"
     },
     {
@@ -1755,7 +1791,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L80",
       "id": "admin_auto_moderation_service_automoderationservice_checkprohibitedwords",
-      "community": 22,
+      "community": 15,
       "norm_label": ".checkprohibitedwords()"
     },
     {
@@ -1764,7 +1800,7 @@
       "source_file": "apps/api/src/modules/admin/auto-moderation.service.ts",
       "source_location": "L89",
       "id": "admin_auto_moderation_service_automoderationservice_applycheck",
-      "community": 22,
+      "community": 15,
       "norm_label": ".applycheck()"
     },
     {
@@ -2151,7 +2187,7 @@
       "source_file": "apps/api/src/modules/admin/moderation.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_admin_moderation_service_ts",
-      "community": 16,
+      "community": 22,
       "norm_label": "moderation.service.ts"
     },
     {
@@ -2169,7 +2205,7 @@
       "source_file": "apps/api/src/modules/admin/moderation.service.ts",
       "source_location": "L11",
       "id": "admin_moderation_service_moderationservice_constructor",
-      "community": 26,
+      "community": 22,
       "norm_label": ".constructor()"
     },
     {
@@ -2718,7 +2754,7 @@
       "source_file": "apps/api/src/modules/listings/photo.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_listings_photo_service_ts",
-      "community": 42,
+      "community": 22,
       "norm_label": "photo.service.ts"
     },
     {
@@ -2781,7 +2817,7 @@
       "source_file": "apps/api/src/modules/listings/typesense.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_listings_typesense_service_ts",
-      "community": 42,
+      "community": 22,
       "norm_label": "typesense.service.ts"
     },
     {
@@ -2844,7 +2880,7 @@
       "source_file": "apps/api/src/modules/listings/listings.module.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_listings_listings_module_ts",
-      "community": 42,
+      "community": 22,
       "norm_label": "listings.module.ts"
     },
     {
@@ -2853,8 +2889,170 @@
       "source_file": "apps/api/src/modules/listings/listings.module.ts",
       "source_location": "L19",
       "id": "listings_listings_module_listingsmodule",
-      "community": 128,
+      "community": 42,
       "norm_label": "listingsmodule"
+    },
+    {
+      "label": "listings.controller.ts",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L1",
+      "id": "apps_api_src_modules_listings_listings_controller_ts",
+      "community": 124,
+      "norm_label": "listings.controller.ts"
+    },
+    {
+      "label": "ListingsController",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L25",
+      "id": "listings_listings_controller_listingscontroller",
+      "community": 61,
+      "norm_label": "listingscontroller"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L26",
+      "id": "listings_listings_controller_listingscontroller_constructor",
+      "community": 61,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".getFeed()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L30",
+      "id": "listings_listings_controller_listingscontroller_getfeed",
+      "community": 92,
+      "norm_label": ".getfeed()"
+    },
+    {
+      "label": ".myStats()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L38",
+      "id": "listings_listings_controller_listingscontroller_mystats",
+      "community": 61,
+      "norm_label": ".mystats()"
+    },
+    {
+      "label": ".getSimilar()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L44",
+      "id": "listings_listings_controller_listingscontroller_getsimilar",
+      "community": 61,
+      "norm_label": ".getsimilar()"
+    },
+    {
+      "label": ".getSafeZones()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L50",
+      "id": "listings_listings_controller_listingscontroller_getsafezones",
+      "community": 61,
+      "norm_label": ".getsafezones()"
+    },
+    {
+      "label": ".getById()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L59",
+      "id": "listings_listings_controller_listingscontroller_getbyid",
+      "community": 61,
+      "norm_label": ".getbyid()"
+    },
+    {
+      "label": ".createDraft()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L70",
+      "id": "listings_listings_controller_listingscontroller_createdraft",
+      "community": 61,
+      "norm_label": ".createdraft()"
+    },
+    {
+      "label": ".save()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L82",
+      "id": "listings_listings_controller_listingscontroller_save",
+      "community": 61,
+      "norm_label": ".save()"
+    },
+    {
+      "label": ".unsave()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L94",
+      "id": "listings_listings_controller_listingscontroller_unsave",
+      "community": 61,
+      "norm_label": ".unsave()"
+    },
+    {
+      "label": ".markAsSold()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L106",
+      "id": "listings_listings_controller_listingscontroller_markassold",
+      "community": 61,
+      "norm_label": ".markassold()"
+    },
+    {
+      "label": ".updateStatus()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L119",
+      "id": "listings_listings_controller_listingscontroller_updatestatus",
+      "community": 124,
+      "norm_label": ".updatestatus()"
+    },
+    {
+      "label": ".deleteDraft()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L132",
+      "id": "listings_listings_controller_listingscontroller_deletedraft",
+      "community": 61,
+      "norm_label": ".deletedraft()"
+    },
+    {
+      "label": ".updateDraftDetails()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L144",
+      "id": "listings_listings_controller_listingscontroller_updatedraftdetails",
+      "community": 61,
+      "norm_label": ".updatedraftdetails()"
+    },
+    {
+      "label": ".trackWhatsappClick()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L176",
+      "id": "listings_listings_controller_listingscontroller_trackwhatsappclick",
+      "community": 61,
+      "norm_label": ".trackwhatsappclick()"
+    },
+    {
+      "label": ".getPotentialBuyers()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L187",
+      "id": "listings_listings_controller_listingscontroller_getpotentialbuyers",
+      "community": 61,
+      "norm_label": ".getpotentialbuyers()"
+    },
+    {
+      "label": ".setCoverPhoto()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L199",
+      "id": "listings_listings_controller_listingscontroller_setcoverphoto",
+      "community": 61,
+      "norm_label": ".setcoverphoto()"
     },
     {
       "label": "listings.service.ts",
@@ -2889,7 +3087,7 @@
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
       "source_location": "L34",
       "id": "listings_listings_service_listingsservice_constructor",
-      "community": 22,
+      "community": 15,
       "norm_label": ".constructor()"
     },
     {
@@ -2923,7 +3121,7 @@
       "label": ".getSimilar()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L172",
+      "source_location": "L171",
       "id": "listings_listings_service_listingsservice_getsimilar",
       "community": 34,
       "norm_label": ".getsimilar()"
@@ -2932,7 +3130,7 @@
       "label": ".createDraft()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L211",
+      "source_location": "L210",
       "id": "listings_listings_service_listingsservice_createdraft",
       "community": 124,
       "norm_label": ".createdraft()"
@@ -2941,7 +3139,7 @@
       "label": ".saveListing()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L276",
+      "source_location": "L273",
       "id": "listings_listings_service_listingsservice_savelisting",
       "community": 34,
       "norm_label": ".savelisting()"
@@ -2950,7 +3148,7 @@
       "label": ".unsaveListing()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L298",
+      "source_location": "L295",
       "id": "listings_listings_service_listingsservice_unsavelisting",
       "community": 34,
       "norm_label": ".unsavelisting()"
@@ -2959,7 +3157,7 @@
       "label": ".getMyStats()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L315",
+      "source_location": "L312",
       "id": "listings_listings_service_listingsservice_getmystats",
       "community": 34,
       "norm_label": ".getmystats()"
@@ -2968,7 +3166,7 @@
       "label": ".markAsSold()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L354",
+      "source_location": "L351",
       "id": "listings_listings_service_listingsservice_markassold",
       "community": 34,
       "norm_label": ".markassold()"
@@ -2977,7 +3175,7 @@
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L385",
+      "source_location": "L382",
       "id": "listings_listings_service_listingsservice_updatestatus",
       "community": 34,
       "norm_label": ".updatestatus()"
@@ -2986,7 +3184,7 @@
       "label": ".deleteDraft()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L445",
+      "source_location": "L442",
       "id": "listings_listings_service_listingsservice_deletedraft",
       "community": 34,
       "norm_label": ".deletedraft()"
@@ -2995,25 +3193,52 @@
       "label": ".updateDraftDetails()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L461",
+      "source_location": "L458",
       "id": "listings_listings_service_listingsservice_updatedraftdetails",
       "community": 34,
       "norm_label": ".updatedraftdetails()"
     },
     {
+      "label": ".processIMEI()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L523",
+      "id": "listings_listings_service_listingsservice_processimei",
+      "community": 34,
+      "norm_label": ".processimei()"
+    },
+    {
+      "label": ".sanitizeIMEI()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L533",
+      "id": "listings_listings_service_listingsservice_sanitizeimei",
+      "community": 34,
+      "norm_label": ".sanitizeimei()"
+    },
+    {
       "label": ".trackWhatsappClick()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L504",
+      "source_location": "L552",
       "id": "listings_listings_service_listingsservice_trackwhatsappclick",
       "community": 34,
       "norm_label": ".trackwhatsappclick()"
     },
     {
+      "label": ".getPotentialBuyers()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L564",
+      "id": "listings_listings_service_listingsservice_getpotentialbuyers",
+      "community": 34,
+      "norm_label": ".getpotentialbuyers()"
+    },
+    {
       "label": ".getSafeZonesByCity()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L511",
+      "source_location": "L586",
       "id": "listings_listings_service_listingsservice_getsafezonesbycity",
       "community": 34,
       "norm_label": ".getsafezonesbycity()"
@@ -3022,7 +3247,7 @@
       "label": ".getFeedByDistance()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L524",
+      "source_location": "L599",
       "id": "listings_listings_service_listingsservice_getfeedbydistance",
       "community": 92,
       "norm_label": ".getfeedbydistance()"
@@ -3031,7 +3256,7 @@
       "label": ".buildWhereClause()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L701",
+      "source_location": "L776",
       "id": "listings_listings_service_listingsservice_buildwhereclause",
       "community": 92,
       "norm_label": ".buildwhereclause()"
@@ -3040,190 +3265,10 @@
       "label": ".setCoverPhoto()",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
-      "source_location": "L762",
+      "source_location": "L837",
       "id": "listings_listings_service_listingsservice_setcoverphoto",
       "community": 34,
       "norm_label": ".setcoverphoto()"
-    },
-    {
-      "label": "listings.controller.ts",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L1",
-      "id": "apps_api_src_modules_listings_listings_controller_ts",
-      "community": 18,
-      "norm_label": "listings.controller.ts"
-    },
-    {
-      "label": "ListingsController",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L24",
-      "id": "listings_listings_controller_listingscontroller",
-      "community": 61,
-      "norm_label": "listingscontroller"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L25",
-      "id": "listings_listings_controller_listingscontroller_constructor",
-      "community": 61,
-      "norm_label": ".constructor()"
-    },
-    {
-      "label": ".getFeed()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L29",
-      "id": "listings_listings_controller_listingscontroller_getfeed",
-      "community": 92,
-      "norm_label": ".getfeed()"
-    },
-    {
-      "label": ".myStats()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L37",
-      "id": "listings_listings_controller_listingscontroller_mystats",
-      "community": 61,
-      "norm_label": ".mystats()"
-    },
-    {
-      "label": ".getSimilar()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L43",
-      "id": "listings_listings_controller_listingscontroller_getsimilar",
-      "community": 61,
-      "norm_label": ".getsimilar()"
-    },
-    {
-      "label": ".getSafeZones()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L49",
-      "id": "listings_listings_controller_listingscontroller_getsafezones",
-      "community": 61,
-      "norm_label": ".getsafezones()"
-    },
-    {
-      "label": ".getById()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L57",
-      "id": "listings_listings_controller_listingscontroller_getbyid",
-      "community": 61,
-      "norm_label": ".getbyid()"
-    },
-    {
-      "label": ".createDraft()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L68",
-      "id": "listings_listings_controller_listingscontroller_createdraft",
-      "community": 124,
-      "norm_label": ".createdraft()"
-    },
-    {
-      "label": ".save()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L80",
-      "id": "listings_listings_controller_listingscontroller_save",
-      "community": 61,
-      "norm_label": ".save()"
-    },
-    {
-      "label": ".unsave()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L92",
-      "id": "listings_listings_controller_listingscontroller_unsave",
-      "community": 61,
-      "norm_label": ".unsave()"
-    },
-    {
-      "label": ".markAsSold()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L104",
-      "id": "listings_listings_controller_listingscontroller_markassold",
-      "community": 61,
-      "norm_label": ".markassold()"
-    },
-    {
-      "label": ".updateStatus()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L117",
-      "id": "listings_listings_controller_listingscontroller_updatestatus",
-      "community": 18,
-      "norm_label": ".updatestatus()"
-    },
-    {
-      "label": ".deleteDraft()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L130",
-      "id": "listings_listings_controller_listingscontroller_deletedraft",
-      "community": 61,
-      "norm_label": ".deletedraft()"
-    },
-    {
-      "label": ".updateDraftDetails()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L142",
-      "id": "listings_listings_controller_listingscontroller_updatedraftdetails",
-      "community": 61,
-      "norm_label": ".updatedraftdetails()"
-    },
-    {
-      "label": ".trackWhatsappClick()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L164",
-      "id": "listings_listings_controller_listingscontroller_trackwhatsappclick",
-      "community": 61,
-      "norm_label": ".trackwhatsappclick()"
-    },
-    {
-      "label": ".setCoverPhoto()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L173",
-      "id": "listings_listings_controller_listingscontroller_setcoverphoto",
-      "community": 61,
-      "norm_label": ".setcoverphoto()"
-    },
-    {
-      "label": "create-listing.dto.ts",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
-      "source_location": "L1",
-      "id": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
-      "community": 124,
-      "norm_label": "create-listing.dto.ts"
-    },
-    {
-      "label": "ListingConditionEnum",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
-      "source_location": "L17",
-      "id": "dto_create_listing_dto_listingconditionenum",
-      "community": 124,
-      "norm_label": "listingconditionenum"
-    },
-    {
-      "label": "CreateListingDto",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
-      "source_location": "L24",
-      "id": "dto_create_listing_dto_createlistingdto",
-      "community": 124,
-      "norm_label": "createlistingdto"
     },
     {
       "label": "update-listing-status.dto.ts",
@@ -3231,7 +3276,7 @@
       "source_file": "apps/api/src/modules/listings/dto/update-listing-status.dto.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_listings_dto_update_listing_status_dto_ts",
-      "community": 18,
+      "community": 124,
       "norm_label": "update-listing-status.dto.ts"
     },
     {
@@ -3240,7 +3285,7 @@
       "source_file": "apps/api/src/modules/listings/dto/update-listing-status.dto.ts",
       "source_location": "L4",
       "id": "dto_update_listing_status_dto_updatelistingstatusdto",
-      "community": 18,
+      "community": 124,
       "norm_label": "updatelistingstatusdto"
     },
     {
@@ -3271,12 +3316,39 @@
       "norm_label": "listingfiltersdto"
     },
     {
+      "label": "create-listing.dto.ts",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
+      "source_location": "L1",
+      "id": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
+      "community": 124,
+      "norm_label": "create-listing.dto.ts"
+    },
+    {
+      "label": "ListingConditionEnum",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
+      "source_location": "L17",
+      "id": "dto_create_listing_dto_listingconditionenum",
+      "community": 124,
+      "norm_label": "listingconditionenum"
+    },
+    {
+      "label": "CreateListingDto",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
+      "source_location": "L24",
+      "id": "dto_create_listing_dto_createlistingdto",
+      "community": 124,
+      "norm_label": "createlistingdto"
+    },
+    {
       "label": "typesense-sync.worker.ts",
       "file_type": "code",
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_listings_workers_typesense_sync_worker_ts",
-      "community": 42,
+      "community": 22,
       "norm_label": "typesense-sync.worker.ts"
     },
     {
@@ -3285,7 +3357,7 @@
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L8",
       "id": "workers_typesense_sync_worker_typesensesyncworker",
-      "community": 42,
+      "community": 128,
       "norm_label": "typesensesyncworker"
     },
     {
@@ -3303,7 +3375,7 @@
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L18",
       "id": "workers_typesense_sync_worker_typesensesyncworker_process",
-      "community": 42,
+      "community": 128,
       "norm_label": ".process()"
     },
     {
@@ -3312,7 +3384,7 @@
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L33",
       "id": "workers_typesense_sync_worker_typesensesyncworker_synclisting",
-      "community": 42,
+      "community": 128,
       "norm_label": ".synclisting()"
     },
     {
@@ -3321,7 +3393,7 @@
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L71",
       "id": "workers_typesense_sync_worker_typesensesyncworker_deletelisting",
-      "community": 42,
+      "community": 128,
       "norm_label": ".deletelisting()"
     },
     {
@@ -3330,7 +3402,7 @@
       "source_file": "apps/api/src/modules/listings/workers/typesense-sync.worker.ts",
       "source_location": "L76",
       "id": "workers_typesense_sync_worker_typesensesyncworker_checkimei",
-      "community": 42,
+      "community": 128,
       "norm_label": ".checkimei()"
     },
     {
@@ -3348,7 +3420,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.controller.ts",
       "source_location": "L18",
       "id": "notifications_notifications_controller_notificationscontroller",
-      "community": 16,
+      "community": 12,
       "norm_label": "notificationscontroller"
     },
     {
@@ -3357,7 +3429,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.controller.ts",
       "source_location": "L19",
       "id": "notifications_notifications_controller_notificationscontroller_constructor",
-      "community": 16,
+      "community": 12,
       "norm_label": ".constructor()"
     },
     {
@@ -3366,7 +3438,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.controller.ts",
       "source_location": "L22",
       "id": "notifications_notifications_controller_notificationscontroller_findall",
-      "community": 16,
+      "community": 12,
       "norm_label": ".findall()"
     },
     {
@@ -3375,7 +3447,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.controller.ts",
       "source_location": "L31",
       "id": "notifications_notifications_controller_notificationscontroller_markasread",
-      "community": 16,
+      "community": 12,
       "norm_label": ".markasread()"
     },
     {
@@ -3384,7 +3456,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.controller.ts",
       "source_location": "L39",
       "id": "notifications_notifications_controller_notificationscontroller_markallasread",
-      "community": 16,
+      "community": 12,
       "norm_label": ".markallasread()"
     },
     {
@@ -3393,7 +3465,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.module.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_notifications_notifications_module_ts",
-      "community": 16,
+      "community": 12,
       "norm_label": "notifications.module.ts"
     },
     {
@@ -3402,7 +3474,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.module.ts",
       "source_location": "L11",
       "id": "notifications_notifications_module_notificationsmodule",
-      "community": 16,
+      "community": 12,
       "norm_label": "notificationsmodule"
     },
     {
@@ -3411,7 +3483,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_notifications_notifications_service_ts",
-      "community": 16,
+      "community": 22,
       "norm_label": "notifications.service.ts"
     },
     {
@@ -3420,7 +3492,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L5",
       "id": "notifications_notifications_service_notificationsservice",
-      "community": 16,
+      "community": 22,
       "norm_label": "notificationsservice"
     },
     {
@@ -3438,7 +3510,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L8",
       "id": "notifications_notifications_service_notificationsservice_findall",
-      "community": 16,
+      "community": 22,
       "norm_label": ".findall()"
     },
     {
@@ -3447,7 +3519,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L35",
       "id": "notifications_notifications_service_notificationsservice_markasread",
-      "community": 16,
+      "community": 22,
       "norm_label": ".markasread()"
     },
     {
@@ -3456,7 +3528,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L50",
       "id": "notifications_notifications_service_notificationsservice_markallasread",
-      "community": 16,
+      "community": 22,
       "norm_label": ".markallasread()"
     },
     {
@@ -3465,7 +3537,7 @@
       "source_file": "apps/api/src/modules/notifications/notifications.service.ts",
       "source_location": "L57",
       "id": "notifications_notifications_service_notificationsservice_createnotification",
-      "community": 16,
+      "community": 22,
       "norm_label": ".createnotification()"
     },
     {
@@ -3645,7 +3717,7 @@
       "source_file": "apps/api/src/modules/reviews/reviews.service.ts",
       "source_location": "L7",
       "id": "reviews_reviews_service_reviewsservice_constructor",
-      "community": 24,
+      "community": 22,
       "norm_label": ".constructor()"
     },
     {
@@ -4140,7 +4212,7 @@
       "source_file": "apps/api/src/modules/verification/verification.module.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_verification_verification_module_ts",
-      "community": 16,
+      "community": 12,
       "norm_label": "verification.module.ts"
     },
     {
@@ -4158,7 +4230,7 @@
       "source_file": "apps/api/src/modules/verification/verification.service.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_verification_verification_service_ts",
-      "community": 16,
+      "community": 22,
       "norm_label": "verification.service.ts"
     },
     {
@@ -4239,7 +4311,7 @@
       "source_file": "apps/api/src/modules/verification/workers/verification.worker.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_verification_workers_verification_worker_ts",
-      "community": 16,
+      "community": 22,
       "norm_label": "verification.worker.ts"
     },
     {
@@ -4248,7 +4320,7 @@
       "source_file": "apps/api/src/modules/verification/workers/verification.worker.ts",
       "source_location": "L8",
       "id": "workers_verification_worker_verificationworker",
-      "community": 16,
+      "community": 22,
       "norm_label": "verificationworker"
     },
     {
@@ -4257,7 +4329,7 @@
       "source_file": "apps/api/src/modules/verification/workers/verification.worker.ts",
       "source_location": "L11",
       "id": "workers_verification_worker_verificationworker_constructor",
-      "community": 16,
+      "community": 22,
       "norm_label": ".constructor()"
     },
     {
@@ -4266,7 +4338,7 @@
       "source_file": "apps/api/src/modules/verification/workers/verification.worker.ts",
       "source_location": "L18",
       "id": "workers_verification_worker_verificationworker_process",
-      "community": 16,
+      "community": 22,
       "norm_label": ".process()"
     },
     {
@@ -4275,7 +4347,7 @@
       "source_file": "apps/api/src/modules/verification/workers/verification.worker.ts",
       "source_location": "L24",
       "id": "workers_verification_worker_verificationworker_autocheck",
-      "community": 16,
+      "community": 22,
       "norm_label": ".autocheck()"
     },
     {
@@ -4338,7 +4410,7 @@
       "source_file": "apps/api/src/modules/fraud-reports/fraud-reports.controller.ts",
       "source_location": "L1",
       "id": "apps_api_src_modules_fraud_reports_fraud_reports_controller_ts",
-      "community": 36,
+      "community": 18,
       "norm_label": "fraud-reports.controller.ts"
     },
     {
@@ -4347,7 +4419,7 @@
       "source_file": "apps/api/src/modules/fraud-reports/fraud-reports.controller.ts",
       "source_location": "L8",
       "id": "fraud_reports_fraud_reports_controller_createfraudreportdto",
-      "community": 36,
+      "community": 18,
       "norm_label": "createfraudreportdto"
     },
     {
@@ -4356,7 +4428,7 @@
       "source_file": "apps/api/src/modules/fraud-reports/fraud-reports.controller.ts",
       "source_location": "L15",
       "id": "fraud_reports_fraud_reports_controller_updatefraudreportdto",
-      "community": 36,
+      "community": 18,
       "norm_label": "updatefraudreportdto"
     },
     {
@@ -4554,7 +4626,7 @@
       "source_file": "apps/api/src/modules/search-alerts/search-alerts.module.ts",
       "source_location": "L10",
       "id": "search_alerts_search_alerts_module_searchalertsmodule",
-      "community": 12,
+      "community": 25,
       "norm_label": "searchalertsmodule"
     },
     {
@@ -4594,6 +4666,42 @@
       "norm_label": "devicemodelsmodule"
     },
     {
+      "label": "device-models.controller.ts",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L1",
+      "id": "apps_api_src_modules_device_models_device_models_controller_ts",
+      "community": 51,
+      "norm_label": "device-models.controller.ts"
+    },
+    {
+      "label": "DeviceModelsController",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L5",
+      "id": "device_models_device_models_controller_devicemodelscontroller",
+      "community": 51,
+      "norm_label": "devicemodelscontroller"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L6",
+      "id": "device_models_device_models_controller_devicemodelscontroller_constructor",
+      "community": 51,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".search()",
+      "file_type": "code",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L9",
+      "id": "device_models_device_models_controller_devicemodelscontroller_search",
+      "community": 51,
+      "norm_label": ".search()"
+    },
+    {
       "label": "device-models.service.ts",
       "file_type": "code",
       "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
@@ -4630,40 +4738,13 @@
       "norm_label": ".search()"
     },
     {
-      "label": "device-models.controller.ts",
+      "label": ".attachModelStats()",
       "file_type": "code",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L1",
-      "id": "apps_api_src_modules_device_models_device_models_controller_ts",
+      "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
+      "source_location": "L43",
+      "id": "device_models_device_models_service_devicemodelsservice_attachmodelstats",
       "community": 51,
-      "norm_label": "device-models.controller.ts"
-    },
-    {
-      "label": "DeviceModelsController",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L5",
-      "id": "device_models_device_models_controller_devicemodelscontroller",
-      "community": 51,
-      "norm_label": "devicemodelscontroller"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L6",
-      "id": "device_models_device_models_controller_devicemodelscontroller_constructor",
-      "community": 51,
-      "norm_label": ".constructor()"
-    },
-    {
-      "label": ".search()",
-      "file_type": "code",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L9",
-      "id": "device_models_device_models_controller_devicemodelscontroller_search",
-      "community": 51,
-      "norm_label": ".search()"
+      "norm_label": ".attachmodelstats()"
     },
     {
       "label": "price-index.module.ts",
@@ -5845,6 +5926,15 @@
       "norm_label": "swe-worker-5c72df51bb1f6ee0.js"
     },
     {
+      "label": "sw.js",
+      "file_type": "code",
+      "source_file": "apps/web/public/sw.js",
+      "source_location": "L1",
+      "id": "apps_web_public_sw_js",
+      "community": 112,
+      "norm_label": "sw.js"
+    },
+    {
       "label": "workbox-8266a8c5.js",
       "file_type": "code",
       "source_file": "apps/web/public/workbox-8266a8c5.js",
@@ -6646,15 +6736,6 @@
       "norm_label": "st()"
     },
     {
-      "label": "sw.js",
-      "file_type": "code",
-      "source_file": "apps/web/public/sw.js",
-      "source_location": "L1",
-      "id": "apps_web_public_sw_js",
-      "community": 112,
-      "norm_label": "sw.js"
-    },
-    {
       "label": "middleware.ts",
       "file_type": "code",
       "source_file": "apps/web/src/middleware.ts",
@@ -6705,7 +6786,7 @@
       "source_file": "apps/web/src/app/error.tsx",
       "source_location": "L1",
       "id": "apps_web_src_app_error_tsx",
-      "community": 127,
+      "community": 40,
       "norm_label": "error.tsx"
     },
     {
@@ -6714,7 +6795,7 @@
       "source_file": "apps/web/src/app/error.tsx",
       "source_location": "L5",
       "id": "app_error_globalerror",
-      "community": 127,
+      "community": 40,
       "norm_label": "globalerror()"
     },
     {
@@ -7270,7 +7351,7 @@
       "label": "SimilarListing",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "id": "id_page_similarlisting",
       "community": 3,
       "norm_label": "similarlisting"
@@ -7279,7 +7360,7 @@
       "label": "getListing()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L43",
+      "source_location": "L44",
       "id": "id_page_getlisting",
       "community": 3,
       "norm_label": "getlisting()"
@@ -7288,7 +7369,7 @@
       "label": "getSimilar()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L51",
+      "source_location": "L52",
       "id": "id_page_getsimilar",
       "community": 3,
       "norm_label": "getsimilar()"
@@ -7297,7 +7378,7 @@
       "label": "getSafeZones()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L59",
+      "source_location": "L60",
       "id": "id_page_getsafezones",
       "community": 3,
       "norm_label": "getsafezones()"
@@ -7306,7 +7387,7 @@
       "label": "Props",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L67",
+      "source_location": "L68",
       "id": "id_page_props",
       "community": 3,
       "norm_label": "props"
@@ -7315,7 +7396,7 @@
       "label": "generateMetadata()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L69",
+      "source_location": "L70",
       "id": "id_page_generatemetadata",
       "community": 3,
       "norm_label": "generatemetadata()"
@@ -7324,7 +7405,7 @@
       "label": "CONDITION_LABEL",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L93",
+      "source_location": "L94",
       "id": "id_page_condition_label",
       "community": 3,
       "norm_label": "condition_label"
@@ -7333,7 +7414,7 @@
       "label": "CONDITION_CLS",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L96",
+      "source_location": "L97",
       "id": "id_page_condition_cls",
       "community": 3,
       "norm_label": "condition_cls"
@@ -7342,7 +7423,7 @@
       "label": "SAFE_ZONE_TYPE",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L102",
+      "source_location": "L103",
       "id": "id_page_safe_zone_type",
       "community": 3,
       "norm_label": "safe_zone_type"
@@ -7351,7 +7432,7 @@
       "label": "BatteryGauge()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L106",
+      "source_location": "L107",
       "id": "id_page_batterygauge",
       "community": 3,
       "norm_label": "batterygauge()"
@@ -7360,7 +7441,7 @@
       "label": "hasAnyPaymentMethod()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L124",
+      "source_location": "L125",
       "id": "id_page_hasanypaymentmethod",
       "community": 3,
       "norm_label": "hasanypaymentmethod()"
@@ -7369,7 +7450,7 @@
       "label": "ListingDetailPage()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/listings/[id]/page.tsx",
-      "source_location": "L135",
+      "source_location": "L136",
       "id": "id_page_listingdetailpage",
       "community": 3,
       "norm_label": "listingdetailpage()"
@@ -7702,7 +7783,7 @@
       "label": "MarketContext",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L389",
+      "source_location": "L492",
       "id": "sell_page_marketcontext",
       "community": 4,
       "norm_label": "marketcontext"
@@ -7711,7 +7792,7 @@
       "label": "getPriceColor()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L396",
+      "source_location": "L499",
       "id": "sell_page_getpricecolor",
       "community": 4,
       "norm_label": "getpricecolor()"
@@ -7720,7 +7801,7 @@
       "label": "getPriceLabel()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L401",
+      "source_location": "L504",
       "id": "sell_page_getpricelabel",
       "community": 4,
       "norm_label": "getpricelabel()"
@@ -7729,7 +7810,7 @@
       "label": "Step3()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L407",
+      "source_location": "L510",
       "id": "sell_page_step3",
       "community": 4,
       "norm_label": "step3()"
@@ -7738,7 +7819,7 @@
       "label": "Step4()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L647",
+      "source_location": "L760",
       "id": "sell_page_step4",
       "community": 4,
       "norm_label": "step4()"
@@ -7747,16 +7828,16 @@
       "label": "Step5()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L909",
+      "source_location": "L1022",
       "id": "sell_page_step5",
-      "community": 4,
+      "community": 23,
       "norm_label": "step5()"
     },
     {
       "label": "SellPageInner()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L1040",
+      "source_location": "L1153",
       "id": "sell_page_sellpageinner",
       "community": 4,
       "norm_label": "sellpageinner()"
@@ -7765,7 +7846,7 @@
       "label": "SellPage()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/sell/page.tsx",
-      "source_location": "L1240",
+      "source_location": "L1353",
       "id": "sell_page_sellpage",
       "community": 4,
       "norm_label": "sellpage()"
@@ -7866,7 +7947,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L1",
       "id": "apps_web_src_app_main_admin_users_page_tsx",
-      "community": 67,
+      "community": 23,
       "norm_label": "page.tsx"
     },
     {
@@ -7875,7 +7956,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L12",
       "id": "users_page_userrole",
-      "community": 67,
+      "community": 23,
       "norm_label": "userrole"
     },
     {
@@ -7884,7 +7965,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L14",
       "id": "users_page_userrecord",
-      "community": 67,
+      "community": 23,
       "norm_label": "userrecord"
     },
     {
@@ -7893,7 +7974,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L26",
       "id": "users_page_role_meta",
-      "community": 67,
+      "community": 23,
       "norm_label": "role_meta"
     },
     {
@@ -7902,7 +7983,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L33",
       "id": "users_page_assignable_roles",
-      "community": 67,
+      "community": 23,
       "norm_label": "assignable_roles"
     },
     {
@@ -7911,7 +7992,7 @@
       "source_file": "apps/web/src/app/(main)/admin/users/page.tsx",
       "source_location": "L35",
       "id": "users_page_adminuserspage",
-      "community": 67,
+      "community": 23,
       "norm_label": "adminuserspage()"
     },
     {
@@ -8107,7 +8188,7 @@
       "label": "getAppleModels()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/apple/page.tsx",
-      "source_location": "L23",
+      "source_location": "L26",
       "id": "apple_page_getapplemodels",
       "community": 8,
       "norm_label": "getapplemodels()"
@@ -8116,7 +8197,7 @@
       "label": "ApplePage()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/apple/page.tsx",
-      "source_location": "L33",
+      "source_location": "L36",
       "id": "apple_page_applepage",
       "community": 8,
       "norm_label": "applepage()"
@@ -8197,7 +8278,7 @@
       "label": "getSamsungModels()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/samsung/page.tsx",
-      "source_location": "L23",
+      "source_location": "L26",
       "id": "samsung_page_getsamsungmodels",
       "community": 8,
       "norm_label": "getsamsungmodels()"
@@ -8206,7 +8287,7 @@
       "label": "getSerie()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/samsung/page.tsx",
-      "source_location": "L33",
+      "source_location": "L36",
       "id": "samsung_page_getserie",
       "community": 8,
       "norm_label": "getserie()"
@@ -8215,7 +8296,7 @@
       "label": "SamsungPage()",
       "file_type": "code",
       "source_file": "apps/web/src/app/(main)/samsung/page.tsx",
-      "source_location": "L40",
+      "source_location": "L43",
       "id": "samsung_page_samsungpage",
       "community": 8,
       "norm_label": "samsungpage()"
@@ -8586,7 +8667,7 @@
       "source_file": "apps/web/src/app/(info)/faq/page.tsx",
       "source_location": "L1",
       "id": "apps_web_src_app_info_faq_page_tsx",
-      "community": 15,
+      "community": 28,
       "norm_label": "page.tsx"
     },
     {
@@ -8595,7 +8676,7 @@
       "source_file": "apps/web/src/app/(info)/faq/page.tsx",
       "source_location": "L7",
       "id": "faq_page_faqs",
-      "community": 15,
+      "community": 28,
       "norm_label": "faqs"
     },
     {
@@ -8604,7 +8685,7 @@
       "source_file": "apps/web/src/app/(info)/faq/page.tsx",
       "source_location": "L38",
       "id": "faq_page_faqitem",
-      "community": 15,
+      "community": 28,
       "norm_label": "faqitem()"
     },
     {
@@ -8613,7 +8694,7 @@
       "source_file": "apps/web/src/app/(info)/faq/page.tsx",
       "source_location": "L62",
       "id": "faq_page_faqpage",
-      "community": 15,
+      "community": 28,
       "norm_label": "faqpage()"
     },
     {
@@ -8768,6 +8849,78 @@
       "id": "terms_page_termspage",
       "community": 131,
       "norm_label": "termspage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L1",
+      "id": "apps_web_src_app_info_verificar_page_tsx",
+      "community": 67,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L4",
+      "id": "verificar_page_metadata",
+      "community": 67,
+      "norm_label": "metadata"
+    },
+    {
+      "label": "GuideSectionProps",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L10",
+      "id": "verificar_page_guidesectionprops",
+      "community": 67,
+      "norm_label": "guidesectionprops"
+    },
+    {
+      "label": "GuideSection()",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L18",
+      "id": "verificar_page_guidesection",
+      "community": 67,
+      "norm_label": "guidesection()"
+    },
+    {
+      "label": "StepList()",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L43",
+      "id": "verificar_page_steplist",
+      "community": 67,
+      "norm_label": "steplist()"
+    },
+    {
+      "label": "AlertBox()",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L58",
+      "id": "verificar_page_alertbox",
+      "community": 67,
+      "norm_label": "alertbox()"
+    },
+    {
+      "label": "AlertList()",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L72",
+      "id": "verificar_page_alertlist",
+      "community": 67,
+      "norm_label": "alertlist()"
+    },
+    {
+      "label": "VerificarPage()",
+      "file_type": "code",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L85",
+      "id": "verificar_page_verificarpage",
+      "community": 67,
+      "norm_label": "verificarpage()"
     },
     {
       "label": "providers.tsx",
@@ -9117,7 +9270,7 @@
       "source_file": "apps/web/src/components/listings/TradeInSimulator.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_listings_tradeinsimulator_tsx",
-      "community": 3,
+      "community": 127,
       "norm_label": "tradeinsimulator.tsx"
     },
     {
@@ -9126,7 +9279,7 @@
       "source_file": "apps/web/src/components/listings/TradeInSimulator.tsx",
       "source_location": "L9",
       "id": "listings_tradeinsimulator_props",
-      "community": 3,
+      "community": 127,
       "norm_label": "props"
     },
     {
@@ -9135,7 +9288,7 @@
       "source_file": "apps/web/src/components/listings/TradeInSimulator.tsx",
       "source_location": "L15",
       "id": "listings_tradeinsimulator_condition_mult",
-      "community": 3,
+      "community": 127,
       "norm_label": "condition_mult"
     },
     {
@@ -9144,7 +9297,7 @@
       "source_file": "apps/web/src/components/listings/TradeInSimulator.tsx",
       "source_location": "L19",
       "id": "listings_tradeinsimulator_brands_opts",
-      "community": 3,
+      "community": 127,
       "norm_label": "brands_opts"
     },
     {
@@ -9153,7 +9306,7 @@
       "source_file": "apps/web/src/components/listings/TradeInSimulator.tsx",
       "source_location": "L20",
       "id": "listings_tradeinsimulator_storage_opts",
-      "community": 3,
+      "community": 127,
       "norm_label": "storage_opts"
     },
     {
@@ -9191,42 +9344,6 @@
       "id": "listings_whatsappbutton_whatsappbutton",
       "community": 3,
       "norm_label": "whatsappbutton()"
-    },
-    {
-      "label": "MarkSoldModal.tsx",
-      "file_type": "code",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L1",
-      "id": "apps_web_src_components_listings_marksoldmodal_tsx",
-      "community": 23,
-      "norm_label": "marksoldmodal.tsx"
-    },
-    {
-      "label": "UserResult",
-      "file_type": "code",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L8",
-      "id": "listings_marksoldmodal_userresult",
-      "community": 23,
-      "norm_label": "userresult"
-    },
-    {
-      "label": "Props",
-      "file_type": "code",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L15",
-      "id": "listings_marksoldmodal_props",
-      "community": 23,
-      "norm_label": "props"
-    },
-    {
-      "label": "MarkSoldModal()",
-      "file_type": "code",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L23",
-      "id": "listings_marksoldmodal_marksoldmodal",
-      "community": 23,
-      "norm_label": "marksoldmodal()"
     },
     {
       "label": "ListingCard.tsx",
@@ -9463,6 +9580,42 @@
       "norm_label": "locationpicker()"
     },
     {
+      "label": "MarkSoldModal.tsx",
+      "file_type": "code",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L1",
+      "id": "apps_web_src_components_listings_marksoldmodal_tsx",
+      "community": 23,
+      "norm_label": "marksoldmodal.tsx"
+    },
+    {
+      "label": "UserResult",
+      "file_type": "code",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L8",
+      "id": "listings_marksoldmodal_userresult",
+      "community": 23,
+      "norm_label": "userresult"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L16",
+      "id": "listings_marksoldmodal_props",
+      "community": 23,
+      "norm_label": "props"
+    },
+    {
+      "label": "MarkSoldModal()",
+      "file_type": "code",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L24",
+      "id": "listings_marksoldmodal_marksoldmodal",
+      "community": 23,
+      "norm_label": "marksoldmodal()"
+    },
+    {
       "label": "NotificationBell.tsx",
       "file_type": "code",
       "source_file": "apps/web/src/components/notifications/NotificationBell.tsx",
@@ -9549,7 +9702,7 @@
       "source_file": "apps/web/src/components/sell/AccessoriesChecklist.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_sell_accessorieschecklist_tsx",
-      "community": 23,
+      "community": 4,
       "norm_label": "accessorieschecklist.tsx"
     },
     {
@@ -9558,7 +9711,7 @@
       "source_file": "apps/web/src/components/sell/AccessoriesChecklist.tsx",
       "source_location": "L6",
       "id": "sell_accessorieschecklist_accessorieschecklistprops",
-      "community": 23,
+      "community": 4,
       "norm_label": "accessorieschecklistprops"
     },
     {
@@ -9567,7 +9720,7 @@
       "source_file": "apps/web/src/components/sell/AccessoriesChecklist.tsx",
       "source_location": "L15",
       "id": "sell_accessorieschecklist_accessorieschecklist",
-      "community": 23,
+      "community": 4,
       "norm_label": "accessorieschecklist()"
     },
     {
@@ -9576,7 +9729,7 @@
       "source_file": "apps/web/src/components/sell/ConditionGuide.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_sell_conditionguide_tsx",
-      "community": 59,
+      "community": 4,
       "norm_label": "conditionguide.tsx"
     },
     {
@@ -9585,7 +9738,7 @@
       "source_file": "apps/web/src/components/sell/ConditionGuide.tsx",
       "source_location": "L6",
       "id": "sell_conditionguide_conditionguideprops",
-      "community": 59,
+      "community": 4,
       "norm_label": "conditionguideprops"
     },
     {
@@ -9594,7 +9747,7 @@
       "source_file": "apps/web/src/components/sell/ConditionGuide.tsx",
       "source_location": "L11",
       "id": "sell_conditionguide_conditions",
-      "community": 59,
+      "community": 4,
       "norm_label": "conditions"
     },
     {
@@ -9612,7 +9765,7 @@
       "source_file": "apps/web/src/components/sell/PhotoUploader.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_sell_photouploader_tsx",
-      "community": 28,
+      "community": 4,
       "norm_label": "photouploader.tsx"
     },
     {
@@ -9621,7 +9774,7 @@
       "source_file": "apps/web/src/components/sell/PhotoUploader.tsx",
       "source_location": "L13",
       "id": "sell_photouploader_photouploaderprops",
-      "community": 28,
+      "community": 4,
       "norm_label": "photouploaderprops"
     },
     {
@@ -9630,7 +9783,7 @@
       "source_file": "apps/web/src/components/sell/PhotoUploader.tsx",
       "source_location": "L27",
       "id": "sell_photouploader_compressimage",
-      "community": 28,
+      "community": 4,
       "norm_label": "compressimage()"
     },
     {
@@ -9639,7 +9792,7 @@
       "source_file": "apps/web/src/components/sell/PhotoUploader.tsx",
       "source_location": "L54",
       "id": "sell_photouploader_photouploader",
-      "community": 28,
+      "community": 4,
       "norm_label": "photouploader()"
     },
     {
@@ -9891,7 +10044,7 @@
       "source_file": "apps/web/src/components/search-alerts/SearchAlertForm.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_search_alerts_searchalertform_tsx",
-      "community": 40,
+      "community": 6,
       "norm_label": "searchalertform.tsx"
     },
     {
@@ -9900,7 +10053,7 @@
       "source_file": "apps/web/src/components/search-alerts/SearchAlertForm.tsx",
       "source_location": "L10",
       "id": "search_alerts_searchalertform_schema",
-      "community": 40,
+      "community": 6,
       "norm_label": "schema"
     },
     {
@@ -9909,7 +10062,7 @@
       "source_file": "apps/web/src/components/search-alerts/SearchAlertForm.tsx",
       "source_location": "L18",
       "id": "search_alerts_searchalertform_formdata",
-      "community": 40,
+      "community": 6,
       "norm_label": "formdata"
     },
     {
@@ -9918,7 +10071,7 @@
       "source_file": "apps/web/src/components/search-alerts/SearchAlertForm.tsx",
       "source_location": "L20",
       "id": "search_alerts_searchalertform_searchalertform",
-      "community": 40,
+      "community": 6,
       "norm_label": "searchalertform()"
     },
     {
@@ -9997,7 +10150,7 @@
       "label": "Footer()",
       "file_type": "code",
       "source_file": "apps/web/src/components/layout/Footer.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "id": "layout_footer_footer",
       "community": 17,
       "norm_label": "footer()"
@@ -10008,7 +10161,7 @@
       "source_file": "apps/web/src/components/brand/ModelListings.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_brand_modellistings_tsx",
-      "community": 8,
+      "community": 28,
       "norm_label": "modellistings.tsx"
     },
     {
@@ -10017,7 +10170,7 @@
       "source_file": "apps/web/src/components/brand/ModelListings.tsx",
       "source_location": "L10",
       "id": "brand_modellistings_listing",
-      "community": 8,
+      "community": 28,
       "norm_label": "listing"
     },
     {
@@ -10026,7 +10179,7 @@
       "source_file": "apps/web/src/components/brand/ModelListings.tsx",
       "source_location": "L22",
       "id": "brand_modellistings_condition_labels",
-      "community": 8,
+      "community": 28,
       "norm_label": "condition_labels"
     },
     {
@@ -10035,7 +10188,7 @@
       "source_file": "apps/web/src/components/brand/ModelListings.tsx",
       "source_location": "L26",
       "id": "brand_modellistings_props",
-      "community": 8,
+      "community": 28,
       "norm_label": "props"
     },
     {
@@ -10044,7 +10197,7 @@
       "source_file": "apps/web/src/components/brand/ModelListings.tsx",
       "source_location": "L32",
       "id": "brand_modellistings_modellistings",
-      "community": 8,
+      "community": 28,
       "norm_label": "modellistings()"
     },
     {
@@ -10152,7 +10305,7 @@
       "source_file": "apps/web/src/components/ui/ErrorBoundary.tsx",
       "source_location": "L1",
       "id": "apps_web_src_components_ui_errorboundary_tsx",
-      "community": 127,
+      "community": 40,
       "norm_label": "errorboundary.tsx"
     },
     {
@@ -10161,7 +10314,7 @@
       "source_file": "apps/web/src/components/ui/ErrorBoundary.tsx",
       "source_location": "L5",
       "id": "ui_errorboundary_errorboundary",
-      "community": 127,
+      "community": 40,
       "norm_label": "errorboundary()"
     },
     {
@@ -12690,7 +12843,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 128,
+      "community": 42,
       "norm_label": "bullmq queue listings",
       "id": "concept_bullmq_queue"
     },
@@ -12781,7 +12934,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 128,
+      "community": 42,
       "norm_label": "typesensesyncworker",
       "id": "listings_workers_typesense_sync_worker_typesencsyncworker"
     },
@@ -12794,7 +12947,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 128,
+      "community": 42,
       "norm_label": "imei duplicate fraud detection",
       "id": "concept_imei_fraud_detection"
     },
@@ -14575,7 +14728,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 11,
       "norm_label": "listingwithdetails",
       "id": "packages_types_listingwithdetails"
     },
@@ -14588,7 +14741,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 11,
       "norm_label": "listingfilters",
       "id": "packages_types_listingfilters"
     },
@@ -14601,7 +14754,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 11,
       "norm_label": "publicprofile",
       "id": "packages_types_publicprofile"
     },
@@ -14614,7 +14767,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 11,
       "norm_label": "domain enums",
       "id": "packages_types_enums"
     },
@@ -14718,7 +14871,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 9,
       "norm_label": "sprint 6.3 geolocation task",
       "id": "agent_sprint63_task_geolocation"
     },
@@ -18071,6 +18224,58 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "apps_api_src_common_guards_optional_auth_guard_ts",
+      "target": "guards_optional_auth_guard_optionalauthguard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "apps_api_src_common_guards_optional_auth_guard_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "guards_optional_auth_guard_optionalauthguard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "guards_optional_auth_guard_optionalauthguard",
+      "target": "guards_optional_auth_guard_optionalauthguard_canactivate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/common/guards/optional-auth.guard.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "guards_optional_auth_guard_optionalauthguard",
+      "target": "guards_optional_auth_guard_optionalauthguard_constructor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "apps/api/src/common/constants/user-levels.ts",
       "source_location": "L7",
       "weight": 1.0,
@@ -20817,11 +21022,353 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "apps_api_src_modules_listings_dto_create_listing_dto_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "apps_api_src_modules_listings_dto_listing_filters_dto_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "apps_api_src_modules_listings_dto_update_listing_status_dto_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "apps_api_src_modules_listings_listings_controller_ts",
       "target": "apps_api_src_modules_listings_listings_service_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "dto_create_listing_dto_createlistingdto"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "dto_listing_filters_dto_listingfiltersdto"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "dto_update_listing_status_dto_updatelistingstatusdto"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "listings_listings_controller_listingscontroller"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_listings_controller_ts",
+      "target": "listings_listings_service_listingsservice"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_dto_create_listing_dto_createlistingdto"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_dto_listing_filters_dto_listingfiltersdto"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_dto_update_listing_status_dto_updatelistingstatusdto"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_constructor"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_createdraft"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L130",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_deletedraft"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_getbyid"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_getfeed"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_getpotentialbuyers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_getsafezones"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_getsimilar"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_markassold"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_mystats"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_save"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_setcoverphoto"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_trackwhatsappclick"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_unsave"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L142",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_updatedraftdetails"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_controller_listingscontroller_updatestatus"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "listings_listings_controller_listingscontroller",
+      "target": "listings_listings_service_listingsservice"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller_constructor",
+      "target": "listings_listings_service_listingsservice"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller_getfeed",
+      "target": "dto_listing_filters_dto_listingfiltersdto"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller_getsafezones",
+      "target": "listings_listings_controller_listingscontroller_getbyid"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller_createdraft",
+      "target": "dto_create_listing_dto_createlistingdto"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "listings_listings_controller_listingscontroller_updatestatus",
+      "target": "dto_update_listing_status_dto_updatelistingstatusdto"
     },
     {
       "relation": "imports_from",
@@ -20886,38 +21433,6 @@
       "confidence_score": 1.0,
       "source": "apps_api_src_modules_listings_listings_service_ts",
       "target": "listings_listings_service_public_seller_select"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "listings_listings_service_listingsservice"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_service_listingsservice"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller_constructor",
-      "target": "listings_listings_service_listingsservice"
     },
     {
       "relation": "calls",
@@ -21083,6 +21598,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L564",
+      "weight": 1.0,
+      "source": "listings_listings_service_listingsservice",
+      "target": "listings_listings_service_listingsservice_getpotentialbuyers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
       "source_location": "L453",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -21108,6 +21633,26 @@
       "confidence_score": 1.0,
       "source": "listings_listings_service_listingsservice",
       "target": "listings_listings_service_listingsservice_markassold"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L523",
+      "weight": 1.0,
+      "source": "listings_listings_service_listingsservice",
+      "target": "listings_listings_service_listingsservice_processimei",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L533",
+      "weight": 1.0,
+      "source": "listings_listings_service_listingsservice",
+      "target": "listings_listings_service_listingsservice_sanitizeimei",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -21225,6 +21770,17 @@
       "target": "listings_listings_service_listingsservice_attachmarketprice"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "listings_listings_service_listingsservice_getbyid",
+      "target": "listings_listings_service_listingsservice_sanitizeimei",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -21234,6 +21790,17 @@
       "confidence_score": 1.0,
       "source": "listings_listings_service_listingsservice_createdraft",
       "target": "dto_create_listing_dto_createlistingdto"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/listings.service.ts",
+      "source_location": "L494",
+      "weight": 1.0,
+      "source": "listings_listings_service_listingsservice_updatedraftdetails",
+      "target": "listings_listings_service_listingsservice_processimei",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -21256,326 +21823,6 @@
       "confidence_score": 1.0,
       "source": "listings_listings_service_listingsservice_buildwhereclause",
       "target": "dto_listing_filters_dto_listingfiltersdto"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "apps_api_src_modules_listings_dto_create_listing_dto_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "apps_api_src_modules_listings_dto_listing_filters_dto_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "apps_api_src_modules_listings_dto_update_listing_status_dto_ts"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "dto_create_listing_dto_createlistingdto"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "dto_listing_filters_dto_listingfiltersdto"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "dto_update_listing_status_dto_updatelistingstatusdto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_listings_controller_ts",
-      "target": "listings_listings_controller_listingscontroller"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_dto_create_listing_dto_createlistingdto"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_dto_listing_filters_dto_listingfiltersdto"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_dto_update_listing_status_dto_updatelistingstatusdto"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_constructor"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_createdraft"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L130",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_deletedraft"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_getbyid"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_getfeed"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L49",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_getsafezones"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_getsimilar"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L104",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_markassold"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_mystats"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L80",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_save"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L137",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_setcoverphoto"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L128",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_trackwhatsappclick"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L92",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_unsave"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L142",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_updatedraftdetails"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L117",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller",
-      "target": "listings_listings_controller_listingscontroller_updatestatus"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller_getfeed",
-      "target": "dto_listing_filters_dto_listingfiltersdto"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L50",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller_getsafezones",
-      "target": "listings_listings_controller_listingscontroller_getbyid"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller_createdraft",
-      "target": "dto_create_listing_dto_createlistingdto"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/listings.controller.ts",
-      "source_location": "L117",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "listings_listings_controller_listingscontroller_updatestatus",
-      "target": "dto_update_listing_status_dto_updatelistingstatusdto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
-      "target": "dto_create_listing_dto_createlistingdto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
-      "target": "dto_create_listing_dto_listingconditionenum"
     },
     {
       "relation": "contains",
@@ -21606,6 +21853,26 @@
       "confidence_score": 1.0,
       "source": "apps_api_src_modules_listings_dto_listing_filters_dto_ts",
       "target": "dto_listing_filters_dto_listingfiltersdto"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
+      "target": "dto_create_listing_dto_createlistingdto"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/listings/dto/create-listing.dto.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_listings_dto_create_listing_dto_ts",
+      "target": "dto_create_listing_dto_listingconditionenum"
     },
     {
       "relation": "contains",
@@ -24134,12 +24401,12 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "apps_api_src_modules_device_models_device_models_service_ts",
-      "target": "device_models_device_models_service_devicemodelsservice"
+      "source": "apps_api_src_modules_device_models_device_models_controller_ts",
+      "target": "device_models_device_models_controller_devicemodelscontroller"
     },
     {
       "relation": "imports",
@@ -24153,6 +24420,26 @@
       "target": "device_models_device_models_service_devicemodelsservice"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "device_models_device_models_controller_devicemodelscontroller",
+      "target": "device_models_device_models_controller_devicemodelscontroller_constructor"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "device_models_device_models_controller_devicemodelscontroller",
+      "target": "device_models_device_models_controller_devicemodelscontroller_search"
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -24162,6 +24449,26 @@
       "confidence_score": 1.0,
       "source": "device_models_device_models_controller_devicemodelscontroller_constructor",
       "target": "device_models_device_models_service_devicemodelsservice"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_api_src_modules_device_models_device_models_service_ts",
+      "target": "device_models_device_models_service_devicemodelsservice"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "device_models_device_models_service_devicemodelsservice",
+      "target": "device_models_device_models_service_devicemodelsservice_attachmodelstats",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -24184,34 +24491,15 @@
       "target": "device_models_device_models_service_devicemodelsservice_search"
     },
     {
-      "relation": "contains",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L5",
+      "source_file": "apps/api/src/modules/device-models/device-models.service.ts",
+      "source_location": "L39",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_api_src_modules_device_models_device_models_controller_ts",
-      "target": "device_models_device_models_controller_devicemodelscontroller"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "device_models_device_models_controller_devicemodelscontroller",
-      "target": "device_models_device_models_controller_devicemodelscontroller_constructor"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/api/src/modules/device-models/device-models.controller.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "device_models_device_models_controller_devicemodelscontroller",
-      "target": "device_models_device_models_controller_devicemodelscontroller_search"
+      "source": "device_models_device_models_service_devicemodelsservice_search",
+      "target": "device_models_device_models_service_devicemodelsservice_attachmodelstats",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -31648,6 +31936,76 @@
       "target": "terms_page_termspage"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_alertbox",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_alertlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_guidesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_guidesectionprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_steplist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/app/(info)/verificar/page.tsx",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "apps_web_src_app_info_verificar_page_tsx",
+      "target": "verificar_page_verificarpage",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -32458,47 +32816,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "apps/web/src/components/dashboard/MyListingsPanel.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_web_src_components_dashboard_mylistingspanel_tsx",
-      "target": "apps_web_src_components_listings_marksoldmodal_tsx"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
-      "target": "listings_marksoldmodal_marksoldmodal"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
-      "target": "listings_marksoldmodal_props"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
-      "target": "listings_marksoldmodal_userresult"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "apps/web/src/components/listings/ListingCard.tsx",
       "source_location": "L7",
       "weight": 1.0,
@@ -33030,6 +33347,47 @@
       "weight": 1.0,
       "source": "listings_locationpicker_locationpicker",
       "target": "concept_venezuela_states"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/components/dashboard/MyListingsPanel.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_web_src_components_dashboard_mylistingspanel_tsx",
+      "target": "apps_web_src_components_listings_marksoldmodal_tsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
+      "target": "listings_marksoldmodal_marksoldmodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
+      "target": "listings_marksoldmodal_props"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/web/src/components/listings/MarkSoldModal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "apps_web_src_components_listings_marksoldmodal_tsx",
+      "target": "listings_marksoldmodal_userresult"
     },
     {
       "relation": "imports_from",
@@ -36420,9 +36778,9 @@
       "source_file": "PROGRESS.md",
       "source_location": "L349",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_progress_cambialo_estado_del_proyecto",
-      "target": "techmarket_vz_progress_sprint_8_1_completado_29_mayo_2026",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_progress_sprint_8_1_completado_29_mayo_2026"
     },
     {
       "relation": "contains",
@@ -36430,9 +36788,9 @@
       "source_file": "PROGRESS.md",
       "source_location": "L365",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_progress_cambialo_estado_del_proyecto",
-      "target": "techmarket_vz_progress_sprint_8_2_completado_29_mayo_2026",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_progress_sprint_8_2_completado_29_mayo_2026"
     },
     {
       "relation": "contains",
@@ -36600,9 +36958,9 @@
       "source_file": "PROGRESS.md",
       "source_location": "L351",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_progress_sprint_8_1_completado_29_mayo_2026",
-      "target": "techmarket_vz_progress_8_bugfixes_de_l\u00f3gica_y_backend",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_progress_8_bugfixes_de_l\u00f3gica_y_backend"
     },
     {
       "relation": "contains",
@@ -36610,9 +36968,9 @@
       "source_file": "PROGRESS.md",
       "source_location": "L367",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_progress_sprint_8_2_completado_29_mayo_2026",
-      "target": "techmarket_vz_progress_legal_obligatorio_antes_del_beta_launch",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_progress_legal_obligatorio_antes_del_beta_launch"
     },
     {
       "relation": "contains",
@@ -36630,9 +36988,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "handoff_md",
-      "target": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente"
     },
     {
       "relation": "contains",
@@ -36640,9 +36998,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_apis_clave",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_apis_clave"
     },
     {
       "relation": "contains",
@@ -36650,9 +37008,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_archivos_clave_por_funcionalidad",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_archivos_clave_por_funcionalidad"
     },
     {
       "relation": "contains",
@@ -36660,9 +37018,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L252",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_convenciones_del_proyecto",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_convenciones_del_proyecto"
     },
     {
       "relation": "contains",
@@ -36670,9 +37028,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L262",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_c\u00f3mo_retomar_trabajo",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_c\u00f3mo_retomar_trabajo"
     },
     {
       "relation": "contains",
@@ -36680,9 +37038,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_estado_actual_del_producto_29_mayo_2026",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_estado_actual_del_producto_29_mayo_2026"
     },
     {
       "relation": "contains",
@@ -36690,9 +37048,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_filtros_del_feed_query_params",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_filtros_del_feed_query_params"
     },
     {
       "relation": "contains",
@@ -36700,9 +37058,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L195",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_flags_y_constantes_importantes",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_flags_y_constantes_importantes"
     },
     {
       "relation": "contains",
@@ -36710,9 +37068,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_flujo_de_publicaci\u00f3n_wizard",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_flujo_de_publicaci\u00f3n_wizard"
     },
     {
       "relation": "contains",
@@ -36720,9 +37078,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_infraestructura_activa",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_infraestructura_activa"
     },
     {
       "relation": "contains",
@@ -36730,9 +37088,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_modelo_de_datos_cr\u00edtico_prisma",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_modelo_de_datos_cr\u00edtico_prisma"
     },
     {
       "relation": "contains",
@@ -36740,9 +37098,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_qu\u00e9_es_cambialo",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_qu\u00e9_es_cambialo"
     },
     {
       "relation": "contains",
@@ -36750,9 +37108,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L242",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_reglas_de_seguridad_restricciones",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_reglas_de_seguridad_restricciones"
     },
     {
       "relation": "contains",
@@ -36760,9 +37118,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_roles_de_usuario",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_roles_de_usuario"
     },
     {
       "relation": "contains",
@@ -36770,9 +37128,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_cambialo_handoff_para_nuevo_agente",
-      "target": "techmarket_vz_handoff_stack",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_stack"
     },
     {
       "relation": "contains",
@@ -36780,9 +37138,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L90",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_auth_settings",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_auth_settings"
     },
     {
       "relation": "contains",
@@ -36790,9 +37148,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_listings",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_listings"
     },
     {
       "relation": "contains",
@@ -36800,9 +37158,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_misc",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_misc"
     },
     {
       "relation": "contains",
@@ -36810,9 +37168,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L114",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_moderaci\u00f3n",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_moderaci\u00f3n"
     },
     {
       "relation": "contains",
@@ -36820,9 +37178,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_users",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_users"
     },
     {
       "relation": "contains",
@@ -36830,9 +37188,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_apis_clave",
-      "target": "techmarket_vz_handoff_verificaci\u00f3n",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_verificaci\u00f3n"
     },
     {
       "relation": "contains",
@@ -36840,9 +37198,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_estado_actual_del_producto_29_mayo_2026",
-      "target": "techmarket_vz_handoff_lo_que_funciona_en_producci\u00f3n",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_lo_que_funciona_en_producci\u00f3n"
     },
     {
       "relation": "contains",
@@ -36850,9 +37208,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L233",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_estado_actual_del_producto_29_mayo_2026",
-      "target": "techmarket_vz_handoff_pendientes_conocidos",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_pendientes_conocidos"
     },
     {
       "relation": "contains",
@@ -36860,9 +37218,9 @@
       "source_file": "HANDOFF.md",
       "source_location": "L230",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "techmarket_vz_handoff_estado_actual_del_producto_29_mayo_2026",
-      "target": "techmarket_vz_handoff_zonas_seguras",
-      "confidence_score": 1.0
+      "target": "techmarket_vz_handoff_zonas_seguras"
     },
     {
       "relation": "references",
@@ -38386,5 +38744,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f6810f90fea9e134b0e4bbe28a3aea6569db7ebf"
+  "built_at_commit": "bb37c2884a4ebdb721f40f87957e7efe0d5fbe49"
 }

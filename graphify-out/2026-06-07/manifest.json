@@ -1,0 +1,1017 @@
+{
+  "/home/franku/projects/techmarket-vz/package.json": {
+    "mtime": 1778902864.8214836,
+    "ast_hash": "70abda5e73fbaea83d470c2279282ce7",
+    "semantic_hash": "70abda5e73fbaea83d470c2279282ce7"
+  },
+  "/home/franku/projects/techmarket-vz/skills-lock.json": {
+    "mtime": 1778902864.8344073,
+    "ast_hash": "561755e28c9cea84ffed77856eae91a6",
+    "semantic_hash": "561755e28c9cea84ffed77856eae91a6"
+  },
+  "/home/franku/projects/techmarket-vz/tsconfig.json": {
+    "mtime": 1778902864.8346987,
+    "ast_hash": "9ae9be9c8d521a5d18f5b4b84ba13475",
+    "semantic_hash": "9ae9be9c8d521a5d18f5b4b84ba13475"
+  },
+  "/home/franku/projects/techmarket-vz/turbo.json": {
+    "mtime": 1778902864.834754,
+    "ast_hash": "c3025d1489b81e7df5551e0065ee61e1",
+    "semantic_hash": "c3025d1489b81e7df5551e0065ee61e1"
+  },
+  "/home/franku/projects/techmarket-vz/vercel.json": {
+    "mtime": 1779081634.3053842,
+    "ast_hash": "bcaf603bc23e019042295dd913b4582a",
+    "semantic_hash": "bcaf603bc23e019042295dd913b4582a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/tsconfig.json": {
+    "mtime": 1778902864.8353322,
+    "ast_hash": "73fa51847fa74a6f78c3288f4626ca09",
+    "semantic_hash": "73fa51847fa74a6f78c3288f4626ca09"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/package.json": {
+    "mtime": 1779325087.5583706,
+    "ast_hash": "a9c37a5511147b00b0c5a0778018d632",
+    "semantic_hash": "a9c37a5511147b00b0c5a0778018d632"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/app.module.ts": {
+    "mtime": 1779254627.2938218,
+    "ast_hash": "2d926dff36e67d0e2f11955562e65b4f",
+    "semantic_hash": "2d926dff36e67d0e2f11955562e65b4f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/main.ts": {
+    "mtime": 1779325087.5583706,
+    "ast_hash": "0d9c27947771da545d803c153829765c",
+    "semantic_hash": "0d9c27947771da545d803c153829765c"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/database/prisma.module.ts": {
+    "mtime": 1778902864.8412633,
+    "ast_hash": "e74167b617cb13d7ea658df6ca3469a5",
+    "semantic_hash": "e74167b617cb13d7ea658df6ca3469a5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/database/prisma.service.ts": {
+    "mtime": 1778902864.8413053,
+    "ast_hash": "47d26b3060e867130b9de18daea09eb9",
+    "semantic_hash": "47d26b3060e867130b9de18daea09eb9"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/decorators/current-user.decorator.ts": {
+    "mtime": 1778902864.8413563,
+    "ast_hash": "a731fedc47897c21d57f06426de1b165",
+    "semantic_hash": "a731fedc47897c21d57f06426de1b165"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/filters/all-exceptions.filter.ts": {
+    "mtime": 1778902864.8414218,
+    "ast_hash": "d9625a54c8cd7fd8840ecf59fc327dc2",
+    "semantic_hash": "d9625a54c8cd7fd8840ecf59fc327dc2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/guards/supabase-auth.guard.ts": {
+    "mtime": 1779257069.003753,
+    "ast_hash": "de7fbbf61dd42e6e967effdc0e8ecf9e",
+    "semantic_hash": "de7fbbf61dd42e6e967effdc0e8ecf9e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/constants/user-levels.ts": {
+    "mtime": 1779256001.5315502,
+    "ast_hash": "daa5e95267baa4e2e7d467d612209921",
+    "semantic_hash": "daa5e95267baa4e2e7d467d612209921"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/common/constants/venezuela-states.ts": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "842a58bff8f256846a7aae8ba781282f",
+    "semantic_hash": "842a58bff8f256846a7aae8ba781282f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/moderation.controller.ts": {
+    "mtime": 1778902864.8419755,
+    "ast_hash": "9c730c3f2669e99f83e31605583166a2",
+    "semantic_hash": "9c730c3f2669e99f83e31605583166a2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/moderation-queue.controller.ts": {
+    "mtime": 1779166917.5110233,
+    "ast_hash": "f363eb5676f3f1303a7cced1f70127dd",
+    "semantic_hash": "f363eb5676f3f1303a7cced1f70127dd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/admin.module.ts": {
+    "mtime": 1779166939.9867427,
+    "ast_hash": "058a28498fd047c6393ec247138549b2",
+    "semantic_hash": "058a28498fd047c6393ec247138549b2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/moderation.service.ts": {
+    "mtime": 1780095838.7235184,
+    "ast_hash": "22731e4a5a76e07c5a59340791db402f",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/auto-moderation.service.ts": {
+    "mtime": 1779254542.450405,
+    "ast_hash": "2c106a74ce7ce983a8953b8774d2a3fb",
+    "semantic_hash": "2c106a74ce7ce983a8953b8774d2a3fb"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/admin.service.ts": {
+    "mtime": 1779301776.1610913,
+    "ast_hash": "a8effc7a5479fb8d36c278fd91df904b",
+    "semantic_hash": "a8effc7a5479fb8d36c278fd91df904b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/admin/admin.controller.ts": {
+    "mtime": 1779301786.3979728,
+    "ast_hash": "895b4a5730231c9f820d21e560cbb1b7",
+    "semantic_hash": "895b4a5730231c9f820d21e560cbb1b7"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/auth.module.ts": {
+    "mtime": 1779166663.9232473,
+    "ast_hash": "df1d206bed1e14751a2dc9b4ed10ff62",
+    "semantic_hash": "df1d206bed1e14751a2dc9b4ed10ff62"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/auth.controller.ts": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "6b605fbefbac658cddf690ff2d99e425",
+    "semantic_hash": "6b605fbefbac658cddf690ff2d99e425"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/auth.service.ts": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "1727f47c1c24c6e34b12d2500e11b367",
+    "semantic_hash": "1727f47c1c24c6e34b12d2500e11b367"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/dto/login.dto.ts": {
+    "mtime": 1778902864.8424666,
+    "ast_hash": "6504dfa023fc3ce829bef7956054a89f",
+    "semantic_hash": "6504dfa023fc3ce829bef7956054a89f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/dto/magic-link.dto.ts": {
+    "mtime": 1778902864.842521,
+    "ast_hash": "8451fdfa9b64b16297a3f108e6e5a59f",
+    "semantic_hash": "8451fdfa9b64b16297a3f108e6e5a59f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/auth/dto/register.dto.ts": {
+    "mtime": 1778902864.842566,
+    "ast_hash": "fdc202995e3d102c1f2087c0e3186f29",
+    "semantic_hash": "fdc202995e3d102c1f2087c0e3186f29"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/imei/imei.controller.ts": {
+    "mtime": 1778902864.842566,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/imei/imei.module.ts": {
+    "mtime": 1778902864.842665,
+    "ast_hash": "9b126c3affeeff7a5c23595862f83de0",
+    "semantic_hash": "9b126c3affeeff7a5c23595862f83de0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/imei/imei.service.ts": {
+    "mtime": 1778902864.842665,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/photo.controller.ts": {
+    "mtime": 1778902864.843228,
+    "ast_hash": "960a768e6d4bda33a11221a8154a7425",
+    "semantic_hash": "960a768e6d4bda33a11221a8154a7425"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/photo.service.ts": {
+    "mtime": 1778902864.8433902,
+    "ast_hash": "09765ca0e71f1df1915e5ec16c0a40a5",
+    "semantic_hash": "09765ca0e71f1df1915e5ec16c0a40a5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/typesense.service.ts": {
+    "mtime": 1779084829.98623,
+    "ast_hash": "9e0c69b41858178eb9c62a418128e9d5",
+    "semantic_hash": "9e0c69b41858178eb9c62a418128e9d5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/listings.module.ts": {
+    "mtime": 1779254607.9329572,
+    "ast_hash": "7fb42675ee56f2bade97c4b58505df68",
+    "semantic_hash": "7fb42675ee56f2bade97c4b58505df68"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/listings.controller.ts": {
+    "mtime": 1780095869.663334,
+    "ast_hash": "104725b15551b03bda3564783ff1a64b",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/listings.service.ts": {
+    "mtime": 1780095855.0574222,
+    "ast_hash": "e411e05b7a3dd80fff07698c32596bae",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/dto/create-listing.dto.ts": {
+    "mtime": 1779256009.4744456,
+    "ast_hash": "666a8f3e1c5daf9c9983b67ba841f092",
+    "semantic_hash": "666a8f3e1c5daf9c9983b67ba841f092"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/dto/update-listing-status.dto.ts": {
+    "mtime": 1779298326.8432286,
+    "ast_hash": "8aed5772a4948b51579d76bcc188bd16",
+    "semantic_hash": "8aed5772a4948b51579d76bcc188bd16"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/dto/listing-filters.dto.ts": {
+    "mtime": 1779814980.6171756,
+    "ast_hash": "3bbb49f1edace6864266bfea7f97071d",
+    "semantic_hash": "3bbb49f1edace6864266bfea7f97071d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/listings/workers/typesense-sync.worker.ts": {
+    "mtime": 1778902864.8437989,
+    "ast_hash": "8908aa1a94037c42197cd11e6bb119f0",
+    "semantic_hash": "8908aa1a94037c42197cd11e6bb119f0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/notifications/notifications.controller.ts": {
+    "mtime": 1778902864.8439243,
+    "ast_hash": "4999f9490abb5a6bb024500d997d2336",
+    "semantic_hash": "4999f9490abb5a6bb024500d997d2336"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/notifications/notifications.module.ts": {
+    "mtime": 1778902864.8440356,
+    "ast_hash": "e8fd1495b7a022accc1bb9e532e0c9c1",
+    "semantic_hash": "e8fd1495b7a022accc1bb9e532e0c9c1"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/notifications/notifications.service.ts": {
+    "mtime": 1778902864.844183,
+    "ast_hash": "94fb743b39ab0a029596c99b6b69bb49",
+    "semantic_hash": "94fb743b39ab0a029596c99b6b69bb49"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/notifications/push.service.ts": {
+    "mtime": 1778990905.4682095,
+    "ast_hash": "f2064d15feaa1bec8dd69b3bc4142b30",
+    "semantic_hash": "f2064d15feaa1bec8dd69b3bc4142b30"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/payments/payments.controller.ts": {
+    "mtime": 1778902864.844183,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/payments/payments.module.ts": {
+    "mtime": 1778902864.844287,
+    "ast_hash": "98d45a419728b4f394639f024c47828b",
+    "semantic_hash": "98d45a419728b4f394639f024c47828b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/payments/payments.service.ts": {
+    "mtime": 1778902864.844287,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/reviews/reviews.controller.ts": {
+    "mtime": 1778931771.6692913,
+    "ast_hash": "4d18f0cfbfb6ebba119ab6a69ade3cc7",
+    "semantic_hash": "4d18f0cfbfb6ebba119ab6a69ade3cc7"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/reviews/reviews.module.ts": {
+    "mtime": 1778931771.6702914,
+    "ast_hash": "c0e7c20acd4238f39c99c3b0235b746a",
+    "semantic_hash": "c0e7c20acd4238f39c99c3b0235b746a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/reviews/reviews.service.ts": {
+    "mtime": 1778931736.4605746,
+    "ast_hash": "a7d4f04365cca0ed4f108209b75eb374",
+    "semantic_hash": "a7d4f04365cca0ed4f108209b75eb374"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/reviews/dto/create-review.dto.ts": {
+    "mtime": 1778931644.9883842,
+    "ast_hash": "29fa3f2d9f8c76783e68371cb5753140",
+    "semantic_hash": "29fa3f2d9f8c76783e68371cb5753140"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/safe-zones/safe-zones.controller.ts": {
+    "mtime": 1778931771.6721826,
+    "ast_hash": "d15cca00a46e28eaab4ec905ed259d8e",
+    "semantic_hash": "d15cca00a46e28eaab4ec905ed259d8e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/safe-zones/safe-zones.module.ts": {
+    "mtime": 1778931771.6722913,
+    "ast_hash": "78234da4011ee77e70951cee607ddc2f",
+    "semantic_hash": "78234da4011ee77e70951cee607ddc2f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/safe-zones/safe-zones.service.ts": {
+    "mtime": 1778931771.6714385,
+    "ast_hash": "2b7ed480e310d1f2b63292fb884dcca4",
+    "semantic_hash": "2b7ed480e310d1f2b63292fb884dcca4"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/users/username-validator.service.ts": {
+    "mtime": 1779166644.331502,
+    "ast_hash": "79ead1950ccbb1a4c65cfc75b437a1f6",
+    "semantic_hash": "79ead1950ccbb1a4c65cfc75b437a1f6"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/users/users.module.ts": {
+    "mtime": 1779166650.9434159,
+    "ast_hash": "ebd6bb3ad6308848e7f60e62132b521a",
+    "semantic_hash": "ebd6bb3ad6308848e7f60e62132b521a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/users/users.controller.ts": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "2a4733e5595b96b2b64eb44f91077a05",
+    "semantic_hash": "2a4733e5595b96b2b64eb44f91077a05"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/users/users.service.ts": {
+    "mtime": 1780095873.9513075,
+    "ast_hash": "e21c748c7af6313cfb59a639328e9615",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/users/dto/update-user.dto.ts": {
+    "mtime": 1778902864.8453016,
+    "ast_hash": "13c8eb92257ae2424cf5d909eb5a8a58",
+    "semantic_hash": "13c8eb92257ae2424cf5d909eb5a8a58"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/verification/verification.controller.ts": {
+    "mtime": 1778902864.8453813,
+    "ast_hash": "8d0b1c9263452878282f6e296accbb0f",
+    "semantic_hash": "8d0b1c9263452878282f6e296accbb0f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/verification/verification.module.ts": {
+    "mtime": 1778902864.8455174,
+    "ast_hash": "20185cf6beec1e34a816f97e25c67928",
+    "semantic_hash": "20185cf6beec1e34a816f97e25c67928"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/verification/verification.service.ts": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "2b57adc6f8ef8098bbc39629aa156808",
+    "semantic_hash": "2b57adc6f8ef8098bbc39629aa156808"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/verification/workers/verification.worker.ts": {
+    "mtime": 1778902864.845774,
+    "ast_hash": "086a07481a3c5dda73984763d83fe68c",
+    "semantic_hash": "086a07481a3c5dda73984763d83fe68c"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/fraud-reports/fraud-reports.service.ts": {
+    "mtime": 1778931704.0080447,
+    "ast_hash": "0f58eef261441c062c8f4b7fccbf3897",
+    "semantic_hash": "0f58eef261441c062c8f4b7fccbf3897"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/fraud-reports/fraud-reports.controller.ts": {
+    "mtime": 1778931704.0088933,
+    "ast_hash": "f1f8765ef1ede4263d902a35750525c6",
+    "semantic_hash": "f1f8765ef1ede4263d902a35750525c6"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/fraud-reports/fraud-reports.module.ts": {
+    "mtime": 1778931704.0072458,
+    "ast_hash": "902fa50c487ee9986d47c6febdfbf2e7",
+    "semantic_hash": "902fa50c487ee9986d47c6febdfbf2e7"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/search-alerts/search-alerts.service.ts": {
+    "mtime": 1778990924.6404397,
+    "ast_hash": "a5eac44c8c84232e4f5d51491a150d1c",
+    "semantic_hash": "a5eac44c8c84232e4f5d51491a150d1c"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/search-alerts/search-alerts.controller.ts": {
+    "mtime": 1778990924.64144,
+    "ast_hash": "5a8772be5e7132fe99644b185f0c2dfb",
+    "semantic_hash": "5a8772be5e7132fe99644b185f0c2dfb"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/search-alerts/search-alerts.module.ts": {
+    "mtime": 1778990924.6425161,
+    "ast_hash": "39e6c4cb60a1a43553e5c91194f6a432",
+    "semantic_hash": "39e6c4cb60a1a43553e5c91194f6a432"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/search-alerts/dto/create-search-alert.dto.ts": {
+    "mtime": 1778990883.0292041,
+    "ast_hash": "5c70d9ab1fddae559c285adb11141ef2",
+    "semantic_hash": "5c70d9ab1fddae559c285adb11141ef2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/device-models/device-models.module.ts": {
+    "mtime": 1779131862.2105258,
+    "ast_hash": "bae3598bb0aa0e84166fac7ae45c01e0",
+    "semantic_hash": "bae3598bb0aa0e84166fac7ae45c01e0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/device-models/device-models.service.ts": {
+    "mtime": 1779131983.4070625,
+    "ast_hash": "5fc67fd284355674d6465c74f289e149",
+    "semantic_hash": "5fc67fd284355674d6465c74f289e149"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/device-models/device-models.controller.ts": {
+    "mtime": 1779131989.132994,
+    "ast_hash": "2783bf652a92497a60dc3c827db9f238",
+    "semantic_hash": "2783bf652a92497a60dc3c827db9f238"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/price-index/price-index.module.ts": {
+    "mtime": 1779166701.1777658,
+    "ast_hash": "4b6adfcfc8cf48c6eaa2d54cf4ec963d",
+    "semantic_hash": "4b6adfcfc8cf48c6eaa2d54cf4ec963d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/price-index/price-index.controller.ts": {
+    "mtime": 1779257069.0047529,
+    "ast_hash": "173b2a152d0afaa2952ed451e008bb81",
+    "semantic_hash": "173b2a152d0afaa2952ed451e008bb81"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/price-index/price-index.service.ts": {
+    "mtime": 1779257069.0047529,
+    "ast_hash": "9f830de2ee5cd27252222076f00879f5",
+    "semantic_hash": "9f830de2ee5cd27252222076f00879f5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/kyc/kyc.service.ts": {
+    "mtime": 1779254493.6937265,
+    "ast_hash": "3f474149daef680e70fc69601a8d02e8",
+    "semantic_hash": "3f474149daef680e70fc69601a8d02e8"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/kyc/kyc.controller.ts": {
+    "mtime": 1779254518.0325673,
+    "ast_hash": "dc36295786a046a55d2abf2a9de87e82",
+    "semantic_hash": "dc36295786a046a55d2abf2a9de87e82"
+  },
+  "/home/franku/projects/techmarket-vz/apps/api/src/modules/kyc/kyc.module.ts": {
+    "mtime": 1779254522.1405401,
+    "ast_hash": "d2f7b98cc242710707f428b2fc2a8ab7",
+    "semantic_hash": "d2f7b98cc242710707f428b2fc2a8ab7"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/next-env.d.ts": {
+    "mtime": 1778902864.8461256,
+    "ast_hash": "90426577ad8f38459f3e566411c85589",
+    "semantic_hash": "90426577ad8f38459f3e566411c85589"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/next.config.ts": {
+    "mtime": 1778902864.8462248,
+    "ast_hash": "3550485dd1fbec5cf28921d41846c7cd",
+    "semantic_hash": "3550485dd1fbec5cf28921d41846c7cd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/postcss.config.mjs": {
+    "mtime": 1778902864.8463986,
+    "ast_hash": "b94982db987a06959d1836a6d7f9735a",
+    "semantic_hash": "b94982db987a06959d1836a6d7f9735a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/tsconfig.json": {
+    "mtime": 1778902864.8464584,
+    "ast_hash": "c6fd076c4e8c4cd12d49de22437427ea",
+    "semantic_hash": "c6fd076c4e8c4cd12d49de22437427ea"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/instrumentation.ts": {
+    "mtime": 1779325087.5583706,
+    "ast_hash": "245ce6ca97aa68389fb3ceed641ef061",
+    "semantic_hash": "245ce6ca97aa68389fb3ceed641ef061"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/sentry.client.config.ts": {
+    "mtime": 1779325087.5613704,
+    "ast_hash": "9bbdab588057f107afb0ffa1915ebc67",
+    "semantic_hash": "9bbdab588057f107afb0ffa1915ebc67"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/package.json": {
+    "mtime": 1779814668.3383138,
+    "ast_hash": "4ff45af34a7e56c9532c7bfb43bb51a0",
+    "semantic_hash": "4ff45af34a7e56c9532c7bfb43bb51a0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/manifest.json": {
+    "mtime": 1778902864.8471859,
+    "ast_hash": "8f7b23237f7ce925c8c2d3b3772d1aa4",
+    "semantic_hash": "8f7b23237f7ce925c8c2d3b3772d1aa4"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/swe-worker-5c72df51bb1f6ee0.js": {
+    "mtime": 1779814174.9629326,
+    "ast_hash": "76fdd3369f623a3edcf74ce2200bfdd0",
+    "semantic_hash": "76fdd3369f623a3edcf74ce2200bfdd0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/workbox-8266a8c5.js": {
+    "mtime": 1779814174.9669325,
+    "ast_hash": "a7ff52040a9385519fc9496b8657e7ab",
+    "semantic_hash": "a7ff52040a9385519fc9496b8657e7ab"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/sw.js": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "53c0f5579a6da78fd65aa77aab235a5b",
+    "semantic_hash": "53c0f5579a6da78fd65aa77aab235a5b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/middleware.ts": {
+    "mtime": 1778902864.8473406,
+    "ast_hash": "0332d6631d936b88b4b3efce5a2c1eea",
+    "semantic_hash": "0332d6631d936b88b4b3efce5a2c1eea"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/robots.ts": {
+    "mtime": 1779321484.4465983,
+    "ast_hash": "4f7316070ce032bed1873bdcbb613dfe",
+    "semantic_hash": "4f7316070ce032bed1873bdcbb613dfe"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/sitemap.ts": {
+    "mtime": 1780096296.8230762,
+    "ast_hash": "ed27a0e572087673aa87c2d24600cf17",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/error.tsx": {
+    "mtime": 1779325087.5613704,
+    "ast_hash": "3c4e73f0bf9132982d9707a11443fb8a",
+    "semantic_hash": "3c4e73f0bf9132982d9707a11443fb8a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/layout.tsx": {
+    "mtime": 1779385473.7821858,
+    "ast_hash": "8141ad386e9bb04ea505db7e5d9f5f37",
+    "semantic_hash": "8141ad386e9bb04ea505db7e5d9f5f37"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/layout.tsx": {
+    "mtime": 1779121995.4432015,
+    "ast_hash": "99f4ca5e398828c858631bf5f0e6851b",
+    "semantic_hash": "99f4ca5e398828c858631bf5f0e6851b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/login/page.tsx": {
+    "mtime": 1779325087.5613704,
+    "ast_hash": "f6abcffa782acb1ea24d2b3a15036787",
+    "semantic_hash": "f6abcffa782acb1ea24d2b3a15036787"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/register/page.tsx": {
+    "mtime": 1780096286.4091675,
+    "ast_hash": "52668d512b143c4a1a547dc1d487211e",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/register/complete/page.tsx": {
+    "mtime": 1779231553.5624647,
+    "ast_hash": "b80ad053b4907968a614c5b1874cd686",
+    "semantic_hash": "b80ad053b4907968a614c5b1874cd686"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/setup-2fa/page.tsx": {
+    "mtime": 1779330437.4239287,
+    "ast_hash": "8c818f45a41e9c468d2c8bf5e7fbb731",
+    "semantic_hash": "8c818f45a41e9c468d2c8bf5e7fbb731"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(auth)/verify-2fa/page.tsx": {
+    "mtime": 1779330583.78337,
+    "ast_hash": "ccdae8fe446a117d14711b6297089e62",
+    "semantic_hash": "ccdae8fe446a117d14711b6297089e62"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/layout.tsx": {
+    "mtime": 1780096596.2342994,
+    "ast_hash": "38573de4354b59453dd5c74cfaeaffb2",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/page.tsx": {
+    "mtime": 1780097195.7792125,
+    "ast_hash": "65fc588ecc4bd1fde1c0b55fc23169f0",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/dashboard/page.tsx": {
+    "mtime": 1779256071.4946444,
+    "ast_hash": "3a85fb8fa4c13a981ac495e93174dfe9",
+    "semantic_hash": "3a85fb8fa4c13a981ac495e93174dfe9"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/dashboard/listings/page.tsx": {
+    "mtime": 1779322409.4131818,
+    "ast_hash": "dcb30e53f4f8a90d67d06b5e463e0e36",
+    "semantic_hash": "dcb30e53f4f8a90d67d06b5e463e0e36"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/dashboard/reviews/page.tsx": {
+    "mtime": 1779124321.0727751,
+    "ast_hash": "a51004e9af02dbaf76dd642f8414ef80",
+    "semantic_hash": "a51004e9af02dbaf76dd642f8414ef80"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/dashboard/alerts/DeleteAlertButton.tsx": {
+    "mtime": 1778990883.030011,
+    "ast_hash": "d195a7041b8d50b79b59d249835a4933",
+    "semantic_hash": "d195a7041b8d50b79b59d249835a4933"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/dashboard/alerts/page.tsx": {
+    "mtime": 1779124333.0135944,
+    "ast_hash": "2bcf1484c6600db2d0eaa3bd184e717e",
+    "semantic_hash": "2bcf1484c6600db2d0eaa3bd184e717e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/listings/[id]/page.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "12e36ddc22618fd382ac0aa1efb256d9",
+    "semantic_hash": "12e36ddc22618fd382ac0aa1efb256d9"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/profile/[username]/page.tsx": {
+    "mtime": 1779298415.8913152,
+    "ast_hash": "5b08ab4713c28eb2a8aa06d582648c5d",
+    "semantic_hash": "5b08ab4713c28eb2a8aa06d582648c5d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/profile/edit/page.tsx": {
+    "mtime": 1779169649.8552978,
+    "ast_hash": "8de8ae54690559991b43f6a2ae8ea44a",
+    "semantic_hash": "8de8ae54690559991b43f6a2ae8ea44a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/search/page.tsx": {
+    "mtime": 1778902864.8489268,
+    "ast_hash": "eda3c159b378aa63afd7f5436836dcc3",
+    "semantic_hash": "eda3c159b378aa63afd7f5436836dcc3"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/sell/layout.tsx": {
+    "mtime": 1779122096.6717353,
+    "ast_hash": "f9971f9295a0bb4a2691644e5db06ebd",
+    "semantic_hash": "f9971f9295a0bb4a2691644e5db06ebd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/sell/page.tsx": {
+    "mtime": 1780096008.9824011,
+    "ast_hash": "352b4d05014707d3c6c734be1f9eac9a",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/verify-identity/page.tsx": {
+    "mtime": 1778902864.849326,
+    "ast_hash": "0aabe554ec491bd6ca63caee1817bbef",
+    "semantic_hash": "0aabe554ec491bd6ca63caee1817bbef"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/safe-zones/page.tsx": {
+    "mtime": 1779081923.9719408,
+    "ast_hash": "24b468ad124b19560b882e94da2dab05",
+    "semantic_hash": "24b468ad124b19560b882e94da2dab05"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/admin/users/page.tsx": {
+    "mtime": 1779298467.5717883,
+    "ast_hash": "b77ad56a77bc4e1b37d1355dade04fa0",
+    "semantic_hash": "b77ad56a77bc4e1b37d1355dade04fa0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/admin/users/[id]/page.tsx": {
+    "mtime": 1779301760.2892756,
+    "ast_hash": "981b546490aab81959e253f86cc3c0f3",
+    "semantic_hash": "981b546490aab81959e253f86cc3c0f3"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/admin/moderation/page.tsx": {
+    "mtime": 1779257069.0047529,
+    "ast_hash": "2f6ddbe6c5d87eedb3142f74ffc08851",
+    "semantic_hash": "2f6ddbe6c5d87eedb3142f74ffc08851"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/admin/kyc/page.tsx": {
+    "mtime": 1779254675.7734768,
+    "ast_hash": "2f63e3c5afd4c67dbe70bc1dd3821f2d",
+    "semantic_hash": "2f63e3c5afd4c67dbe70bc1dd3821f2d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/apple/page.tsx": {
+    "mtime": 1779166534.070953,
+    "ast_hash": "229a8b5ce6d110d815bd37d2e23f5e1e",
+    "semantic_hash": "229a8b5ce6d110d815bd37d2e23f5e1e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/apple/[model-slug]/page.tsx": {
+    "mtime": 1779166577.6503754,
+    "ast_hash": "ebe7257361afe946763c5f068297dbc5",
+    "semantic_hash": "ebe7257361afe946763c5f068297dbc5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/samsung/page.tsx": {
+    "mtime": 1779166545.2468042,
+    "ast_hash": "12331918122d94be8dd368ac322df6ec",
+    "semantic_hash": "12331918122d94be8dd368ac322df6ec"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/samsung/[model-slug]/page.tsx": {
+    "mtime": 1779166587.0332518,
+    "ast_hash": "433b66ded56c6114bdffd93769953785",
+    "semantic_hash": "433b66ded56c6114bdffd93769953785"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/kyc/page.tsx": {
+    "mtime": 1779257655.2970192,
+    "ast_hash": "d58c732159723769cf085429acb8e139",
+    "semantic_hash": "d58c732159723769cf085429acb8e139"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/explore/page.tsx": {
+    "mtime": 1779257069.0057528,
+    "ast_hash": "2c8412ef4e8c535979b1b5be200d230d",
+    "semantic_hash": "2c8412ef4e8c535979b1b5be200d230d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(main)/settings/page.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "c417b52fc97c486bf2c50300ab46f794",
+    "semantic_hash": "c417b52fc97c486bf2c50300ab46f794"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/api/og/[id]/route.tsx": {
+    "mtime": 1778902864.849553,
+    "ast_hash": "dbb45d8f4565af52e8be0691855754f5",
+    "semantic_hash": "dbb45d8f4565af52e8be0691855754f5"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/auth/callback/route.ts": {
+    "mtime": 1779231527.4147441,
+    "ast_hash": "f8bdde69357569051a83c58c7e5532b0",
+    "semantic_hash": "f8bdde69357569051a83c58c7e5532b0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/layout.tsx": {
+    "mtime": 1780096593.3383274,
+    "ast_hash": "4b65213d3d02c149eb3b7f82103f0ccc",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/faq/page.tsx": {
+    "mtime": 1779257056.5738769,
+    "ast_hash": "5af4199e2afccba419c60571bd3640b1",
+    "semantic_hash": "5af4199e2afccba419c60571bd3640b1"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/about/page.tsx": {
+    "mtime": 1779257069.0047529,
+    "ast_hash": "425acac0db9ee55a73c4dd98d4b95218",
+    "semantic_hash": "425acac0db9ee55a73c4dd98d4b95218"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/roadmap/page.tsx": {
+    "mtime": 1779257074.9486935,
+    "ast_hash": "071f474d84ad8a369ca05b6e8787891d",
+    "semantic_hash": "071f474d84ad8a369ca05b6e8787891d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/providers.tsx": {
+    "mtime": 1779328211.9497442,
+    "ast_hash": "c088fb06d06133f37211a59d2c7a719a",
+    "semantic_hash": "c088fb06d06133f37211a59d2c7a719a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/ActiveFilterChips.tsx": {
+    "mtime": 1778902864.8501883,
+    "ast_hash": "0b8f38b396de6dc639b35aeb8c3760ce",
+    "semantic_hash": "0b8f38b396de6dc639b35aeb8c3760ce"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/FilterPanel.tsx": {
+    "mtime": 1778902864.8504725,
+    "ast_hash": "1907879e304e7974d24eb22856e51310",
+    "semantic_hash": "1907879e304e7974d24eb22856e51310"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/ListingGallery.tsx": {
+    "mtime": 1778902864.8507626,
+    "ast_hash": "193ecc8dccbda538a9aa975be22dcf55",
+    "semantic_hash": "193ecc8dccbda538a9aa975be22dcf55"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/SaveButton.tsx": {
+    "mtime": 1778902864.8508747,
+    "ast_hash": "9650efd84e6d9f90de8898431178cf7b",
+    "semantic_hash": "9650efd84e6d9f90de8898431178cf7b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/ViewToggle.tsx": {
+    "mtime": 1779121777.235207,
+    "ast_hash": "d7082751ab6ceab5ada64de84505f5c2",
+    "semantic_hash": "d7082751ab6ceab5ada64de84505f5c2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/EmptyState.tsx": {
+    "mtime": 1779121792.636136,
+    "ast_hash": "e388200c5636c62119dbdbb8a2983e56",
+    "semantic_hash": "e388200c5636c62119dbdbb8a2983e56"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/PriceIndicator.tsx": {
+    "mtime": 1779166733.3683522,
+    "ast_hash": "349d7b78fc4b0d7f3a5d45a985464f9a",
+    "semantic_hash": "349d7b78fc4b0d7f3a5d45a985464f9a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/TradeInSimulator.tsx": {
+    "mtime": 1779166762.9029746,
+    "ast_hash": "86c7969a5eae7d42d04ccc9d7a1464c0",
+    "semantic_hash": "86c7969a5eae7d42d04ccc9d7a1464c0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/WhatsAppButton.tsx": {
+    "mtime": 1779254624.5298412,
+    "ast_hash": "d20c93fd6f099797214bf93faef2eb6a",
+    "semantic_hash": "d20c93fd6f099797214bf93faef2eb6a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/MarkSoldModal.tsx": {
+    "mtime": 1779297581.2893925,
+    "ast_hash": "6bd2dfa78b77c8cd3fdc448f539f29c8",
+    "semantic_hash": "6bd2dfa78b77c8cd3fdc448f539f29c8"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/ListingCard.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "a079ff5f03a5eb0cd554cfacb7949ee4",
+    "semantic_hash": "a079ff5f03a5eb0cd554cfacb7949ee4"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/FilterSidebar.tsx": {
+    "mtime": 1779815328.3658571,
+    "ast_hash": "791bfe878452bc6ac4d434a5e08b892a",
+    "semantic_hash": "791bfe878452bc6ac4d434a5e08b892a"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/listings/LocationPicker.tsx": {
+    "mtime": 1780095966.6527007,
+    "ast_hash": "2a09b25e8317c6052d2b1dd5ded8065b",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/notifications/NotificationBell.tsx": {
+    "mtime": 1778902864.8509436,
+    "ast_hash": "79cca5abde9bbbe9af7c8f81d6eeaa66",
+    "semantic_hash": "79cca5abde9bbbe9af7c8f81d6eeaa66"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/notifications/PushPermission.tsx": {
+    "mtime": 1778990905.4674075,
+    "ast_hash": "ab213a87ee3fa415fa4c34c4d529badd",
+    "semantic_hash": "ab213a87ee3fa415fa4c34c4d529badd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/profile/ReputationBadge.tsx": {
+    "mtime": 1778931874.7404296,
+    "ast_hash": "b8f2209ddfd936680aca4ef0745cd102",
+    "semantic_hash": "b8f2209ddfd936680aca4ef0745cd102"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/sell/AccessoriesChecklist.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "ca121b15c5c1606cfde680f1ae965692",
+    "semantic_hash": "ca121b15c5c1606cfde680f1ae965692"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/sell/ConditionGuide.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "384a3daaff344c35acdc83a9b9ec6490",
+    "semantic_hash": "384a3daaff344c35acdc83a9b9ec6490"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/sell/PhotoUploader.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "236aff17dd5e0235b13b2d67fa5f9006",
+    "semantic_hash": "236aff17dd5e0235b13b2d67fa5f9006"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/sell/StepIndicator.tsx": {
+    "mtime": 1779814668.340314,
+    "ast_hash": "52def7b09e3cde120f730b50873734ab",
+    "semantic_hash": "52def7b09e3cde120f730b50873734ab"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/reviews/StarRating.tsx": {
+    "mtime": 1778931644.9873495,
+    "ast_hash": "f9f2f56b1ff045d2bc35572f4934e443",
+    "semantic_hash": "f9f2f56b1ff045d2bc35572f4934e443"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/reviews/ReviewCard.tsx": {
+    "mtime": 1778931803.2045858,
+    "ast_hash": "b38b51dbf3311e92afcacfdd5cc9cf6c",
+    "semantic_hash": "b38b51dbf3311e92afcacfdd5cc9cf6c"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/reviews/ReviewsList.tsx": {
+    "mtime": 1778931803.20543,
+    "ast_hash": "0dbb4c9e13adfef49d795238e3956983",
+    "semantic_hash": "0dbb4c9e13adfef49d795238e3956983"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/reviews/ReviewForm.tsx": {
+    "mtime": 1779082479.507413,
+    "ast_hash": "71045ead6d31a2d24eaee51e163c13ce",
+    "semantic_hash": "71045ead6d31a2d24eaee51e163c13ce"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/fraud/ReportButton.tsx": {
+    "mtime": 1778931874.7412677,
+    "ast_hash": "18519ab1f9de0930b8a31adc4da1aae0",
+    "semantic_hash": "18519ab1f9de0930b8a31adc4da1aae0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/pwa/InstallPrompt.tsx": {
+    "mtime": 1778990828.83851,
+    "ast_hash": "14992e908569128b51fd1a96c56a7f6f",
+    "semantic_hash": "14992e908569128b51fd1a96c56a7f6f"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/search-alerts/SearchAlertForm.tsx": {
+    "mtime": 1778990883.0283477,
+    "ast_hash": "0bf0732a4566532af8766aa7b07fa396",
+    "semantic_hash": "0bf0732a4566532af8766aa7b07fa396"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/layout/Header.tsx": {
+    "mtime": 1779814668.339314,
+    "ast_hash": "bef44c53cd28de9cbec8d895f11965ea",
+    "semantic_hash": "bef44c53cd28de9cbec8d895f11965ea"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/brand/ModelListings.tsx": {
+    "mtime": 1779166612.4099185,
+    "ast_hash": "4f84912fd40688b1b01a0f221ebc7cfb",
+    "semantic_hash": "4f84912fd40688b1b01a0f221ebc7cfb"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/home/LocationBanner.tsx": {
+    "mtime": 1779166840.0749955,
+    "ast_hash": "17866fb646c091aff2eb484379592897",
+    "semantic_hash": "17866fb646c091aff2eb484379592897"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/dashboard/MyListingsPanel.tsx": {
+    "mtime": 1779322762.82273,
+    "ast_hash": "22dfe2932afa0d33868c2e8f4b2bcc8c",
+    "semantic_hash": "22dfe2932afa0d33868c2e8f4b2bcc8c"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/ui/ErrorStates.tsx": {
+    "mtime": 1779257069.0057528,
+    "ast_hash": "ef318ed6ab91e9bed51f8f9fa6e51e6b",
+    "semantic_hash": "ef318ed6ab91e9bed51f8f9fa6e51e6b"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/ui/ErrorBoundary.tsx": {
+    "mtime": 1779325087.5613704,
+    "ast_hash": "5b6393ee476075e027a3e8bc93a14376",
+    "semantic_hash": "5b6393ee476075e027a3e8bc93a14376"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/typesense.ts": {
+    "mtime": 1778902864.8517225,
+    "ast_hash": "f4396f9acfe5ad4a466f866044088948",
+    "semantic_hash": "f4396f9acfe5ad4a466f866044088948"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/utils.ts": {
+    "mtime": 1778902864.8518813,
+    "ast_hash": "bc64fe1963a638ba55e938d3d0077db1",
+    "semantic_hash": "bc64fe1963a638ba55e938d3d0077db1"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/push.ts": {
+    "mtime": 1779082360.2671967,
+    "ast_hash": "3bdcdcb9092dc22ac59f9b455a7bf451",
+    "semantic_hash": "3bdcdcb9092dc22ac59f9b455a7bf451"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/cloudinary.ts": {
+    "mtime": 1779121735.0434015,
+    "ast_hash": "bf82f8ac63c25a7732c7e53631cf1082",
+    "semantic_hash": "bf82f8ac63c25a7732c7e53631cf1082"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/slug.ts": {
+    "mtime": 1779166513.6032262,
+    "ast_hash": "b849872e6fa47e24bb2f736f19ad74db",
+    "semantic_hash": "b849872e6fa47e24bb2f736f19ad74db"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/api-client.ts": {
+    "mtime": 1779257069.0057528,
+    "ast_hash": "79600616605ac96cd2824a046ccc1ee4",
+    "semantic_hash": "79600616605ac96cd2824a046ccc1ee4"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/posthog.ts": {
+    "mtime": 1779325087.5613704,
+    "ast_hash": "75fca82f9750cf07d9493511fcabf75d",
+    "semantic_hash": "75fca82f9750cf07d9493511fcabf75d"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/venezuela-states.ts": {
+    "mtime": 1779814668.340314,
+    "ast_hash": "47456b57452a0e546d43799d5590bb8e",
+    "semantic_hash": "47456b57452a0e546d43799d5590bb8e"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/supabase/client.ts": {
+    "mtime": 1778902864.852002,
+    "ast_hash": "9cc8bd2a442353e23890c57c83e16d72",
+    "semantic_hash": "9cc8bd2a442353e23890c57c83e16d72"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/supabase/server.ts": {
+    "mtime": 1778902864.8522544,
+    "ast_hash": "038a19ca0bc06c440907d58ae0845fbf",
+    "semantic_hash": "038a19ca0bc06c440907d58ae0845fbf"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/supabase/middleware.ts": {
+    "mtime": 1779257069.0057528,
+    "ast_hash": "fcee9473f044f876041767b837eb2888",
+    "semantic_hash": "fcee9473f044f876041767b837eb2888"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/store/auth.store.ts": {
+    "mtime": 1778902864.8523304,
+    "ast_hash": "3effb548dcd5276b5d100a8bcefaa9e2",
+    "semantic_hash": "3effb548dcd5276b5d100a8bcefaa9e2"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/store/sell.store.ts": {
+    "mtime": 1779814668.340314,
+    "ast_hash": "5b190c5bd7ce0653aaabdecfa0bc76d0",
+    "semantic_hash": "5b190c5bd7ce0653aaabdecfa0bc76d0"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/hooks/useLocation.ts": {
+    "mtime": 1779166520.570133,
+    "ast_hash": "8e37ad3db9e6bdfc6acb89b7a5dcaf80",
+    "semantic_hash": "8e37ad3db9e6bdfc6acb89b7a5dcaf80"
+  },
+  "/home/franku/projects/techmarket-vz/packages/db/package.json": {
+    "mtime": 1779253868.0393722,
+    "ast_hash": "0d684441b398c97e88c868c5c5756618",
+    "semantic_hash": "0d684441b398c97e88c868c5c5756618"
+  },
+  "/home/franku/projects/techmarket-vz/packages/db/prisma/seed.ts": {
+    "mtime": 1779165824.6636798,
+    "ast_hash": "0a8e986755ba4413c1060838a9c6a32c",
+    "semantic_hash": "0a8e986755ba4413c1060838a9c6a32c"
+  },
+  "/home/franku/projects/techmarket-vz/packages/db/src/index.ts": {
+    "mtime": 1778902864.852981,
+    "ast_hash": "41697a7d2e0a9b8f2657a866347686af",
+    "semantic_hash": "41697a7d2e0a9b8f2657a866347686af"
+  },
+  "/home/franku/projects/techmarket-vz/packages/types/package.json": {
+    "mtime": 1778902864.8530433,
+    "ast_hash": "5889e3ff4c93830fbdcb489960c35d1f",
+    "semantic_hash": "5889e3ff4c93830fbdcb489960c35d1f"
+  },
+  "/home/franku/projects/techmarket-vz/packages/types/src/index.ts": {
+    "mtime": 1779298321.1842868,
+    "ast_hash": "2b721cad78aeaaa417db3364a70e1d79",
+    "semantic_hash": "2b721cad78aeaaa417db3364a70e1d79"
+  },
+  "/home/franku/projects/techmarket-vz/packages/utils/package.json": {
+    "mtime": 1778902864.8532274,
+    "ast_hash": "694348f8efe125dde6aa0feff07b89c4",
+    "semantic_hash": "694348f8efe125dde6aa0feff07b89c4"
+  },
+  "/home/franku/projects/techmarket-vz/packages/utils/src/index.ts": {
+    "mtime": 1778902864.853292,
+    "ast_hash": "4a07a8e2b88e734fd83c2c6af9bf18d7",
+    "semantic_hash": "4a07a8e2b88e734fd83c2c6af9bf18d7"
+  },
+  "/home/franku/projects/techmarket-vz/README.md": {
+    "mtime": 1779085615.6609557,
+    "ast_hash": "ea4e62588a733ee806c9e34f5168aad4",
+    "semantic_hash": "ea4e62588a733ee806c9e34f5168aad4"
+  },
+  "/home/franku/projects/techmarket-vz/AGENT_FRONTEND_TASK.md": {
+    "mtime": 1779254368.7184987,
+    "ast_hash": "0f22a78feda2b15e64f98f372c88f25c",
+    "semantic_hash": "0f22a78feda2b15e64f98f372c88f25c"
+  },
+  "/home/franku/projects/techmarket-vz/AGENT_SPRINT63_TASK.md": {
+    "mtime": 1779255506.1878083,
+    "ast_hash": "2ac737a9828e2bf0e46a4890b56281e8",
+    "semantic_hash": "2ac737a9828e2bf0e46a4890b56281e8"
+  },
+  "/home/franku/projects/techmarket-vz/PROGRESS.md": {
+    "mtime": 1780097843.347773,
+    "ast_hash": "330712bc86578efa6718ec87cb9ea04e",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/og-image.png": {
+    "mtime": 1779328211.9627442,
+    "ast_hash": "4bcf3ddbc2de7c073ff60cdfb4872ce4",
+    "semantic_hash": "4bcf3ddbc2de7c073ff60cdfb4872ce4"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/favicon.svg": {
+    "mtime": 1779385467.9212453,
+    "ast_hash": "81528b9c857892369dd9b6fa6c4805bd",
+    "semantic_hash": "81528b9c857892369dd9b6fa6c4805bd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/public/logo.svg": {
+    "mtime": 1779385467.9222455,
+    "ast_hash": "1acccb190d9145d1e0a9a33bacdfc034",
+    "semantic_hash": "1acccb190d9145d1e0a9a33bacdfc034"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/icon.svg": {
+    "mtime": 1779385467.9202454,
+    "ast_hash": "81528b9c857892369dd9b6fa6c4805bd",
+    "semantic_hash": "81528b9c857892369dd9b6fa6c4805bd"
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/lib/config.ts": {
+    "mtime": 1780095877.3352866,
+    "ast_hash": "53dcac04a7822551bd1dc4812a75455b",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/privacy/page.tsx": {
+    "mtime": 1780096225.5936909,
+    "ast_hash": "c45413960b0ec882c55ac3c996620758",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/app/(info)/terms/page.tsx": {
+    "mtime": 1780097211.5400474,
+    "ast_hash": "c00fc5328e7051aa08c51b476363188f",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/apps/web/src/components/layout/Footer.tsx": {
+    "mtime": 1780096583.8764188,
+    "ast_hash": "f353759377366b736b4cbdc8de6e2523",
+    "semantic_hash": ""
+  },
+  "/home/franku/projects/techmarket-vz/HANDOFF.md": {
+    "mtime": 1780097911.4851317,
+    "ast_hash": "41e2f0ba715a29722465a5909b86fe01",
+    "semantic_hash": ""
+  }
+}

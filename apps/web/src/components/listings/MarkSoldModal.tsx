@@ -1,15 +1,16 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Loader2, Search, CheckCircle2, X } from 'lucide-react'
+import { Loader2, Search, CheckCircle2, X, MessageCircle } from 'lucide-react'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 
 interface UserResult {
   id: string
   username: string
-  fullName: string
+  fullName?: string
   avatarUrl: string | null
+  reputationScore?: number | null
 }
 
 interface Props {
@@ -27,11 +28,30 @@ export default function MarkSoldModal({ listingId, listingName, authToken, onCon
   const [searching, setSearching] = useState(false)
   const [selected, setSelected] = useState<UserResult | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [potentialBuyers, setPotentialBuyers] = useState<UserResult[]>([])
+  const [loadingBuyers, setLoadingBuyers] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (step === 2) setTimeout(() => inputRef.current?.focus(), 100)
   }, [step])
+
+  // Cargar usuarios que ya contactaron por WhatsApp — sugerencia rápida tipo Facebook Marketplace
+  useEffect(() => {
+    if (step !== 2) return
+    let cancelled = false
+    const loadPotentialBuyers = async () => {
+      setLoadingBuyers(true)
+      try {
+        const res = await fetch(`${API_URL}/api/v1/listings/${listingId}/potential-buyers`, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        })
+        if (res.ok && !cancelled) setPotentialBuyers(await res.json() as UserResult[])
+      } finally { if (!cancelled) setLoadingBuyers(false) }
+    }
+    void loadPotentialBuyers()
+    return () => { cancelled = true }
+  }, [step, listingId, authToken])
 
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return }
@@ -95,13 +115,52 @@ export default function MarkSoldModal({ listingId, listingName, authToken, onCon
           {step === 2 && (
             <>
               <p className="text-sm text-slate-600">¿A quién se lo vendiste? <span className="text-slate-400">(opcional)</span></p>
+
+              {/* Opción A — usuarios que contactaron por WhatsApp */}
+              {loadingBuyers && (
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Buscando compradores que te contactaron...
+                </div>
+              )}
+              {!loadingBuyers && potentialBuyers.length > 0 && !selected && (
+                <div>
+                  <p className="mb-1.5 text-xs font-medium text-slate-500">Usuarios que te contactaron:</p>
+                  <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden">
+                    {potentialBuyers.map(u => (
+                      <button
+                        key={u.id}
+                        onClick={() => { setSelected(u); setQuery(u.username); setResults([]) }}
+                        className="flex w-full items-center gap-3 px-4 py-2.5 hover:bg-slate-50 text-left"
+                      >
+                        {u.avatarUrl ? (
+                          <img src={u.avatarUrl} alt="" className="h-7 w-7 rounded-full object-cover" />
+                        ) : (
+                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">
+                            {u.username[0]?.toUpperCase()}
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-slate-900">@{u.username}</p>
+                        </div>
+                        <span className="flex items-center gap-1 text-xs text-amber-500">
+                          <MessageCircle className="h-3 w-3 text-green-500" />
+                          {typeof u.reputationScore === 'number' ? `⭐ ${u.reputationScore.toFixed(1)}` : null}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Opción B — buscar por username manualmente */}
+              <p className="text-xs font-medium text-slate-500">Buscar por username:</p>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={e => { setQuery(e.target.value); setSelected(null) }}
-                  placeholder="Buscar por username..."
+                  placeholder="@username del comprador"
                   className="w-full rounded-xl border border-slate-200 py-2.5 pl-9 pr-4 text-sm outline-none focus:border-green-500"
                 />
                 {searching && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-slate-400" />}
@@ -140,10 +199,10 @@ export default function MarkSoldModal({ listingId, listingName, authToken, onCon
 
               <div className="flex gap-2 pt-1">
                 <button
-                  onClick={() => { setSelected(null); setStep(3) }}
+                  onClick={() => { setSelected(null); setQuery(''); setStep(3) }}
                   className="flex-1 rounded-xl border border-slate-200 py-2.5 text-xs font-medium text-slate-500 hover:bg-slate-50"
                 >
-                  No está en Cambialo
+                  Se vendió fuera de Cambialo
                 </button>
                 <button
                   onClick={() => setStep(3)}

@@ -1,16 +1,16 @@
-# Graph Report - techmarket-vz  (2026-05-29)
+# Graph Report - techmarket-vz  (2026-06-07)
 
 ## Corpus Check
-- 199 files · ~84,947 words
+- 201 files · ~87,715 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1566 nodes · 2273 edges · 131 communities (91 shown, 40 thin omitted)
+- 1583 nodes · 2293 edges · 131 communities (89 shown, 42 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 109 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f6810f90`
+- Built from commit: `bb37c288`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -136,21 +136,21 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `PrismaService` - 45 edges
-2. `ListingsService` - 32 edges
+2. `ListingsService` - 35 edges
 3. `cn()` - 30 edges
 4. `AuthService` - 25 edges
 5. `createClient()` - 25 edges
 6. `AdminService` - 24 edges
-7. `ListingsController` - 22 edges
+7. `ListingsController` - 23 edges
 8. `AuthController` - 21 edges
 9. `AdminController` - 19 edges
 10. `NotificationsService` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Sprint 6.3 Geolocation Task` --references--> `useLocation()`  [EXTRACTED]
-  AGENT_SPRINT63_TASK.md → apps/web/src/hooks/useLocation.ts
 - `Sprint 6.3 Geolocation Task` --references--> `Step3Data`  [EXTRACTED]
   AGENT_SPRINT63_TASK.md → apps/web/src/store/sell.store.ts
+- `Sprint 6.3 Geolocation Task` --references--> `useLocation()`  [EXTRACTED]
+  AGENT_SPRINT63_TASK.md → apps/web/src/hooks/useLocation.ts
 - `Safe Zones Seed` --conceptually_related_to--> `VENEZUELA_STATES`  [INFERRED]
   packages/db/prisma/seed.ts → apps/web/src/lib/venezuela-states.ts
 - `KYC Frontend Task` --references--> `createClient (browser)`  [EXTRACTED]
@@ -158,7 +158,7 @@
 - `ReputationScore calculation logic` --shares_data_with--> `UsersService`  [INFERRED]
   apps/api/src/modules/reviews/reviews.service.ts → apps/api/src/modules/users/users.service.ts
 
-## Communities (131 total, 40 thin omitted)
+## Communities (131 total, 42 thin omitted)
 
 ### Community 0 - "Service Worker / Workbox Cache"
 Cohesion: 0.11
@@ -169,40 +169,40 @@ Cohesion: 0.04
 Nodes (48): dependencies, bullmq, @cambialo/types, @cambialo/utils, class-transformer, class-validator, cloudinary, ioredis (+40 more)
 
 ### Community 3 - "Admin Controller & RBAC"
-Cohesion: 0.06
-Nodes (35): Device Models search API, Price Index API endpoint, Save Listing API endpoint, WhatsApp Click tracking API, CONDITION_CLS, CONDITION_LABEL, DeviceModel, generateMetadata() (+27 more)
+Cohesion: 0.07
+Nodes (31): Device Models search API, Price Index API endpoint, Save Listing API endpoint, WhatsApp Click tracking API, CONDITION_CLS, CONDITION_LABEL, DeviceModel, generateMetadata() (+23 more)
 
 ### Community 4 - "Moderation & Prisma Services"
 Cohesion: 0.07
-Nodes (33): Sprint 6.3 Geolocation Task, Domain Enums, ListingFilters, ListingWithDetails, PublicProfile, DeviceModel, getPriceColor(), getPriceLabel() (+25 more)
+Nodes (34): AccessoriesChecklist(), AccessoriesChecklistProps, ConditionGuideProps, CONDITIONS, DeviceModel, getPriceColor(), getPriceLabel(), LocationPicker (+26 more)
 
 ### Community 6 - "Search Alerts Dashboard"
-Cohesion: 0.07
-Nodes (16): Supabase notifications table, ProfileFields, VENEZUELA_STATES, ReportButton(), ReportButtonProps, KycPage(), KycRequest, KycStatus (+8 more)
+Cohesion: 0.06
+Nodes (19): Supabase notifications table, ProfileFields, VENEZUELA_STATES, ReportButton(), ReportButtonProps, KycPage(), KycRequest, KycStatus (+11 more)
 
 ### Community 7 - "Auth Flow (login/register/2FA)"
 Cohesion: 0.07
 Nodes (17): DeleteAlertButton(), metadata, SearchAlert, DashboardPage(), metadata, Review, CityGroup, metadata (+9 more)
 
 ### Community 8 - "Web Dependencies & Packages"
-Cohesion: 0.09
-Nodes (25): getActiveListings(), getDeviceModels(), sitemap(), ApplePage(), DeviceModel, getAppleModels(), metadata, DeviceModel (+17 more)
+Cohesion: 0.11
+Nodes (21): getActiveListings(), getDeviceModels(), sitemap(), ApplePage(), DeviceModel, getAppleModels(), metadata, DeviceModel (+13 more)
 
 ### Community 9 - "Admin DTOs & Moderation Queue"
 Cohesion: 0.09
-Nodes (24): useLocation hook, VENEZUELA_STATES / STATE_COORDS, LocationBanner(), Coords, LocationStatus, useLocation(), STATE_COORDS, VENEZUELA_STATES (+16 more)
+Nodes (25): Sprint 6.3 Geolocation Task, useLocation hook, VENEZUELA_STATES / STATE_COORDS, LocationBanner(), Coords, LocationStatus, useLocation(), STATE_COORDS (+17 more)
 
 ### Community 10 - "Sitemap & SEO Generators"
 Cohesion: 0.06
 Nodes (32): dependencies, @cambialo/types, @cambialo/utils, class-variance-authority, clsx, date-fns, @ducanh2912/next-pwa, framer-motion (+24 more)
 
 ### Community 11 - "Settings & Auth Store"
-Cohesion: 0.07
-Nodes (21): KYC Frontend Task, apiCall(), ApiCallError, ApiError, ERROR_MESSAGES, createClient (browser), 2FA Role Enforcement, Protected Routes (+13 more)
+Cohesion: 0.06
+Nodes (25): KYC Frontend Task, apiCall(), ApiCallError, ApiError, ERROR_MESSAGES, createClient (browser), 2FA Role Enforcement, Protected Routes (+17 more)
 
 ### Community 12 - "Root Monorepo Config"
-Cohesion: 0.21
-Nodes (7): AdminModule, PrismaModule, ImeiModule, KycModule, KycStatus, PaymentsModule, SearchAlertsModule
+Cohesion: 0.14
+Nodes (8): AdminModule, PrismaModule, ImeiModule, KycModule, KycStatus, NotificationsController, NotificationsModule, PaymentsModule
 
 ### Community 13 - "Users Module (API)"
 Cohesion: 0.07
@@ -213,16 +213,16 @@ Cohesion: 0.12
 Nodes (5): UpdateUserDto, UpdateUserDto, UsersController, KYC verification flow, UsersService
 
 ### Community 16 - "Turborepo Pipeline Config"
-Cohesion: 0.08
-Nodes (12): NotificationsController, NotificationsModule, Notification (Prisma model), NotificationsService, VerificationController, VerificationModule, generateVerificationCode(), VerificationCode generation (+4 more)
+Cohesion: 0.13
+Nodes (8): Notification (Prisma model), VerificationController, VerificationModule, generateVerificationCode(), VerificationCode generation, VerificationService, Auto-check listing verification logic, VerificationWorker
 
 ### Community 17 - "Auto-Moderation Engine"
 Cohesion: 0.07
 Nodes (31): AdminKycPage, ModerationPage, AuthCallbackRoute, FeedContent, ExplorePage (HomePage), TrustSignals, InfoLayout(), KycPage (+23 more)
 
 ### Community 18 - "DB Package & Prisma Client"
-Cohesion: 0.18
-Nodes (8): UserRole, UserRole, BanDto, CurrentUser, UpdateListingStatusDto, SupabaseAuthGuard, ReorderDto, RejectDto
+Cohesion: 0.15
+Nodes (10): UserRole, UserRole, BanDto, ModerationQueueController, CurrentUser, CreateFraudReportDto, UpdateFraudReportDto, SupabaseAuthGuard (+2 more)
 
 ### Community 19 - "Notifications & Verification"
 Cohesion: 0.13
@@ -237,32 +237,28 @@ Cohesion: 0.10
 Nodes (19): dependencies, @prisma/client, devDependencies, prisma, ts-node, @types/node, typescript, exports (+11 more)
 
 ### Community 22 - "Reviews UI Components"
-Cohesion: 0.11
-Nodes (6): AutoCheckResult, AutoModerationService, PROHIBITED_WORDS, PrismaService, PushService, VAPID/web-push integration
+Cohesion: 0.09
+Nodes (7): AutoCheckResult, PROHIBITED_WORDS, PrismaService, NotificationsService, PushService, VAPID/web-push integration, VerificationWorker
 
 ### Community 23 - "Admin Pages & Photo Upload"
-Cohesion: 0.10
-Nodes (17): MyListingsPanel(), MyListingsPanelProps, MyListingStats, formatPrice(), generateContactMessage(), generateWhatsAppLink(), Props, UserResult (+9 more)
+Cohesion: 0.08
+Nodes (20): MyListingsPanel(), MyListingsPanelProps, MyListingStats, formatPrice(), generateContactMessage(), generateWhatsAppLink(), Props, UserResult (+12 more)
 
 ### Community 24 - "Price Index Module"
-Cohesion: 0.23
+Cohesion: 0.25
 Nodes (6): CreateReviewDto, CreateReviewDto, ReviewsController, ReviewsModule, ReputationScore calculation logic, ReviewsService
 
 ### Community 25 - "Auth API Controller"
-Cohesion: 0.21
-Nodes (3): CreateSearchAlertDto, SearchAlertsController, SearchAlertsService
-
-### Community 26 - "Web TypeScript Config"
-Cohesion: 0.15
-Nodes (3): ModerationController, ModerationQueueController, ModerationService
+Cohesion: 0.19
+Nodes (4): CreateSearchAlertDto, SearchAlertsController, SearchAlertsModule, SearchAlertsService
 
 ### Community 27 - "API TypeScript Config"
 Cohesion: 0.08
 Nodes (24): APIs clave, Archivos clave por funcionalidad, Auth / Settings, Cambialo — Handoff para nuevo agente, Convenciones del proyecto, Cómo retomar trabajo, Estado actual del producto (29 Mayo 2026), Filtros del feed (query params) (+16 more)
 
 ### Community 28 - "NestJS App Module"
-Cohesion: 0.12
-Nodes (20): cn(), ReviewCard(), ReviewCardProps, FormData, ReviewForm(), ReviewFormProps, schema, Review (+12 more)
+Cohesion: 0.09
+Nodes (22): CONDITION_LABELS, Listing, ModelListings(), Props, FAQS, cn(), ReviewCard(), ReviewCardProps (+14 more)
 
 ### Community 29 - "Search Alerts Module"
 Cohesion: 0.12
@@ -289,8 +285,8 @@ Cohesion: 0.14
 Nodes (13): background_color, categories, description, display, icons, name, orientation, prefer_related_applications (+5 more)
 
 ### Community 36 - "Module 36"
-Cohesion: 0.15
-Nodes (6): CreateFraudReportDto, FraudReportsController, UpdateFraudReportDto, FraudReportsModule, FraudReport (Prisma model), FraudReportsService
+Cohesion: 0.16
+Nodes (4): FraudReportsController, FraudReportsModule, FraudReport (Prisma model), FraudReportsService
 
 ### Community 37 - "Module 37"
 Cohesion: 0.18
@@ -306,15 +302,15 @@ Nodes (9): cn(), FeedContent(), FeedItem, FeedPage, fetchFeed(), itemVariants, l
 
 ### Community 40 - "Module 40"
 Cohesion: 0.18
-Nodes (10): apiCall, ApiCallError, buildListingsQuery, ERROR_MESSAGES, FormData, schema, SearchAlertForm(), ApiError() (+2 more)
+Nodes (8): apiCall, ApiCallError, buildListingsQuery, ERROR_MESSAGES, ErrorBoundary(), ApiError(), ConnectionError(), TimeoutError()
 
 ### Community 41 - "Module 41"
 Cohesion: 0.25
 Nodes (3): EmptyStateFeed(), EmptyStateWithFilters(), EmptyStateWithFiltersProps
 
 ### Community 42 - "Module 42"
-Cohesion: 0.18
-Nodes (3): Typesense Full-text Search, TypesenseService, TypesenseSyncWorker
+Cohesion: 0.21
+Nodes (6): BullMQ Queue listings, IMEI Duplicate Fraud Detection, Typesense Full-text Search, ListingsModule, TypesenseService, TypesenseSyncWorker
 
 ### Community 43 - "Module 43"
 Cohesion: 0.16
@@ -349,7 +345,7 @@ Cohesion: 0.22
 Nodes (4): searchClient, TYPESENSE_PORT, typesenseConfig, TypesenseHit
 
 ### Community 51 - "Module 51"
-Cohesion: 0.31
+Cohesion: 0.29
 Nodes (3): DeviceModelsController, DeviceModelsModule, DeviceModelsService
 
 ### Community 52 - "Module 52"
@@ -381,15 +377,15 @@ Cohesion: 0.22
 Nodes (6): KYC_META, KycStatus, Listing, ROLE_META, UserDetail, UserRole
 
 ### Community 59 - "Module 59"
-Cohesion: 0.22
-Nodes (14): Algolia react-instantsearch hooks, ListingCondition type, BatteryFilter(), CityFilter(), CONDITION_LABELS, ConditionFilter(), FilterPanel(), FilterPanelProps (+6 more)
+Cohesion: 0.29
+Nodes (12): Algolia react-instantsearch hooks, ListingCondition type, BatteryFilter(), CityFilter(), CONDITION_LABELS, ConditionFilter(), FilterPanel(), FilterPanelProps (+4 more)
 
 ### Community 60 - "Module 60"
 Cohesion: 0.29
 Nodes (5): ListingCardSkeleton(), getRecentListings(), metadata, RecentListing, RecentListingsSection()
 
 ### Community 61 - "Module 61"
-Cohesion: 0.14
+Cohesion: 0.12
 Nodes (3): CreateListingDto, UpdateListingStatusDto, ListingsController
 
 ### Community 62 - "Module 62"
@@ -407,10 +403,6 @@ Nodes (5): config, middleware(), ROLES_REQUIRE_2FA, TWO_FA_EXEMPT, updateSession
 ### Community 66 - "Module 66"
 Cohesion: 0.33
 Nodes (4): DONE, IN_PROGRESS, metadata, UPCOMING
-
-### Community 67 - "Module 67"
-Cohesion: 0.33
-Nodes (4): ASSIGNABLE_ROLES, ROLE_META, UserRecord, UserRole
 
 ### Community 68 - "Module 68"
 Cohesion: 0.33
@@ -465,35 +457,35 @@ Cohesion: 0.33
 Nodes (5): Cambialo, Desarrollo local, Estructura, Roadmap, Stack
 
 ### Community 124 - "Community 124"
-Cohesion: 0.21
-Nodes (6): getListingLimit(), LISTING_LIMITS, CreateListingDto, ListingConditionEnum, ListingConditionEnum, PUBLIC_SELLER_SELECT
+Cohesion: 0.15
+Nodes (8): getListingLimit(), LISTING_LIMITS, CreateListingDto, ListingConditionEnum, ListingConditionEnum, UpdateListingStatusDto, OptionalAuthGuard, PUBLIC_SELLER_SELECT
 
-### Community 128 - "Community 128"
-Cohesion: 0.67
-Nodes (4): BullMQ Queue listings, IMEI Duplicate Fraud Detection, ListingsModule, TypesenseSyncWorker
+### Community 127 - "Community 127"
+Cohesion: 0.40
+Nodes (4): BRANDS_OPTS, CONDITION_MULT, Props, STORAGE_OPTS
 
 ## Ambiguous Edges - Review These
 - `Sitemap generator` → `KYC Identity Verification`  [AMBIGUOUS]
   apps/web/src/app/sitemap.ts · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **594 isolated node(s):** `name`, `private`, `workspaces`, `dev`, `build` (+589 more)
+- **596 isolated node(s):** `name`, `private`, `workspaces`, `dev`, `build` (+591 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **40 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `Sitemap generator` and `KYC Identity Verification`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `PrismaService` connect `Reviews UI Components` to `Module 32`, `Module 36`, `Listing Detail & Price UI`, `Community 122`, `Module 42`, `Module 43`, `Root Monorepo Config`, `Community 120`, `Admin KYC & Feed`, `Turborepo Pipeline Config`, `Module 49`, `DB Package & Prisma Client`, `Module 51`, `Module 81`, `Price Index Module`, `Auth API Controller`, `Web TypeScript Config`, `Community 124`?**
+- **Why does `PrismaService` connect `Reviews UI Components` to `Module 32`, `Module 36`, `Listing Detail & Price UI`, `Module 42`, `Module 43`, `Root Monorepo Config`, `Community 120`, `Admin KYC & Feed`, `Security Concepts (2FA/KYC/Ban)`, `Turborepo Pipeline Config`, `Module 49`, `DB Package & Prisma Client`, `Module 51`, `Module 81`, `Price Index Module`, `Auth API Controller`, `Community 122`, `Community 124`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **Why does `AuthService` connect `Module 76` to `API Dependencies & Packages`, `Listing Detail & Price UI`, `Notifications & Verification`, `Community 120`, `Community 122`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `ListingsService` connect `Module 34` to `Community 128`, `Module 42`, `Module 92`, `Module 81`, `DB Package & Prisma Client`, `Reviews UI Components`, `Community 124`, `Module 61`?**
+- **Why does `createClient()` connect `Search Alerts Dashboard` to `Moderation & Prisma Services`, `Auth Flow (login/register/2FA)`, `Settings & Auth Store`, `Auto-Moderation Engine`, `Admin Pages & Photo Upload`, `Module 57`, `Module 58`, `NestJS App Module`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `createClient()` connect `Search Alerts Dashboard` to `Module 67`, `Moderation & Prisma Services`, `Auth Flow (login/register/2FA)`, `Module 40`, `Settings & Auth Store`, `Auto-Moderation Engine`, `Admin Pages & Photo Upload`, `Module 57`, `Module 58`, `NestJS App Module`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `workspaces` to the rest of the system?**
-  _594 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _596 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Service Worker / Workbox Cache` be split into smaller, more focused modules?**
   _Cohesion score 0.10826210826210826 - nodes in this community are weakly interconnected._
 - **Should `API Dependencies & Packages` be split into smaller, more focused modules?**
