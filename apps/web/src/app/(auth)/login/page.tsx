@@ -9,6 +9,8 @@ import { createClient } from '@/lib/supabase/client'
 import { LogIn, Mail, Lock, Chrome, Loader2, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
+
 const loginSchema = z.object({
   identifier: z.string().min(1, 'Email o username requerido'),
   password: z.string().min(6, 'Mínimo 6 caracteres').optional(),
@@ -38,33 +40,43 @@ export default function LoginPage() {
     setMessage(null)
     try {
       if (mode === 'password') {
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email: data.identifier,
-          password: data.password!,
+        // El backend resuelve si 'identifier' es email o username y verifica ban/suspensión
+        const res = await fetch(`${API_URL}/api/v1/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: data.identifier, password: data.password }),
         })
-        if (authError) throw authError
-
-        // Verificar ban / suspensión
-        const { data: rawUser } = await supabase
-          .from('users')
-          .select('is_banned, ban_reason, is_suspended, suspended_until')
-          .eq('id', authData.user.id)
-          .single()
-
-        const userData = rawUser as { is_banned: boolean; ban_reason: string | null; is_suspended: boolean; suspended_until: string | null } | null
-
-        if (userData?.is_banned) {
-          await supabase.auth.signOut()
-          setError(`Cuenta suspendida permanentemente: ${userData.ban_reason ?? 'contacta soporte'}`)
-          return
+        const body = await res.json().catch(() => ({})) as {
+          accessToken?: string
+          refreshToken?: string
+          code?: string
+          until?: string
+          message?: string
         }
 
-        if (userData?.is_suspended && userData.suspended_until && new Date(userData.suspended_until) > new Date()) {
-          await supabase.auth.signOut()
-          const until = new Date(userData.suspended_until).toLocaleDateString('es-VE', { day: '2-digit', month: 'long', year: 'numeric' })
-          setError(`Cuenta suspendida hasta el ${until}.`)
-          return
+        if (!res.ok) {
+          if (body.code === 'ACCOUNT_BANNED') {
+            setError(body.message ?? 'Esta cuenta ha sido suspendida permanentemente.')
+            return
+          }
+          if (body.code === 'ACCOUNT_SUSPENDED') {
+            const until = body.until
+              ? new Date(body.until).toLocaleDateString('es-VE', { day: '2-digit', month: 'long', year: 'numeric' })
+              : null
+            setError(until ? `Cuenta suspendida hasta el ${until}.` : (body.message ?? 'Cuenta suspendida.'))
+            return
+          }
+          throw new Error(body.message ?? 'Credenciales inválidas.')
         }
+
+        const { error: setSessionError } = await supabase.auth.setSession({
+          access_token: body.accessToken!,
+          refresh_token: body.refreshToken!,
+        })
+        if (setSessionError) throw setSessionError
+
+        const { data: authData } = await supabase.auth.getUser()
+        if (!authData.user) throw new Error('No se pudo iniciar sesión')
 
         // Verificar 2FA para roles críticos
         const { data: roleRows } = await supabase
