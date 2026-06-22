@@ -10,7 +10,7 @@ import { LogIn, Mail, Lock, Chrome, Loader2, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
 const loginSchema = z.object({
-  email: z.string().email('Email inválido'),
+  identifier: z.string().min(1, 'Email o username requerido'),
   password: z.string().min(6, 'Mínimo 6 caracteres').optional(),
 })
 
@@ -39,7 +39,7 @@ export default function LoginPage() {
     try {
       if (mode === 'password') {
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email: data.email,
+          email: data.identifier,
           password: data.password!,
         })
         if (authError) throw authError
@@ -94,7 +94,7 @@ export default function LoginPage() {
         router.refresh()
       } else {
         const { error: otpError } = await supabase.auth.signInWithOtp({
-          email: data.email,
+          email: data.identifier,
           options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
         })
         if (otpError) throw otpError
@@ -147,12 +147,23 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <label className={labelCls}>Email</label>
+          <label className={labelCls}>Correo electrónico o usuario</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input {...register('email')} type="email" className={inputCls} placeholder="tu@email.com" />
+            <input
+              {...register('identifier')}
+              type="text"
+              className={inputCls}
+              placeholder="tu@email.com o @usuario"
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+            />
           </div>
-          {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+          <p className="text-xs text-slate-400 mt-1">
+            Puedes usar tu correo electrónico o tu nombre de usuario.
+          </p>
+          {errors.identifier && <p className="text-xs text-red-500">{errors.identifier.message}</p>}
         </div>
 
         {mode === 'password' && (

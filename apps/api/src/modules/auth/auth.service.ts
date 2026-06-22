@@ -89,23 +89,69 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
+    const { identifier, password } = dto
+    const isEmail = identifier.includes('@')
+
+    // 1. Resolver email desde username si es necesario
+    let email: string
+    if (isEmail) {
+      email = identifier
+    } else {
+      const userByUsername = await this.prisma.user.findUnique({
+        where: { username: identifier.toLowerCase() },
+        select: { email: true },
+      })
+      if (!userByUsername) {
+        // Error genérico — no revela si el username existe
+        throw new UnauthorizedException('Credenciales inválidas.')
+      }
+      email = userByUsername.email
+    }
+
+    // 2. Autenticar con Supabase
     const { data, error } = await this.supabase.auth.signInWithPassword({
-      email: dto.email,
-      password: dto.password,
+      email,
+      password,
     })
 
     if (error || !data.session) {
-      throw new UnauthorizedException('Email o contraseña incorrectos')
+      throw new UnauthorizedException('Credenciales inválidas.')
     }
 
-    // Verificar que el usuario no esté baneado
+    // 3. Verificar ban Y suspensión
     const user = await this.prisma.user.findUnique({
       where: { id: data.user.id },
-      select: { isBanned: true, banReason: true, username: true, fullName: true },
+      select: {
+        isBanned: true,
+        banReason: true,
+        isSuspended: true,
+        suspendedUntil: true,
+        suspendReason: true,
+        username: true,
+        fullName: true,
+      },
     })
 
     if (user?.isBanned) {
-      throw new UnauthorizedException(`Cuenta suspendida: ${user.banReason ?? 'contacta soporte'}`)
+      throw new ForbiddenException({
+        code: 'ACCOUNT_BANNED',
+        message: 'Esta cuenta ha sido suspendida permanentemente.',
+      })
+    }
+
+    if (user?.isSuspended) {
+      if (user.suspendedUntil && user.suspendedUntil > new Date()) {
+        throw new ForbiddenException({
+          code: 'ACCOUNT_SUSPENDED',
+          until: user.suspendedUntil,
+          message: `Cuenta suspendida hasta ${user.suspendedUntil.toISOString()}.`,
+        })
+      }
+      // Suspensión expirada — limpiar silenciosamente
+      await this.prisma.user.update({
+        where: { id: data.user.id },
+        data: { isSuspended: false, suspendedUntil: null, suspendReason: null },
+      })
     }
 
     return {

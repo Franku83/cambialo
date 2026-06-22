@@ -10,6 +10,8 @@ import {
   Length,
   Matches,
   MaxLength,
+  ValidateIf,
+  ValidateNested,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
@@ -19,6 +21,59 @@ enum ListingConditionEnum {
   good = 'good',
   fair = 'fair',
   poor = 'poor',
+}
+
+class RepairDetailsDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  screen?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  battery?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  backCamera?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  frontCamera?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  chargePort?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  buttons?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  housing?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  faceIdTouchId?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  speakerMic?: boolean
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  other?: string
 }
 
 export class CreateListingDto {
@@ -64,10 +119,11 @@ export class CreateListingDto {
   hasRepairs?: boolean
 
   @ApiPropertyOptional()
-  @IsString()
   @IsOptional()
-  @MaxLength(500)
-  repairDetails?: string
+  @ValidateIf((o) => o.hasRepairs === true)
+  @ValidateNested()
+  @Type(() => RepairDetailsDto)
+  repairDetails?: RepairDetailsDto
 
   @ApiPropertyOptional()
   @IsBoolean()

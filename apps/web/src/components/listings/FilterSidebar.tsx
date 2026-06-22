@@ -99,6 +99,7 @@ interface Filters {
   lng?: string | undefined
   paymentMethod?: string | undefined
   acceptsTradeIn?: boolean | undefined
+  noRepairs?: boolean | undefined
 }
 
 function parseFilters(params: URLSearchParams): Filters {
@@ -119,6 +120,7 @@ function parseFilters(params: URLSearchParams): Filters {
     lng: params.get('lng') ?? undefined,
     paymentMethod: params.get('paymentMethod') ?? undefined,
     acceptsTradeIn: params.get('acceptsTradeIn') === '1',
+    noRepairs: params.get('noRepairs') === '1',
   }
 }
 
@@ -136,7 +138,8 @@ function countActiveFilters(f: Filters) {
     (f.includesCharger ? 1 : 0) +
     (f.state ? 1 : 0) +
     (f.paymentMethod ? 1 : 0) +
-    (f.acceptsTradeIn ? 1 : 0)
+    (f.acceptsTradeIn ? 1 : 0) +
+    (f.noRepairs ? 1 : 0)
   )
 }
 
@@ -333,6 +336,11 @@ function FiltersContent({
           onChange={(v) => setLocal((p) => ({ ...p, acceptsTradeIn: v }))}
           label="💱 Acepta trade-in"
         />
+        <Toggle
+          checked={local.noRepairs ?? false}
+          onChange={(v) => setLocal((p) => ({ ...p, noRepairs: v }))}
+          label="🔧 Sin reparaciones"
+        />
       </div>
 
       <button
@@ -385,6 +393,7 @@ export function FilterSidebar() {
       // New filters
       if (f.paymentMethod) params.set('paymentMethod', f.paymentMethod)
       if (f.acceptsTradeIn) params.set('acceptsTradeIn', '1')
+      if (f.noRepairs) params.set('noRepairs', '1')
 
       router.push(`${pathname}?${params.toString()}`)
       setMobileOpen(false)

@@ -111,6 +111,12 @@ export class ListingFiltersDto {
   @IsOptional()
   acceptsTradeIn?: boolean
 
+  @ApiPropertyOptional({ description: 'Solo equipos sin reparaciones' })
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  @IsOptional()
+  noRepairs?: boolean
+
   @ApiPropertyOptional({ description: 'Solo listings que incluyen cargador' })
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()

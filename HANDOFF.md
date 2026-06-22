@@ -1,5 +1,5 @@
 # Cambialo — Handoff para nuevo agente
-> Generado: 29 Mayo 2026  
+> Generado: 22 Junio 2026  
 > Propósito: contexto completo para retomar el proyecto sin conversación previa
 
 ---
@@ -78,6 +78,8 @@ Step 5: Preview → POST /verification/:id/submit → status=pending_review
 ```
 GET    /api/v1/listings                    feed con filtros (lat/lng/rangeKm/state/brand/condition/...)
 GET    /api/v1/listings/:id                detalle (viewer del JWT, no query param)
+GET    /api/v1/listings/mine/stats         listings del vendedor con stats (auth)
+GET    /api/v1/listings/mine/archived      listings archivados (sold/removed/expired) con cursor pagination (auth)
 POST   /api/v1/listings                    crear draft (auth)
 PATCH  /api/v1/listings/:id/details        actualizar datos del draft (auth)
 PATCH  /api/v1/listings/:id/status         cambiar estado (auth)
@@ -90,7 +92,7 @@ POST   /api/v1/listings/:id/save|unsave    watchlist (auth)
 ### Auth / Settings
 ```
 POST /api/v1/auth/register
-POST /api/v1/auth/login
+POST /api/v1/auth/login                          acepta email o username en campo "identifier"
 POST /api/v1/auth/settings/change-email|change-password
 GET  /api/v1/auth/settings/payment-methods
 PUT  /api/v1/auth/settings/payment-methods   { zelle: { enabled, handle }, usdt: {...}, ... }
@@ -139,6 +141,7 @@ offers=1
 box=1
 charger=1
 acceptsTradeIn=1
+noRepairs=1                   solo equipos sin reparaciones
 state=DC|MR|...  (código estado venezolano — ver lib/venezuela-states.ts)
 lat=10.48&lng=-66.9&rangeKm=40
 paymentMethod=zelle|usdt|pago_movil|cash|bs
@@ -156,11 +159,12 @@ User:     id, username, email, fullName, avatarUrl, idVerified, isVerifiedSeller
           locationCity, locationState, whatsappNumber, whatsappPublic,
           paymentMethods Json?  -- { zelle: { enabled, handle }, usdt: {...}, ... }
 
-Listing:  id, sellerId, deviceModelId, status (draft|pending_review|active|paused|sold|removed),
+Listing:  id, sellerId, deviceModelId, status (draft|pending_review|active|paused|sold|expired|removed),
           verificationStatus (pending|verified|rejected), priceUsd, storageGb,
           batteryHealth, condition (mint|good|fair|poor), imeiLast4,
           city, state, latitude, longitude, acceptsOffers, minOfferUsd,
           includesBox, includesCharger, includesEarphones, acceptsTradeIn,
+          hasRepairs Boolean, repairDetails String? (JSON serializado),
           isCover (en ListingPhoto), isBumped, viewsCount, savesCount, whatsappClicks
 
 ListingPhoto: id, listingId, cloudinaryId, cloudinaryUrl, isCover, isVerificationPhoto, sortOrder
@@ -174,14 +178,20 @@ ListingPhoto: id, listingId, cloudinaryId, cloudinaryUrl, isCover, isVerificatio
 |---|---|
 | Feed + filtros (API) | `apps/api/src/modules/listings/listings.service.ts` |
 | Filtros DTO | `apps/api/src/modules/listings/dto/listing-filters.dto.ts` |
+| CreateListing DTO | `apps/api/src/modules/listings/dto/create-listing.dto.ts` |
+| Listings controller | `apps/api/src/modules/listings/listings.controller.ts` |
 | Wizard publicación | `apps/web/src/app/(main)/sell/page.tsx` |
 | Store wizard | `apps/web/src/store/sell.store.ts` |
 | LocationPicker (mapa) | `apps/web/src/components/listings/LocationPicker.tsx` |
 | FilterSidebar | `apps/web/src/components/listings/FilterSidebar.tsx` |
 | ListingCard | `apps/web/src/components/listings/ListingCard.tsx` |
+| Listing detail | `apps/web/src/app/(main)/listings/[id]/page.tsx` |
+| Dashboard panel | `apps/web/src/components/dashboard/MyListingsPanel.tsx` |
+| Archived panel | `apps/web/src/components/dashboard/ArchivedListingsPanel.tsx` |
 | Header | `apps/web/src/components/layout/Header.tsx` |
 | Footer (shared) | `apps/web/src/components/layout/Footer.tsx` |
 | Auth service | `apps/api/src/modules/auth/auth.service.ts` |
+| Login DTO | `apps/api/src/modules/auth/dto/login.dto.ts` |
 | Verificación | `apps/api/src/modules/verification/verification.service.ts` |
 | Moderación | `apps/api/src/modules/admin/moderation.service.ts` |
 | Estados VZ (API) | `apps/api/src/common/constants/venezuela-states.ts` |
@@ -206,20 +216,22 @@ export const VERIFICATION_CODE_ENABLED =
 
 ---
 
-## Estado actual del producto (29 Mayo 2026)
+## Estado actual del producto (22 Junio 2026)
 
 ### Lo que funciona en producción
-- ✅ Registro / Login (email+password, Google OAuth, magic link)
+- ✅ Registro / Login (email+password, username+password, Google OAuth, magic link)
 - ✅ 2FA TOTP para admin/mod/owner
 - ✅ KYC (upload cédula+selfie, revisión admin, límites de listing por nivel)
 - ✅ Wizard publicación 5 pasos con fotos Cloudinary
-- ✅ Feed infinito con cursor pagination + 10+ filtros
+- ✅ Reparaciones estructuradas en wizard (checklist 9 items + "Otro")
+- ✅ Feed infinito con cursor pagination + 12+ filtros (incluye noRepairs)
 - ✅ Mapa Leaflet en filtros (dropdown estados VZ + radio km)
-- ✅ Detalle listing con galería, precio mercado, WhatsApp CTA
+- ✅ Detalle listing con galería, precio mercado, WhatsApp CTA, reparaciones
 - ✅ Métodos de pago por vendedor (Zelle, USDT, Pago Móvil, Efectivo, Bs)
 - ✅ Reviews + reputación permanente
 - ✅ Panel admin: users, moderación, KYC
 - ✅ Cola de moderación (`status=pending_review` sin drafts)
+- ✅ Dashboard con 3 tabs: Activos / Borradores / Archivados
 - ✅ Notificaciones in-app (Supabase Realtime) + push VAPID
 - ✅ Alertas de búsqueda
 - ✅ SEO: sitemap dinámico, robots.txt, JSON-LD, OG images
@@ -236,6 +248,8 @@ export const VERIFICATION_CODE_ENABLED =
 - Typesense (search avanzado) — desactivado sin crash, puede activarse cuando haya budget
 - k6 load testing
 - Magic link por dispositivo nuevo (`TrustedDevice` model)
+- Paginación cursor en archivados (implementada, pendiente UI "cargar más")
+- `LISTING_LIMITS_UI`: activar en `MyListingsPanel` cuando se decida implementar
 
 ---
 
@@ -251,11 +265,12 @@ export const VERIFICATION_CODE_ENABLED =
 
 ## Convenciones del proyecto
 
-- **Tailwind utilities** para todo — no clases CSS custom en globals.css (Agy introdujo algunas, considerarlas deuda técnica)
+- **Tailwind utilities** para todo — no clases CSS custom en globals.css. Si una combinación es muy verbose, documentar como deuda técnica.
 - **No `any`** en TypeScript si se puede evitar
 - **Commits:** `feat|fix|docs|refactor(scope): mensaje` + `Co-Authored-By: Claude Sonnet 4.6`
 - **Grafo de conocimiento:** `graphify-out/graph.json` existe. Después de cada sprint correr `graphify update .`
 - **PROGRESS.md** y **HANDOFF.md** se actualizan al final de cada sprint
+- **repairDetails** se almacena como `String?` (JSON serializado) en la DB, no como `Json?` — hacer `JSON.parse()` en frontend, `JSON.stringify()` al guardar
 
 ---
 

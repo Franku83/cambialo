@@ -34,7 +34,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Iniciar sesión con email y contraseña' })
+  @ApiOperation({ summary: 'Iniciar sesión con email/username y contraseña' })
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto)
   }

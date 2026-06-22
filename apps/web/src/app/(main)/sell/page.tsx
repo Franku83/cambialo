@@ -236,10 +236,19 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   )
   const [battery, setBattery] = useState(step2.batteryHealth ?? 85)
   const [hasRepairs, setHasRepairs] = useState(step2.hasRepairs ?? false)
-  const [repairDetails, setRepairDetails] = useState(step2.repairDetails ?? '')
+  const [repairDetails, setRepairDetails] = useState<Record<string, boolean | string>>(() => {
+    if (step2.repairDetails) {
+      try { return JSON.parse(step2.repairDetails) as Record<string, boolean | string> } catch { /* empty */ }
+    }
+    return {}
+  })
   const [imei, setImei] = useState(step2.imei ?? '')
   const [imeiVisibility, setImeiVisibility] = useState(step2.imeiVisibility ?? 'last4')
   const [error, setError] = useState<string | null>(null)
+
+  const setRepairDetail = (key: string, value: boolean | string) => {
+    setRepairDetails(prev => ({ ...prev, [key]: value }))
+  }
 
   const handleNext = () => {
     if (!condition) return setError('Selecciona la condición del equipo')
@@ -259,7 +268,7 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       condition,
       batteryHealth: battery,
       hasRepairs,
-      repairDetails,
+      repairDetails: hasRepairs ? JSON.stringify(repairDetails) : '',
       includesBox: step2.includesBox ?? false,
       includesCharger: step2.includesCharger ?? false,
       includesEarphones: step2.includesEarphones ?? false,
@@ -306,18 +315,20 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
       </div>
 
       {/* Reparaciones */}
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-slate-700">¿Ha sido reparado?</p>
-            <p className="text-xs text-slate-400">Pantalla, batería, cámara, etc.</p>
+            <p className="text-xs text-slate-400">
+              Sé honesto — los compradores lo valoran y genera más confianza.
+            </p>
           </div>
           <button
             type="button"
             onClick={() => setHasRepairs(!hasRepairs)}
             className={cn(
               'relative inline-flex h-5 w-9 rounded-full border-2 border-transparent transition-colors',
-              hasRepairs ? 'bg-blue-600' : 'bg-slate-200',
+              hasRepairs ? 'bg-green-600' : 'bg-slate-200',
             )}
           >
             <span
@@ -328,14 +339,55 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
             />
           </button>
         </div>
+
         {hasRepairs && (
-          <textarea
-            value={repairDetails}
-            onChange={(e) => setRepairDetails(e.target.value)}
-            placeholder="Describe qué fue reparado, dónde y cuándo..."
-            rows={3}
-            className="mt-3 w-full resize-none rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:border-green-500"
-          />
+          <div className="space-y-3">
+            <p className="text-xs font-medium text-slate-500">¿Qué fue reparado?</p>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { key: 'screen',        label: 'Pantalla / Display',      icon: '📱' },
+                { key: 'battery',       label: 'Batería',                 icon: '🔋' },
+                { key: 'backCamera',    label: 'Cámara trasera',          icon: '📷' },
+                { key: 'frontCamera',   label: 'Cámara frontal',          icon: '🤳' },
+                { key: 'chargePort',    label: 'Puerto de carga',         icon: '🔌' },
+                { key: 'buttons',       label: 'Botones',                 icon: '⚙️' },
+                { key: 'housing',       label: 'Carcasa / Chasis',        icon: '🔲' },
+                { key: 'faceIdTouchId', label: 'Face ID / Touch ID',      icon: '👆' },
+                { key: 'speakerMic',    label: 'Parlante / Micrófono',    icon: '🔊' },
+              ].map(item => (
+                <label
+                  key={item.key}
+                  className={cn(
+                    'flex items-center gap-2 px-3 py-2.5 border rounded-lg cursor-pointer transition-all duration-150',
+                    repairDetails[item.key]
+                      ? 'border-green-600 bg-green-50'
+                      : 'border-slate-200 bg-white hover:border-slate-300',
+                  )}
+                >
+                  <input
+                    type="checkbox"
+                    checked={!!repairDetails[item.key]}
+                    onChange={e => setRepairDetail(item.key, e.target.checked)}
+                    className="sr-only"
+                  />
+                  <span className="text-base">{item.icon}</span>
+                  <span className="text-[13px] text-slate-900">{item.label}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-500">Otro (opcional)</label>
+              <input
+                type="text"
+                placeholder="Describe cualquier otra reparación..."
+                value={typeof repairDetails.other === 'string' ? repairDetails.other : ''}
+                onChange={e => setRepairDetail('other', e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:border-green-500"
+                maxLength={200}
+              />
+            </div>
+          </div>
         )}
       </div>
 
@@ -1095,7 +1147,7 @@ function Step5({ onBack }: { onBack: () => void }) {
       <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-4">
         <h3 className="font-semibold text-slate-900">Resumen del listing</h3>
 
-        <div className="space-y-2 text-sm">
+          <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-slate-500">Equipo</span>
             <span className="font-medium text-slate-900">{step1.brand} {step1.modelName} {step1.storageGb}GB</span>
@@ -1108,6 +1160,41 @@ function Step5({ onBack }: { onBack: () => void }) {
             <span className="text-slate-500">Batería</span>
             <span className="font-medium text-slate-900">{step2.batteryHealth}%</span>
           </div>
+          {step2.hasRepairs && (() => {
+            let parsed: Record<string, boolean | string> = {}
+            try { parsed = JSON.parse(step2.repairDetails ?? '{}') as Record<string, boolean | string> } catch { /* empty */ }
+            const REPAIR_LABELS = [
+              { key: 'screen', label: 'Pantalla', icon: '📱' },
+              { key: 'battery', label: 'Batería', icon: '🔋' },
+              { key: 'backCamera', label: 'Cámara trasera', icon: '📷' },
+              { key: 'frontCamera', label: 'Cámara frontal', icon: '🤳' },
+              { key: 'chargePort', label: 'Puerto de carga', icon: '🔌' },
+              { key: 'buttons', label: 'Botones', icon: '⚙️' },
+              { key: 'housing', label: 'Carcasa', icon: '🔲' },
+              { key: 'faceIdTouchId', label: 'Face ID / Touch ID', icon: '👆' },
+              { key: 'speakerMic', label: 'Parlante / Micrófono', icon: '🔊' },
+            ]
+            const active = REPAIR_LABELS.filter(r => parsed[r.key])
+            const other = typeof parsed.other === 'string' ? parsed.other : ''
+            if (active.length === 0 && !other) return null
+            return (
+              <div className="flex justify-between items-start gap-2">
+                <span className="text-slate-500 shrink-0">Reparaciones</span>
+                <div className="flex flex-wrap gap-1 justify-end">
+                  {active.map(r => (
+                    <span key={r.key} className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-[11px] font-medium rounded-full border border-amber-200">
+                      {r.icon} {r.label}
+                    </span>
+                  ))}
+                  {other && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-[11px] font-medium rounded-full border border-amber-200">
+                      ⚙️ {other}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
           <div className="flex justify-between border-t border-slate-200 pt-2">
             <span className="text-slate-500">Precio</span>
             <span className="text-xl font-bold text-green-600">{formatPrice(step3.priceUsd ?? 0)}</span>

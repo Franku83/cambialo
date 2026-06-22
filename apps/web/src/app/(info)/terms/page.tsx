@@ -34,7 +34,7 @@ const sections = [
         <ul className="list-disc pl-5 space-y-1 mb-4">
           <li>Eres responsable de mantener la confidencialidad de tu contraseña.</li>
           <li>Eres responsable de toda la actividad que ocurra bajo tu cuenta.</li>
-          <li>Debes notificarnos de inmediato a soporte@cambialo.app si sospechas acceso no autorizado.</li>
+          <li>Debes notificarnos de inmediato a través de nuestro formulario de soporte si sospechas acceso no autorizado.</li>
           <li>No puedes crear más de una cuenta personal. Las cuentas son intransferibles.</li>
         </ul>
         <p className="font-medium text-slate-800 mb-2">Verificación de identidad:</p>
@@ -93,7 +93,11 @@ const sections = [
   {
     title: '6. Reputación y reseñas',
     content: (
-      <p>Las reseñas en Cambialo son permanentes y no pueden ser eliminadas por los usuarios. Reflejan la experiencia real de compradores y vendedores. Solo puedes dejar una reseña por transacción. Las reseñas falsas, manipuladas o que contengan información personal de terceros serán eliminadas y pueden resultar en la suspensión de la cuenta.</p>
+      <>
+        <p className="mb-3">Las reseñas en Cambialo son permanentes y no pueden ser eliminadas por los usuarios. Reflejan la experiencia real de compradores y vendedores. Solo puedes dejar una reseña por transacción.</p>
+        <p className="mb-3">Se considera reseña inválida aquella publicada sin haber completado una transacción real en la plataforma, que contenga información demostrablemente falsa, que incluya datos personales de terceros, o que sea resultado de un acuerdo para manipular artificialmente la reputación de un usuario. Las reseñas inválidas serán eliminadas y pueden resultar en la suspensión de la cuenta.</p>
+        <p>Las reseñas publicadas por un usuario son registros permanentes del marketplace. Si un usuario elimina su cuenta, las reseñas que publicó sobre otros vendedores permanecen visibles para preservar la integridad del historial de reputación de la plataforma.</p>
+      </>
     ),
   },
   {
@@ -126,7 +130,9 @@ const sections = [
           <li>Suplantación de identidad.</li>
           <li>Múltiples infracciones graves.</li>
         </ul>
-        <p>Los usuarios baneados no pueden registrarse nuevamente con el mismo correo electrónico. Los baneos son apelables escribiendo a <a href="mailto:soporte@cambialo.app" className="text-green-600 underline hover:text-green-700">soporte@cambialo.app</a> con evidencia que justifique la revisión.</p>
+        <p className="mb-3">Los usuarios baneados no pueden registrarse nuevamente con el mismo correo electrónico.</p>
+        <p className="font-medium text-slate-800 mb-2">Proceso de apelación:</p>
+        <p>Cualquier decisión de moderación puede apelarse realizando tu solicitud a través del formulario de soporte disponible en tu panel de usuario, dentro de los 7 días siguientes a la notificación. Incluye tu nombre de usuario, el listing afectado y la razón de tu apelación. Nos comprometemos a responder en un plazo de 48 horas hábiles.</p>
       </>
     ),
   },
@@ -161,7 +167,7 @@ const sections = [
   {
     title: '12. Contacto',
     content: (
-      <p>Para cualquier consulta sobre estos términos: <a href="mailto:soporte@cambialo.app" className="text-green-600 underline hover:text-green-700">soporte@cambialo.app</a></p>
+      <p>Para cualquier consulta sobre estos términos, utiliza el formulario de soporte disponible en tu panel de usuario o escríbenos a través de nuestras redes sociales oficiales.</p>
     ),
   },
 ]

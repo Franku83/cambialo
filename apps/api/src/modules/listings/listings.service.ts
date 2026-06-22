@@ -240,7 +240,7 @@ export class ListingsService {
         condition: dto.condition,
         imeiLast4: dto.imeiLast4,
         hasRepairs: dto.hasRepairs ?? false,
-        ...(dto.repairDetails && { repairDetails: dto.repairDetails }),
+        ...(dto.repairDetails && { repairDetails: JSON.stringify(dto.repairDetails) }),
         includesBox: dto.includesBox ?? false,
         includesCharger: dto.includesCharger ?? false,
         includesEarphones: dto.includesEarphones ?? false,
@@ -346,6 +346,44 @@ export class ListingsService {
       coverPhotoUrl: l.photos[0]?.cloudinaryUrl ?? null,
       createdAt: l.createdAt,
     }))
+  }
+
+  async getArchivedListings(sellerId: string, cursor?: string, limit = 20) {
+    const archived = await this.prisma.listing.findMany({
+      where: {
+        sellerId,
+        status: { in: ['sold', 'removed', 'expired'] },
+      },
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : undefined),
+      take: limit + 1,
+      select: {
+        id: true,
+        priceUsd: true,
+        status: true,
+        soldAt: true,
+        updatedAt: true,
+        deviceModel: { select: { brand: true, modelName: true } },
+        photos: {
+          where: { isCover: true },
+          take: 1,
+          select: { cloudinaryUrl: true },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    })
+
+    const hasMore = archived.length > limit
+    const data = hasMore ? archived.slice(0, limit) : archived
+    const nextCursor = hasMore ? data[data.length - 1]?.id ?? null : null
+
+    return {
+      data: {
+        sold: data.filter((l) => l.status === 'sold'),
+        removed: data.filter((l) => l.status === 'removed'),
+        expired: data.filter((l) => l.status === 'expired'),
+      },
+      nextCursor,
+    }
   }
 
   async markAsSold(listingId: string, sellerId: string, buyerUsername?: string) {
@@ -816,6 +854,10 @@ export class ListingsService {
 
     if (filters.includesCharger) {
       where['includesCharger'] = true
+    }
+
+    if (filters.noRepairs) {
+      where['hasRepairs'] = false
     }
 
     if (filters.state) {

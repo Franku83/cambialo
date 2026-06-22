@@ -381,8 +381,54 @@ export default async function ListingDetailPage({ params }: Props) {
               </p>
             </div>
           )}
-          {listing.hasRepairs && listing.repairDetails && (
-            <p className="text-sm text-slate-600 border-t border-slate-100 pt-3">{listing.repairDetails}</p>
+          {listing.hasRepairs && listing.repairDetails && (() => {
+            let parsed: Record<string, boolean | string> = {}
+            try { parsed = JSON.parse(listing.repairDetails) as Record<string, boolean | string> } catch { return null }
+            const REPAIR_LABELS = [
+              { key: 'screen', label: 'Pantalla', icon: '📱' },
+              { key: 'battery', label: 'Batería', icon: '🔋' },
+              { key: 'backCamera', label: 'Cámara trasera', icon: '📷' },
+              { key: 'frontCamera', label: 'Cámara frontal', icon: '🤳' },
+              { key: 'chargePort', label: 'Puerto de carga', icon: '🔌' },
+              { key: 'buttons', label: 'Botones', icon: '⚙️' },
+              { key: 'housing', label: 'Carcasa', icon: '🔲' },
+              { key: 'faceIdTouchId', label: 'Face ID / Touch ID', icon: '👆' },
+              { key: 'speakerMic', label: 'Parlante / Micrófono', icon: '🔊' },
+            ]
+            const active = REPAIR_LABELS.filter(r => parsed[r.key])
+            const other = typeof parsed.other === 'string' ? parsed.other : ''
+            if (active.length === 0 && !other) return null
+            return (
+              <div className="border-t border-slate-100 pt-3 space-y-2">
+                <p className="text-sm font-medium text-slate-700">🔧 Reparaciones realizadas</p>
+                <div className="flex flex-wrap gap-2">
+                  {active.map(r => (
+                    <span key={r.key} className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">
+                      {r.icon} {r.label}
+                    </span>
+                  ))}
+                  {other && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">
+                      ⚙️ {other}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
+          {listing.hasRepairs && !listing.repairDetails && (
+            <div className="border-t border-slate-100 pt-3">
+              <div className="flex items-center gap-2 text-sm text-amber-600">
+                <span>⚠️</span> Reparaciones reportadas (sin detalle)
+              </div>
+            </div>
+          )}
+          {!listing.hasRepairs && (
+            <div className="border-t border-slate-100 pt-3">
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <span>✅</span> Sin reparaciones reportadas
+              </div>
+            </div>
           )}
           {accessories.length > 0 && (
             <div className="border-t border-slate-100 pt-3">

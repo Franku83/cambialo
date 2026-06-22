@@ -1,5 +1,5 @@
 # Cambialo — Estado del Proyecto
-> Última actualización: 29 Mayo 2026
+> Última actualización: 22 Junio 2026
 
 ---
 
@@ -47,6 +47,7 @@
 | **Sprint 8** | ✅ | Métodos de pago, 23 estados VZ, mapa Leaflet, foto portada, sweep lenguaje, cargador, trade-in filter |
 | **Sprint 8.1** | ✅ | 8 bugfixes: 404 pending_review, drafts en cola, precio $1, hard delete drafts, código verificación, minOfferUsd, ubicación en wizard, paymentMethods |
 | **Sprint 8.2** | ✅ | Política de Privacidad + Términos y Condiciones, Footer compartido en todas las páginas |
+| **Sprint 8.4** | ✅ | Login email/username, reparaciones estructuradas, filtro noRepairs, archivados con paginación, dashboard tabs, correcciones /terms |
 
 ---
 
@@ -377,6 +378,77 @@ VAPID_PRIVATE_KEY=...
 
 ---
 
+## Sprint 8.4 — Completado (22 Junio 2026)
+
+### Claude — Backend
+
+**Login con username:**
+- ✅ `login.dto.ts`: campo `email` → `identifier` (acepta email o username)
+- ✅ `auth.service.ts` `login()`: resuelve username → email via Prisma, autentica con Supabase
+- ✅ Verificación unificada de `isBanned` + `isSuspended`/`suspendedUntil` — aplica para ambos caminos (email y username)
+- ✅ Suspensión expirada se limpia silenciosamente al hacer login
+- ✅ Error genérico "Credenciales inválidas" — no revela si el username existe
+
+**Checks de reparación:**
+- ✅ `CreateListingDto`: `RepairDetailsDto` estructurado (9 booleans + `other: string`), validado condicionalmente con `@ValidateIf(o => o.hasRepairs === true)`
+- ✅ `listings.service.ts` `createDraft()`: serializa `repairDetails` como JSON string
+- ✅ `ListingFiltersDto`: filtro `noRepairs` (boolean)
+- ✅ `buildWhereClause()`: `noRepairs` → `where.hasRepairs = false`
+
+**Listings archivados:**
+- ✅ Nuevo endpoint `GET /listings/mine/archived?cursor=&limit=20`
+- ✅ `getArchivedListings()` con cursor pagination — clasifica por estado (sold/removed/expired)
+- ✅ Nuevo endpoint en controller con auth guard
+
+### Agy — Frontend
+
+**Login:**
+- ✅ Campo de email → texto libre con label "Correo electrónico o usuario"
+- ✅ `autoComplete="username"`, `autoCapitalize="none"`, `autoCorrect="off"`
+- ✅ Hint: "Puedes usar tu correo electrónico o tu nombre de usuario."
+
+**Wizard Step 2 — Reparaciones:**
+- ✅ Toggle + textarea reemplazado por checklist de 9 reparaciones en grid 2 columnas (Tailwind)
+- ✅ Campo "Otro" con maxLength 200
+- ✅ `repairDetails` se guarda como JSON stringificado en el Zustand store
+- ✅ Step 5: resumen de reparaciones con badges en la vista previa
+- ✅ Listing detail: reparaciones parseadas y mostradas como tags; fallback "✅ Sin reparaciones reportadas"
+
+**FilterSidebar:**
+- ✅ Nuevo filtro `noRepairs` en `Filters` interface, `parseFilters`, `countActiveFilters`, `applyFilters`
+- ✅ Toggle "🔧 Sin reparaciones" en la sección de switches
+
+**Dashboard — Tabs:**
+- ✅ 3 tabs: Activos / Borradores / Archivados (con icono Archive)
+- ✅ `ListingItem` y `EmptyState` extraídos como componentes separados para reutilización entre tabs
+- ✅ Nuevo componente `ArchivedListingsPanel.tsx`: fetch a `GET /listings/mine/archived`, agrupados por estado (Vendidos ✅ / Expirados ⏰ / Eliminados 🚫), colapsables con chevron, thumbnails, fechas formateadas con date-fns/es
+
+**Términos y Condiciones:**
+- ✅ Sección 6: definición de reseña inválida + reviews permanentes tras eliminación de cuenta (C4A, C4C)
+- ✅ Sección 8: proceso de apelación — 7 días, 48h hábiles, formulario de soporte en panel de usuario (C4B)
+- ✅ Emails `soporte@cambialo.app` reemplazados por "formulario de soporte disponible en tu panel de usuario" en secciones 3, 8 y 12
+
+### Archivos modificados (Sprint 8.4)
+
+| Archivo | Cambio |
+|---|---|
+| `apps/api/src/modules/auth/dto/login.dto.ts` | `email` → `identifier` |
+| `apps/api/src/modules/auth/auth.service.ts` | Login acepta email/username, ban/suspension unificado |
+| `apps/api/src/modules/auth/auth.controller.ts` | Summary actualizado |
+| `apps/api/src/modules/listings/dto/create-listing.dto.ts` | `RepairDetailsDto` estructurado |
+| `apps/api/src/modules/listings/dto/listing-filters.dto.ts` | Filtro `noRepairs` |
+| `apps/api/src/modules/listings/listings.service.ts` | `getArchivedListings()`, `noRepairs` en `buildWhereClause`, serialización JSON en `createDraft` |
+| `apps/api/src/modules/listings/listings.controller.ts` | Endpoint `GET /listings/mine/archived` |
+| `apps/web/src/app/(auth)/login/page.tsx` | Campo identifier + hint |
+| `apps/web/src/app/(main)/sell/page.tsx` | Checklist reparaciones + resumen en Step 5 |
+| `apps/web/src/app/(main)/listings/[id]/page.tsx` | Reparaciones estructuradas en detalle |
+| `apps/web/src/components/listings/FilterSidebar.tsx` | Filtro `noRepairs` |
+| `apps/web/src/components/dashboard/MyListingsPanel.tsx` | Tabs + ListingItem + EmptyState |
+| `apps/web/src/components/dashboard/ArchivedListingsPanel.tsx` | **Nuevo** — panel de archivados |
+| `apps/web/src/app/(info)/terms/page.tsx` | 3 correcciones de texto + reemplazo de email hardcodeado |
+
+---
+
 ## Pendientes técnicos menores
 
 ### Variables de entorno legacy
@@ -401,3 +473,7 @@ VAPID_PRIVATE_KEY=...
 | `AuditLog` fire-and-forget en guard | Nunca bloquear el request por logging |
 | 2FA via Supabase MFA (TOTP nativo) | Sin dependencias extra, integrado con el flujo de sesión existente |
 | Soft delete en listings (status = removed) | Preserva historial, PendingReviews y referencias sin romper foreign keys |
+| Login con identifier (email o username) | Frontend envía `identifier`, backend resuelve username → email antes de autenticar con Supabase |
+| repairDetails como String? (JSON serializado) | Evita migración de tipo de campo; no hay queries que filtren por componentes de reparación |
+| Check ban/suspensión después de Supabase auth | Unificado para email y username; evita bypass; limpieza silenciosa de suspensiones expiradas |
+| Dashboard con tabs (Active/Drafts/Archived) | Separación clara de estados; ArchivedListingsPanel carga datos lazy via endpoint propio |

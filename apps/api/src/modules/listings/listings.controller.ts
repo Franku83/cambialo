@@ -39,6 +39,18 @@ export class ListingsController {
     return this.listingsService.getMyStats(user.id)
   }
 
+  @Get('mine/archived')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listings archivados del vendedor (sold/removed/expired) con paginación' })
+  async myArchived(
+    @CurrentUser() user: { id: string },
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.listingsService.getArchivedListings(user.id, cursor, limit ? Number(limit) : undefined)
+  }
+
   @Get(':id/similar')
   @ApiOperation({ summary: 'Listings similares (mismo modelo ±20% precio)' })
   async getSimilar(@Param('id') id: string) {
