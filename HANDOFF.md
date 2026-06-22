@@ -92,7 +92,7 @@ POST   /api/v1/listings/:id/save|unsave    watchlist (auth)
 ### Auth / Settings
 ```
 POST /api/v1/auth/register
-POST /api/v1/auth/login                          acepta email o username en campo "identifier"
+POST /api/v1/auth/login                          acepta email o username en campo "identifier" — frontend DEBE llamar este endpoint (no signInWithPassword directo) y luego supabase.auth.setSession() con el accessToken/refreshToken devuelto
 POST /api/v1/auth/settings/change-email|change-password
 GET  /api/v1/auth/settings/payment-methods
 PUT  /api/v1/auth/settings/payment-methods   { zelle: { enabled, handle }, usdt: {...}, ... }
@@ -260,6 +260,15 @@ export const VERIFICATION_CODE_ENABLED =
 3. **No** hacer deploy manual desde CLI de Railway o Vercel — GitHub integration lo hace sola
 4. **No** usar `--no-verify` en commits
 5. Schema changes → aplicar via Supabase MCP (`apply_migration`) porque port 5432 está bloqueado en Railway
+
+### Estado de RLS / Security Advisors (revisado 22 Junio 2026)
+
+- Todas las tablas públicas tienen RLS activo. `whatsapp_clicks` no lo tenía — corregido (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`, sin policies porque solo se accede via Prisma/`postgres` role que tiene `BYPASSRLS`).
+- Pendientes de bajo riesgo, NO críticos para el launch (revisados y confirmados no explotables con la config actual de permisos — `anon`/`authenticated` no tienen `CREATE` en `public`):
+  - Vista `public_profiles` con `SECURITY DEFINER` — intencional, solo expone campos públicos no sensibles.
+  - Funciones `is_mod_or_above()` / `handle_new_auth_user()` con `search_path` mutable y ejecutables por `anon`/`authenticated` via RPC — sin objetos privilegiados expuestos, vector de ataque cerrado por permisos de schema.
+  - Extensiones `cube`/`earthdistance` instaladas en `public` — usadas por el filtro geo (`rangeKm`), mover de schema requiere testing, no es vulnerabilidad real.
+  - "Leaked password protection" desactivado en Supabase Auth — toggle de dashboard, pendiente de activar cuando haya tiempo (no bloqueante).
 
 ---
 

@@ -48,6 +48,7 @@
 | **Sprint 8.1** | ✅ | 8 bugfixes: 404 pending_review, drafts en cola, precio $1, hard delete drafts, código verificación, minOfferUsd, ubicación en wizard, paymentMethods |
 | **Sprint 8.2** | ✅ | Política de Privacidad + Términos y Condiciones, Footer compartido en todas las páginas |
 | **Sprint 8.4** | ✅ | Login email/username, reparaciones estructuradas, filtro noRepairs, archivados con paginación, dashboard tabs, correcciones /terms |
+| **Fixes post-8.4** | ✅ | Revisión pre-push: bug crítico de login con username corregido, RLS activado en `whatsapp_clicks`, security advisors auditados |
 
 ---
 
@@ -449,6 +450,30 @@ VAPID_PRIVATE_KEY=...
 
 ---
 
+## Fixes post-Sprint 8.4 — Completado (22 Junio 2026, revisión pre-push)
+
+Revisión completa del handoff de Sprint 8.4 antes de hacer push a producción, contrastando código real contra `SPRINT_8.4.md`.
+
+### Bug crítico encontrado y corregido
+- ✅ **Login con username no funcionaba en absoluto** — `apps/web/src/app/(auth)/login/page.tsx` seguía llamando `supabase.auth.signInWithPassword({ email: data.identifier })` directo al cliente, sin pasar nunca por el nuevo endpoint `POST /api/v1/auth/login` que resuelve username→email. Cualquier usuario que escribiera su username (en vez de email) no podía iniciar sesión, porque Supabase Auth rechaza un username como email. Solo se había actualizado el label/placeholder del input, no la lógica de autenticación.
+- ✅ Fix: el frontend ahora llama a `POST /api/v1/auth/login` con `{identifier, password}`, maneja los códigos `ACCOUNT_BANNED`/`ACCOUNT_SUSPENDED` devueltos por el backend, e hidrata la sesión del browser con `supabase.auth.setSession({ access_token, refresh_token })`. Se eliminaron las queries duplicadas de ban/suspensión del lado del cliente (ya las hace el backend de forma unificada).
+- Commit: `1b26f70 fix(auth): login con username no funcionaba — usar endpoint backend en vez de Supabase directo`
+
+### Verificado correcto (sin cambios)
+- Backend completo (auth.service, DTOs, listings.service, filtros, endpoint de archivados) coincide con la spec.
+- Migración de DB de Sprint 8.4 (`has_repairs`, `repair_details`) ya estaba aplicada en producción — `0` filas con `has_repairs IS NULL`.
+- Frontend de reparaciones/archivados/terms implementado fielmente al handoff.
+- El error de `npm run typecheck` (JSX flag, módulo `supabase/middleware`) es preexistente — confirmado comparando contra el commit anterior, no lo introdujo este sprint.
+
+### Hallazgo menor no bloqueante
+- `listings.service.ts` `createDraft()`: `repairDetails` se serializa si está presente sin chequear `hasRepairs === true` (la spec sugería ese guard). No causa bug en la práctica porque el frontend nunca envía `repairDetails` en la creación inicial (eso ocurre después vía `PATCH /listings/:id/details`). Queda anotado como deuda técnica.
+
+### Seguridad — Supabase RLS / Advisors
+- ✅ RLS activado en `whatsapp_clicks` (única tabla pública sin RLS) — sin policies porque solo se accede vía Prisma con el rol `postgres` (`BYPASSRLS`); con RLS activado queda bloqueada por defecto para `anon`/`authenticated` vía PostgREST.
+- Auditados y descartados como no críticos para el launch (ver detalle en `HANDOFF.md`): vista `public_profiles` SECURITY DEFINER (intencional), funciones con `search_path` mutable (vector cerrado — `anon`/`authenticated` no tienen `CREATE` en `public`), extensiones `cube`/`earthdistance` en `public` (higiene, no vulnerabilidad), leaked password protection desactivado (toggle de Auth, no bloqueante).
+
+---
+
 ## Pendientes técnicos menores
 
 ### Variables de entorno legacy
@@ -477,3 +502,5 @@ VAPID_PRIVATE_KEY=...
 | repairDetails como String? (JSON serializado) | Evita migración de tipo de campo; no hay queries que filtren por componentes de reparación |
 | Check ban/suspensión después de Supabase auth | Unificado para email y username; evita bypass; limpieza silenciosa de suspensiones expiradas |
 | Dashboard con tabs (Active/Drafts/Archived) | Separación clara de estados; ArchivedListingsPanel carga datos lazy via endpoint propio |
+| Login frontend llama `/api/v1/auth/login` + `setSession()` | El backend resuelve username→email y valida ban/suspensión; el frontend solo hidrata la sesión del browser con los tokens devueltos — evita duplicar lógica de auth en dos lugares |
+| RLS sin policies en `whatsapp_clicks` | Tabla solo accedida por Prisma (`postgres` role, `BYPASSRLS`) — RLS sin policy bloquea por defecto cualquier acceso vía PostgREST/anon/authenticated sin afectar al backend |
