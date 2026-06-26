@@ -218,6 +218,9 @@ export const VERIFICATION_CODE_ENABLED =
 
 ## Estado actual del producto (22 Junio 2026)
 
+### Infraestructura / DevOps
+- ✅ GitHub Actions keep-alive para Supabase (`.github/workflows/supabase-keepalive.yml`) — ping diario a las 6 AM UTC. **Pendiente:** agregar secret `SUPABASE_ANON_KEY` en GitHub repo settings y correrlo manualmente una vez para verificar.
+
 ### Lo que funciona en producción
 - ✅ Registro / Login (email+password, username+password, Google OAuth, magic link)
 - ✅ 2FA TOTP para admin/mod/owner
@@ -244,6 +247,7 @@ export const VERIFICATION_CODE_ENABLED =
 
 ### Pendientes conocidos
 - `NEXT_PUBLIC_VERIFICATION_CODE_ENABLED=false` debe estar en Vercel env vars
+- Secret `SUPABASE_ANON_KEY` debe agregarse en GitHub → Settings → Secrets and variables → Actions (para el keep-alive workflow)
 - VAPID keys para push notifications
 - Typesense (search avanzado) — desactivado sin crash, puede activarse cuando haya budget
 - k6 load testing
